@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký Thành Viên Nike | Trở Thành Thành Viên</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Top Utility Bar -->
+  <header class="utility-bar">
+    <div class="container utility-content">
+      <div class="jordan-swoosh">
+        <a href="brand.html" title="Jordan">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+        </a>
+      </div>
+      <div class="utility-links">
+        <a href="product.html">Tìm cửa hàng</a>
+        <span>|</span>
+        <a href="blog.html">Trợ giúp</a>
+        <span>|</span>
+        <a href="login.html">Đã có tài khoản? Đăng nhập</a>
+        <span>|</span>
+        <a href="../admin/dashboard.html" style="font-weight: 700; color: var(--color-sale);">Trang Quản Trị</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary Nav Minimal -->
+  <nav class="primary-nav">
+    <div class="container nav-container">
+      <div class="nav-logo">
+        <a href="index.html" aria-label="Nike Trang Chủ">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="nav-menu">
+        <a href="product.html">Mới & Nổi Bật</a>
+        <a href="product.html">Sản Phẩm</a>
+        <a href="brand.html">Thương Hiệu</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="cart.html" class="nav-action-icon" aria-label="Giỏ hàng">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Register Form Main -->
+  <main class="auth-wrapper">
+    <div class="auth-card" style="max-width: 520px;">
+      <div class="auth-logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+        </svg>
+      </div>
+
+      <h1 class="auth-title">TRỞ THÀNH THÀNH VIÊN NIKE</h1>
+      <p class="auth-subtitle">Tạo hồ sơ Nike Member của bạn để nhận quyền mua sắm ưu tiên, ưu đãi sinh nhật và giao hàng miễn phí.</p>
+
+      <form class="auth-form" action="user.html" method="get">
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Họ và Tên</label>
+          <input type="text" id="reg-name" class="form-input" placeholder="Nguyễn Văn A" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Địa chỉ Email</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="email@domain.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-pass">Mật khẩu</label>
+          <input type="password" id="reg-pass" class="form-input" placeholder="Tối thiểu 8 ký tự bao gồm chữ và số" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-confirm-pass">Xác nhận mật khẩu</label>
+          <input type="password" id="reg-confirm-pass" class="form-input" placeholder="Nhập lại mật khẩu" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-dob">Ngày sinh (để nhận quà sinh nhật)</label>
+          <input type="date" id="reg-dob" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Sở thích mua sắm</label>
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm);">
+            <label class="filter-chip" style="justify-content:center; cursor:pointer;">
+              <input type="radio" name="pref" value="men" style="display:none;" checked> Nam
+            </label>
+            <label class="filter-chip" style="justify-content:center; cursor:pointer;">
+              <input type="radio" name="pref" value="women" style="display:none;"> Nữ
+            </label>
+            <label class="filter-chip" style="justify-content:center; cursor:pointer;">
+              <input type="radio" name="pref" value="both" style="display:none;"> Cả hai
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:var(--space-xs);">
+          <label style="display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--color-charcoal); cursor:pointer;">
+            <input type="checkbox" checked style="accent-color:var(--color-ink); width:18px; height:18px; margin-top:2px;">
+            <span>Đăng ký nhận email về sản phẩm mới, tin tức và ưu đãi độc quyền của Nike.</span>
+          </label>
+          <label style="display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--color-charcoal); cursor:pointer;">
+            <input type="checkbox" required style="accent-color:var(--color-ink); width:18px; height:18px; margin-top:2px;">
+            <span>Tôi đồng ý với <a href="#" style="text-decoration:underline;">Điều khoản sử dụng</a> và <a href="#" style="text-decoration:underline;">Chính sách bảo mật</a> của Nike.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width:100%; height:50px; font-size:16px; margin-top:var(--space-md);">
+          TẠO TÀI KHOẢN
+        </button>
+
+        <div class="auth-footer-link">
+          Đã là thành viên? <a href="login.html">Đăng nhập ngay</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom-bar" style="border:none;">
+      <span class="utility-xs">© 2026 Nike, Inc. Tất cả quyền được bảo lưu.</span>
+      <div class="footer-legal-links">
+        <a href="#">Điều khoản sử dụng</a>
+        <a href="#">Chính sách quyền riêng tư</a>
+        <a href="index.html">Trang chủ</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

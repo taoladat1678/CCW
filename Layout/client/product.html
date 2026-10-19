@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tất Cả Giày Nam & Nữ | Nike VN</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Top Utility Bar -->
+  <header class="utility-bar">
+    <div class="container utility-content">
+      <div class="jordan-swoosh">
+        <a href="brand.html" title="Jordan">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+        </a>
+      </div>
+      <div class="utility-links">
+        <a href="product.html">Tìm cửa hàng</a>
+        <span>|</span>
+        <a href="blog.html">Trợ giúp</a>
+        <span>|</span>
+        <a href="register.html">Tham gia cùng chúng tôi</a>
+        <span>|</span>
+        <a href="login.html">Đăng nhập</a>
+        <span>|</span>
+        <a href="../admin/dashboard.html" style="font-weight: 700; color: var(--color-sale);">Trang Quản Trị</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary Navigation -->
+  <nav class="primary-nav">
+    <div class="container nav-container">
+      <div class="nav-logo">
+        <a href="index.html" aria-label="Nike Trang Chủ">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="nav-menu">
+        <a href="product.html">Mới & Nổi Bật</a>
+        <a href="product.html" class="active">Sản Phẩm</a>
+        <a href="brand.html">Thương Hiệu</a>
+        <a href="blog.html">Tin Tức / Blog</a>
+        <a href="product.html" style="color: var(--color-sale);">Giảm Giá</a>
+      </div>
+
+      <div class="nav-actions">
+        <div class="search-pill-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Tìm kiếm">
+        </div>
+
+        <a href="user.html" class="nav-action-icon" aria-label="Yêu thích">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </a>
+
+        <a href="cart.html" class="nav-action-icon" aria-label="Giỏ hàng">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-count-badge">3</span>
+        </a>
+
+        <a href="user.html" class="nav-action-icon" aria-label="Tài khoản">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sub-Nav Strip with Filter & Sort Controls -->
+  <div class="sub-nav-strip">
+    <div class="container sub-nav-container">
+      <div>
+        <h1 style="font-size: 24px; font-weight:600; text-transform:uppercase;">Giày Thể Thao Nam & Nữ (428)</h1>
+      </div>
+      <div class="sub-nav-controls">
+        <button type="button" class="btn-secondary" style="height:38px; padding:0 16px; font-size:14px; gap:6px;">
+          <span>Ẩn Bộ Lọc</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+        </button>
+
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="caption-md" style="color:var(--color-ink);">Sắp xếp:</span>
+          <select class="sort-select">
+            <option value="featured">Nổi Bật Nhất</option>
+            <option value="newest">Mới Ra Mắt</option>
+            <option value="price-low">Giá: Thấp Đến Cao</option>
+            <option value="price-high">Giá: Cao Đến Thấp</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLP Main Grid with Left Sidebar Filters -->
+  <main class="container">
+    <div class="plp-layout">
+      <!-- Left Filter Rail -->
+      <aside class="filter-sidebar">
+        <!-- Categories Filter -->
+        <div class="filter-group">
+          <div class="filter-group-title">Danh Mục</div>
+          <div class="filter-links-list">
+            <a href="#" class="active">Tất Cả Giày <span>(428)</span></a>
+            <a href="#">Giày Lifestyle / Đời Sống <span>(184)</span></a>
+            <a href="#">Giày Chạy Bộ (Running) <span>(92)</span></a>
+            <a href="#">Giày Bóng Rổ (Basketball) <span>(64)</span></a>
+            <a href="#">Giày Trượt Ván (Skateboarding) <span>(45)</span></a>
+            <a href="#">Giày Tập Luyện & Gym <span>(43)</span></a>
+          </div>
+        </div>
+
+        <!-- Brand Filter -->
+        <div class="filter-group">
+          <div class="filter-group-title">Thương Hiệu</div>
+          <div class="filter-checkbox-list">
+            <label class="filter-checkbox-item">
+              <input type="checkbox" checked>
+              <span>Nike Sportswear (280)</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox" checked>
+              <span>Jordan Brand (78)</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox">
+              <span>Nike SB (42)</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox">
+              <span>Nike ACG (28)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Gender Filter -->
+        <div class="filter-group">
+          <div class="filter-group-title">Giới Tính</div>
+          <div class="filter-checkbox-list">
+            <label class="filter-checkbox-item">
+              <input type="checkbox" checked>
+              <span>Nam (290)</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox">
+              <span>Nữ (185)</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox">
+              <span>Unisex (110)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Shoe Size Grid -->
+        <div class="filter-group">
+          <div class="filter-group-title">Kích Thước Giày (EU)</div>
+          <div class="filter-size-grid">
+            <div class="filter-size-btn">38.5</div>
+            <div class="filter-size-btn">39</div>
+            <div class="filter-size-btn">40</div>
+            <div class="filter-size-btn active">40.5</div>
+            <div class="filter-size-btn">41</div>
+            <div class="filter-size-btn">42</div>
+            <div class="filter-size-btn">42.5</div>
+            <div class="filter-size-btn">43</div>
+            <div class="filter-size-btn">44</div>
+          </div>
+        </div>
+
+        <!-- Colors Grid -->
+        <div class="filter-group">
+          <div class="filter-group-title">Màu Sắc</div>
+          <div class="filter-color-grid">
+            <div class="filter-color-item">
+              <div class="filter-color-circle" style="background-color:#111111;"></div>
+              <span>Đen</span>
+            </div>
+            <div class="filter-color-item">
+              <div class="filter-color-circle" style="background-color:#ffffff;"></div>
+              <span>Trắng</span>
+            </div>
+            <div class="filter-color-item">
+              <div class="filter-color-circle" style="background-color:#d30005;"></div>
+              <span>Đỏ</span>
+            </div>
+            <div class="filter-color-item">
+              <div class="filter-color-circle" style="background-color:#1151ff;"></div>
+              <span>Xanh</span>
+            </div>
+            <div class="filter-color-item">
+              <div class="filter-color-circle" style="background-color:#9e9ea0;"></div>
+              <span>Xám</span>
+            </div>
+            <div class="filter-color-item">
+              <div class="filter-color-circle" style="background-color:#0a7281;"></div>
+              <span>Teal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-group">
+          <div class="filter-group-title">Mức Giá</div>
+          <div class="filter-checkbox-list">
+            <label class="filter-checkbox-item">
+              <input type="checkbox">
+              <span>Dưới 2.000.000₫</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox" checked>
+              <span>2.000.000₫ - 4.000.000₫</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox" checked>
+              <span>4.000.000₫ - 6.000.000₫</span>
+            </label>
+            <label class="filter-checkbox-item">
+              <input type="checkbox">
+              <span>Trên 6.000.000₫</span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Products Grid Area -->
+      <section>
+        <div class="product-grid">
+          <!-- Item 1 -->
+          <article class="product-card">
+            <div class="product-card-image-wrap">
+              <span class="product-card-badge badge-promo">Mới Ra Mắt</span>
+              <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <a href="product-detail.html">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80" alt="Nike Air Max Pulse Roam">
+              </a>
+            </div>
+            <div class="product-card-info">
+              <div class="swatch-row">
+                <span class="swatch-dot active" style="background-color: #d30005;"></span>
+                <span class="swatch-dot" style="background-color: #111111;"></span>
+                <span class="swatch-dot" style="background-color: #ffffff;"></span>
+              </div>
+              <a href="product-detail.html" class="product-name">Nike Air Max Pulse Roam</a>
+              <span class="product-category">Giày Nam Thể Thao & Đời Sống</span>
+              <span class="product-colors-count">3 Màu sắc</span>
+              <div class="product-price-row">
+                <span class="price-regular">4.499.000₫</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 2 (Sale) -->
+          <article class="product-card">
+            <div class="product-card-image-wrap">
+              <span class="product-card-badge badge-promo" style="border-color: var(--color-sale); color: var(--color-sale);">Giảm 25%</span>
+              <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <a href="product-detail.html">
+                <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80" alt="Nike Dunk Low Retro">
+              </a>
+            </div>
+            <div class="product-card-info">
+              <div class="swatch-row">
+                <span class="swatch-dot active" style="background-color: #111111;"></span>
+                <span class="swatch-dot" style="background-color: #707072;"></span>
+              </div>
+              <a href="product-detail.html" class="product-name">Nike Dunk Low Retro</a>
+              <span class="product-category">Giày Nam Cổ Thấp</span>
+              <span class="product-colors-count">4 Màu sắc</span>
+              <div class="product-price-row">
+                <span class="price-sale">2.699.000₫</span>
+                <span class="price-original">3.599.000₫</span>
+                <span class="price-discount">25% off</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 3 -->
+          <article class="product-card">
+            <div class="product-card-image-wrap">
+              <span class="product-card-badge badge-promo">Bền Vững</span>
+              <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <a href="product-detail.html">
+                <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=700&q=80" alt="Nike Pegasus 41 GORE-TEX">
+              </a>
+            </div>
+            <div class="product-card-info">
+              <div class="swatch-row">
+                <span class="swatch-dot active" style="background-color: #0a7281;"></span>
+                <span class="swatch-dot" style="background-color: #39393b;"></span>
+              </div>
+              <a href="product-detail.html" class="product-name">Nike Pegasus 41 GORE-TEX</a>
+              <span class="product-category">Giày Chạy Bộ Chống Nước</span>
+              <span class="product-colors-count">2 Màu sắc</span>
+              <div class="product-price-row">
+                <span class="price-regular">3.829.000₫</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 4 -->
+          <article class="product-card">
+            <div class="product-card-image-wrap">
+              <span class="product-card-badge badge-promo">Jordan</span>
+              <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <a href="product-detail.html">
+                <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=700&q=80" alt="Air Jordan 1 Low">
+              </a>
+            </div>
+            <div class="product-card-info">
+              <div class="swatch-row">
+                <span class="swatch-dot active" style="background-color: #111111;"></span>
+                <span class="swatch-dot" style="background-color: #d30005;"></span>
+              </div>
+              <a href="product-detail.html" class="product-name">Air Jordan 1 Low OG</a>
+              <span class="product-category">Giày Nam Cổ Thấp Bóng Rổ</span>
+              <span class="product-colors-count">5 Màu sắc</span>
+              <div class="product-price-row">
+                <span class="price-regular">4.109.000₫</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 5 -->
+          <article class="product-card">
+            <div class="product-card-image-wrap">
+              <span class="product-card-badge badge-promo">ACG</span>
+              <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <a href="product-detail.html">
+                <img src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?auto=format&fit=crop&w=700&q=80" alt="Nike ACG Mountain Fly">
+              </a>
+            </div>
+            <div class="product-card-info">
+              <div class="swatch-row">
+                <span class="swatch-dot active" style="background-color: #0a7281;"></span>
+                <span class="swatch-dot" style="background-color: #707072;"></span>
+              </div>
+              <a href="product-detail.html" class="product-name">Nike ACG Mountain Fly 2 Low</a>
+              <span class="product-category">Giày Dã Ngoại & Leo Núi</span>
+              <span class="product-colors-count">3 Màu sắc</span>
+              <div class="product-price-row">
+                <span class="price-regular">4.529.000₫</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 6 (Sale) -->
+          <article class="product-card">
+            <div class="product-card-image-wrap">
+              <span class="product-card-badge badge-promo" style="border-color: var(--color-sale); color: var(--color-sale);">Giảm 30%</span>
+              <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <a href="product-detail.html">
+                <img src="https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=700&q=80" alt="Nike Air Force 1 '07">
+              </a>
+            </div>
+            <div class="product-card-info">
+              <div class="swatch-row">
+                <span class="swatch-dot active" style="background-color: #ffffff;"></span>
+                <span class="swatch-dot" style="background-color: #111111;"></span>
+              </div>
+              <a href="product-detail.html" class="product-name">Nike Air Force 1 '07 LV8</a>
+              <span class="product-category">Giày Nam Cổ Điển</span>
+              <span class="product-colors-count">6 Màu sắc</span>
+              <div class="product-price-row">
+                <span class="price-sale">2.449.000₫</span>
+                <span class="price-original">3.499.000₫</span>
+                <span class="price-discount">30% off</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Static Pagination -->
+        <div class="pagination-bar">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">4</button>
+          <button class="page-btn" aria-label="Trang tiếp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div>
+          <h4 class="footer-col-title">TÀI NGUYÊN</h4>
+          <ul class="footer-links-list">
+            <li><a href="product.html">Tìm cửa hàng</a></li>
+            <li><a href="register.html">Trở thành thành viên</a></li>
+            <li><a href="blog.html">Gửi phản hồi</a></li>
+            <li><a href="product.html">Khuyến mãi & Ưu đãi</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">TRỢ GIÚP</h4>
+          <ul class="footer-links-list">
+            <li><a href="cart.html">Tình trạng đơn hàng</a></li>
+            <li><a href="product.html">Giao hàng & Vận chuyển</a></li>
+            <li><a href="product-detail.html">Đổi trả hàng</a></li>
+            <li><a href="user.html">Tùy chọn thanh toán</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">VỀ NIKE</h4>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Tin tức công ty</a></li>
+            <li><a href="blog.html">Cơ hội nghề nghiệp</a></li>
+            <li><a href="blog.html">Bền vững môi trường</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">HỆ THỐNG</h4>
+          <ul class="footer-links-list">
+            <li><a href="../admin/dashboard.html">Bảng điều khiển Admin</a></li>
+            <li><a href="../admin/product.html">Quản lý sản phẩm</a></li>
+            <li><a href="../admin/cate.html">Quản lý danh mục</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">KẾT NỐI VỚI NIKE</h4>
+          <p class="caption-md">Đồng hành cùng cộng đồng người yêu thể thao và thời trang trên các nền tảng số.</p>
+        </div>
+      </div>
+      <div class="footer-bottom-bar">
+        <span class="utility-xs">© 2026 Nike, Inc. Tất cả quyền được bảo lưu.</span>
+        <div class="footer-legal-links">
+          <a href="#">Điều khoản sử dụng</a>
+          <a href="#">Chính sách quyền riêng tư</a>
+          <a href="index.html">Trang chủ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

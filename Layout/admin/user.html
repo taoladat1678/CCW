@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Người Dùng & Thành Viên | Nike Admin Portal</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="admin-logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+        </svg>
+        <span>NIKE ADMIN</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-heading">Tổng Quan</div>
+      <a href="dashboard.html" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Bảng Điều Khiển</span>
+      </a>
+
+      <div class="sidebar-heading">Danh Mục Quản Lý</div>
+      <a href="product.html" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <span>Sản Phẩm</span>
+      </a>
+
+      <a href="cate.html" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        <span>Danh Mục</span>
+      </a>
+
+      <a href="user.html" class="nav-link-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>Khách Hàng / User</span>
+      </a>
+
+      <a href="brand.html" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <span>Thương Hiệu</span>
+      </a>
+
+      <a href="blog.html" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>Bài Viết / Blog</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="../client/index.html" class="store-preview-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        <span>Xem Cửa Hàng (Client)</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Admin Main -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="topbar-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" placeholder="Tìm kiếm người dùng...">
+      </div>
+      <div class="topbar-actions">
+        <div class="admin-profile-pill">
+          <div class="admin-avatar">AD</div>
+          <span class="admin-profile-name">Quản Trị Viên</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-body">
+      <div class="page-header-row">
+        <div class="page-title-box">
+          <h1>QUẢN LÝ NGƯỜI DÙNG & THÀNH VIÊN</h1>
+          <p>Danh sách toàn bộ tài khoản thành viên Nike Member và quản trị viên hệ thống.</p>
+        </div>
+        <div>
+          <button type="button" class="btn-primary">+ Thêm Người Dùng Mới</button>
+        </div>
+      </div>
+
+      <div class="admin-card-container">
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="table-toolbar-left">
+            <input type="text" class="table-search-input" placeholder="Tìm theo tên, email, số điện thoại...">
+            <select class="table-select">
+              <option value="">Tất cả vai trò</option>
+              <option value="admin">Quản trị viên (Admin)</option>
+              <option value="member">Thành viên (Member)</option>
+            </select>
+            <select class="table-select">
+              <option value="">Tất cả trạng thái</option>
+              <option value="active">Đang hoạt động</option>
+              <option value="inactive">Tạm khóa</option>
+            </select>
+          </div>
+          <div>
+            <span class="caption-sm" style="color:var(--color-mute);">Tổng số 24,850 khách hàng</span>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width:40px;"><input type="checkbox" style="accent-color:var(--color-ink);"></th>
+                <th>Khách hàng</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Vai trò</th>
+                <th>Ngày gia nhập</th>
+                <th>Trạng thái</th>
+                <th style="text-align:right;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- User 1 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:var(--space-md);">
+                    <div class="admin-avatar" style="width:36px; height:36px; font-size:13px;">AN</div>
+                    <div>
+                      <div class="item-name-cell">Alex Nguyễn</div>
+                      <span class="caption-sm" style="color:var(--color-mute);">ID: #USR-001</span>
+                    </div>
+                  </div>
+                </td>
+                <td>alex.nike@example.com</td>
+                <td>0987 654 321</td>
+                <td><span class="badge-status role-admin">Quản Trị Viên</span></td>
+                <td>12/01/2024</td>
+                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/user.html" target="_blank" class="btn-action-icon" title="Xem hồ sơ">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Sửa thông tin">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon" title="Khóa tài khoản">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- User 2 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:var(--space-md);">
+                    <div class="admin-avatar" style="width:36px; height:36px; font-size:13px; background:#4b4b4d;">TH</div>
+                    <div>
+                      <div class="item-name-cell">Trần Minh Hoàng</div>
+                      <span class="caption-sm" style="color:var(--color-mute);">ID: #USR-042</span>
+                    </div>
+                  </div>
+                </td>
+                <td>hoang.tran@gmail.com</td>
+                <td>0912 345 678</td>
+                <td><span class="badge-status role-user">Thành Viên</span></td>
+                <td>04/03/2025</td>
+                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/user.html" target="_blank" class="btn-action-icon" title="Xem">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Sửa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- User 3 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:var(--space-md);">
+                    <div class="admin-avatar" style="width:36px; height:36px; font-size:13px; background:#0a7281;">LL</div>
+                    <div>
+                      <div class="item-name-cell">Lê Thuỳ Linh</div>
+                      <span class="caption-sm" style="color:var(--color-mute);">ID: #USR-089</span>
+                    </div>
+                  </div>
+                </td>
+                <td>linh.le@outlook.com</td>
+                <td>0903 888 999</td>
+                <td><span class="badge-status role-user">Thành Viên</span></td>
+                <td>19/06/2025</td>
+                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/user.html" target="_blank" class="btn-action-icon" title="Xem">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Sửa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- User 4 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:var(--space-md);">
+                    <div class="admin-avatar" style="width:36px; height:36px; font-size:13px; background:#780700;">PB</div>
+                    <div>
+                      <div class="item-name-cell">Phạm Quốc Bảo</div>
+                      <span class="caption-sm" style="color:var(--color-mute);">ID: #USR-155</span>
+                    </div>
+                  </div>
+                </td>
+                <td>bao.pham@gmail.com</td>
+                <td>0977 123 456</td>
+                <td><span class="badge-status role-user">Thành Viên</span></td>
+                <td>14/09/2026</td>
+                <td><span class="badge-status inactive">Đang khóa</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/user.html" target="_blank" class="btn-action-icon" title="Xem">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Mở khóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="table-footer-pagination">
+          <span>Trang 1 / 1,242</span>
+          <div class="pagination-controls">
+            <button class="page-chip active">1</button>
+            <button class="page-chip">2</button>
+            <button class="page-chip">3</button>
+            <button class="page-chip">Sau →</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

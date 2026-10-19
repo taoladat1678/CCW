@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giỏ Hàng Của Bạn (3) | Nike VN</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Top Utility Bar -->
+  <header class="utility-bar">
+    <div class="container utility-content">
+      <div class="jordan-swoosh">
+        <a href="brand.html" title="Jordan">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+        </a>
+      </div>
+      <div class="utility-links">
+        <a href="product.html">Tìm cửa hàng</a>
+        <span>|</span>
+        <a href="blog.html">Trợ giúp</a>
+        <span>|</span>
+        <a href="register.html">Tham gia cùng chúng tôi</a>
+        <span>|</span>
+        <a href="login.html">Đăng nhập</a>
+        <span>|</span>
+        <a href="../admin/dashboard.html" style="font-weight: 700; color: var(--color-sale);">Trang Quản Trị</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary Navigation -->
+  <nav class="primary-nav">
+    <div class="container nav-container">
+      <div class="nav-logo">
+        <a href="index.html" aria-label="Nike Trang Chủ">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="nav-menu">
+        <a href="product.html">Mới & Nổi Bật</a>
+        <a href="product.html">Sản Phẩm</a>
+        <a href="brand.html">Thương Hiệu</a>
+        <a href="blog.html">Tin Tức / Blog</a>
+        <a href="product.html" style="color: var(--color-sale);">Giảm Giá</a>
+      </div>
+
+      <div class="nav-actions">
+        <div class="search-pill-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Tìm kiếm">
+        </div>
+
+        <a href="user.html" class="nav-action-icon" aria-label="Yêu thích">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </a>
+
+        <a href="cart.html" class="nav-action-icon" style="background-color:var(--color-soft-cloud);" aria-label="Giỏ hàng">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zm13 5H5l1.5-3h11L19 7z"/>
+          </svg>
+          <span class="cart-count-badge">3</span>
+        </a>
+
+        <a href="user.html" class="nav-action-icon" aria-label="Tài khoản">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Cart Main Page Layout -->
+  <main class="container">
+    <div class="cart-layout">
+      <!-- Cart Items Section -->
+      <section class="cart-items-section">
+        <div class="cart-title-row">
+          <h1 style="font-size:26px; font-weight:700; text-transform:uppercase;">TÚI HÀNG CỦA BẠN (3 SẢN PHẨM)</h1>
+        </div>
+
+        <!-- Free Shipping Member Banner -->
+        <div class="cart-promo-banner">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+          <span><strong>Giao hàng miễn phí</strong> cho Thành viên Nike. Đăng nhập hoặc tạo tài khoản để nhận ưu đãi vận chuyển trên toàn quốc.</span>
+        </div>
+
+        <!-- Cart Item 1 -->
+        <article class="cart-item">
+          <div class="cart-item-image">
+            <a href="product-detail.html">
+              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" alt="Nike Air Max Pulse Roam">
+            </a>
+          </div>
+          <div class="cart-item-details">
+            <h2 class="cart-item-name"><a href="product-detail.html">Nike Air Max Pulse Roam</a></h2>
+            <div class="cart-item-meta">Giày Nam Thể Thao & Đời Sống</div>
+            <div class="cart-item-meta">Màu sắc: Gym Red / Black / White</div>
+            <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
+              <span>Cỡ giày: <strong>EU 40.5</strong></span>
+              <div class="cart-qty-box">
+                <label for="qty-1">Số lượng:</label>
+                <select id="qty-1" class="cart-qty-select">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+            </div>
+            <div class="cart-item-actions">
+              <button class="cart-action-btn">Lưu vào yêu thích</button>
+              <button class="cart-action-btn" style="color:var(--color-sale);">Xóa khỏi giỏ</button>
+            </div>
+          </div>
+          <div class="cart-item-price">
+            4.499.000₫
+          </div>
+        </article>
+
+        <!-- Cart Item 2 (Sale Item) -->
+        <article class="cart-item">
+          <div class="cart-item-image">
+            <a href="product-detail.html">
+              <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=400&q=80" alt="Nike Dunk Low Retro">
+            </a>
+          </div>
+          <div class="cart-item-details">
+            <h2 class="cart-item-name"><a href="product-detail.html">Nike Dunk Low Retro</a></h2>
+            <div class="cart-item-meta">Giày Nam Cổ Thấp Thời Trang</div>
+            <div class="cart-item-meta">Màu sắc: Black / White Panda</div>
+            <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
+              <span>Cỡ giày: <strong>EU 41</strong></span>
+              <div class="cart-qty-box">
+                <label for="qty-2">Số lượng:</label>
+                <select id="qty-2" class="cart-qty-select">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                </select>
+              </div>
+            </div>
+            <div class="cart-item-actions">
+              <button class="cart-action-btn">Lưu vào yêu thích</button>
+              <button class="cart-action-btn" style="color:var(--color-sale);">Xóa khỏi giỏ</button>
+            </div>
+          </div>
+          <div class="cart-item-price">
+            <div style="color:var(--color-sale);">2.699.000₫</div>
+            <div class="price-original" style="font-size:14px; color:var(--color-mute); text-decoration:line-through;">3.599.000₫</div>
+          </div>
+        </article>
+
+        <!-- Cart Item 3 -->
+        <article class="cart-item">
+          <div class="cart-item-image">
+            <a href="product-detail.html">
+              <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80" alt="Nike Pegasus 41 GORE-TEX">
+            </a>
+          </div>
+          <div class="cart-item-details">
+            <h2 class="cart-item-name"><a href="product-detail.html">Nike Pegasus 41 GORE-TEX</a></h2>
+            <div class="cart-item-meta">Giày Chạy Bộ Chống Nước</div>
+            <div class="cart-item-meta">Màu sắc: Bicoastal / Teal / Black</div>
+            <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
+              <span>Cỡ giày: <strong>EU 40.5</strong></span>
+              <div class="cart-qty-box">
+                <label for="qty-3">Số lượng:</label>
+                <select id="qty-3" class="cart-qty-select">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                </select>
+              </div>
+            </div>
+            <div class="cart-item-actions">
+              <button class="cart-action-btn">Lưu vào yêu thích</button>
+              <button class="cart-action-btn" style="color:var(--color-sale);">Xóa khỏi giỏ</button>
+            </div>
+          </div>
+          <div class="cart-item-price">
+            3.829.000₫
+          </div>
+        </article>
+      </section>
+
+      <!-- Order Summary Aside Box -->
+      <aside class="cart-summary-box">
+        <h2 class="summary-title">TÓM TẮT ĐƠN HÀNG</h2>
+
+        <div class="summary-row">
+          <span>Tạm tính (3 sản phẩm)</span>
+          <span>11.027.000₫</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Ước tính phí giao hàng</span>
+          <span style="color:var(--color-success); font-weight:600;">Miễn phí</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Giảm giá khuyến mãi</span>
+          <span style="color:var(--color-sale); font-weight:600;">-900.000₫</span>
+        </div>
+
+        <!-- Promo Code Input -->
+        <div style="margin: var(--space-lg) 0; border-top:1px solid var(--color-hairline); border-bottom:1px solid var(--color-hairline); padding: var(--space-md) 0;">
+          <div class="caption-md" style="margin-bottom:var(--space-xs); font-weight:600; color:var(--color-ink);">Bạn có mã ưu đãi?</div>
+          <div class="promo-input-row" style="margin:0;">
+            <input type="text" placeholder="Nhập mã giảm giá" value="NIKEAIR2026">
+            <button type="button" class="btn-secondary" style="height:44px; padding:0 18px; font-size:13px;">Áp Dụng</button>
+          </div>
+        </div>
+
+        <!-- Total Row -->
+        <div class="summary-row total-row">
+          <span>TỔNG CỘNG</span>
+          <span>10.127.000₫</span>
+        </div>
+        <p class="caption-sm" style="color:var(--color-mute); margin-top:-10px; margin-bottom:var(--space-lg);">
+          (Đã bao gồm thuế giá trị gia tăng VAT theo quy định)
+        </p>
+
+        <!-- CTAs -->
+        <button type="button" class="btn-primary">
+          TIẾN HÀNH THANH TOÁN
+        </button>
+
+        <a href="product.html" class="btn-secondary">
+          TIẾP TỤC MUA SẮM
+        </a>
+
+        <div style="margin-top:var(--space-xl); text-align:center;">
+          <p class="caption-sm" style="color:var(--color-mute);">
+            🔒 Thanh toán an toàn và bảo mật với tiêu chuẩn quốc tế Nike Inc.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div>
+          <h4 class="footer-col-title">TÀI NGUYÊN</h4>
+          <ul class="footer-links-list">
+            <li><a href="product.html">Tìm cửa hàng</a></li>
+            <li><a href="register.html">Trở thành thành viên</a></li>
+            <li><a href="blog.html">Gửi phản hồi</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">TRỢ GIÚP</h4>
+          <ul class="footer-links-list">
+            <li><a href="cart.html">Tình trạng đơn hàng</a></li>
+            <li><a href="product.html">Giao hàng</a></li>
+            <li><a href="product-detail.html">Đổi trả hàng</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">VỀ NIKE</h4>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Tin tức công ty</a></li>
+            <li><a href="blog.html">Bền vững môi trường</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">HỆ THỐNG</h4>
+          <ul class="footer-links-list">
+            <li><a href="../admin/dashboard.html">Bảng điều khiển Admin</a></li>
+            <li><a href="../admin/product.html">Quản lý sản phẩm</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">KẾT NỐI VỚI NIKE</h4>
+          <p class="caption-md">Đồng hành cùng cộng đồng người yêu thể thao toàn cầu.</p>
+        </div>
+      </div>
+      <div class="footer-bottom-bar">
+        <span class="utility-xs">© 2026 Nike, Inc. Tất cả quyền được bảo lưu.</span>
+        <div class="footer-legal-links">
+          <a href="#">Điều khoản sử dụng</a>
+          <a href="#">Chính sách quyền riêng tư</a>
+          <a href="index.html">Trang chủ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
