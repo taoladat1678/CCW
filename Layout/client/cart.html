@@ -1,10 +1,63 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giỏ Hàng Của Bạn (3) | Nike VN</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .qty-stepper {
+      display: inline-flex !important;
+      align-items: center !important;
+      border: 1px solid #cacacb !important;
+      border-radius: 20px !important;
+      background: #ffffff !important;
+      padding: 2px 4px !important;
+      height: 38px !important;
+      box-sizing: border-box !important;
+      user-select: none !important;
+    }
+    .qty-btn {
+      width: 30px !important;
+      height: 30px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 50% !important;
+      font-size: 18px !important;
+      font-weight: 600 !important;
+      line-height: 1 !important;
+      color: #111111 !important;
+      cursor: pointer !important;
+      transition: background-color 0.15s ease !important;
+      padding: 0 !important;
+      outline: none !important;
+    }
+    .qty-btn:hover {
+      background-color: #f5f5f5 !important;
+    }
+    .qty-btn:active {
+      background-color: #e5e5e5 !important;
+    }
+    .qty-input {
+      width: 36px !important;
+      max-width: 36px !important;
+      min-width: 36px !important;
+      height: 30px !important;
+      border: none !important;
+      background: transparent !important;
+      text-align: center !important;
+      font-size: 15px !important;
+      font-weight: 700 !important;
+      color: #111111 !important;
+      outline: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -44,7 +97,7 @@
       </div>
 
       <div class="nav-menu">
-        <a href="product.html">Mới & Nổi Bật</a>
+        <a href="index.html">Mới & Nổi Bật</a>
         <a href="product.html">Sản Phẩm</a>
         <a href="brand.html">Thương Hiệu</a>
         <a href="blog.html">Tin Tức / Blog</a>
@@ -59,12 +112,6 @@
           </svg>
           <input type="text" placeholder="Tìm kiếm">
         </div>
-
-        <a href="user.html" class="nav-action-icon" aria-label="Yêu thích">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-          </svg>
-        </a>
 
         <a href="cart.html" class="nav-action-icon" style="background-color:var(--color-soft-cloud);" aria-label="Giỏ hàng">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -111,13 +158,13 @@
             <div class="cart-item-meta">Màu sắc: Gym Red / Black / White</div>
             <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
               <span>Cỡ giày: <strong>EU 40.5</strong></span>
-              <div class="cart-qty-box">
-                <label for="qty-1">Số lượng:</label>
-                <select id="qty-1" class="cart-qty-select">
-                  <option value="1" selected>1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                </select>
+              <div class="cart-qty-control">
+                <label>Số lượng:</label>
+                <div class="qty-stepper">
+                  <button type="button" class="qty-btn btn-minus" aria-label="Giảm số lượng">−</button>
+                  <input type="text" class="qty-input" value="1" readonly>
+                  <button type="button" class="qty-btn btn-plus" aria-label="Tăng số lượng">+</button>
+                </div>
               </div>
             </div>
             <div class="cart-item-actions">
@@ -143,12 +190,13 @@
             <div class="cart-item-meta">Màu sắc: Black / White Panda</div>
             <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
               <span>Cỡ giày: <strong>EU 41</strong></span>
-              <div class="cart-qty-box">
-                <label for="qty-2">Số lượng:</label>
-                <select id="qty-2" class="cart-qty-select">
-                  <option value="1" selected>1</option>
-                  <option value="2">2</option>
-                </select>
+              <div class="cart-qty-control">
+                <label>Số lượng:</label>
+                <div class="qty-stepper">
+                  <button type="button" class="qty-btn btn-minus" aria-label="Giảm số lượng">−</button>
+                  <input type="text" class="qty-input" value="1" readonly>
+                  <button type="button" class="qty-btn btn-plus" aria-label="Tăng số lượng">+</button>
+                </div>
               </div>
             </div>
             <div class="cart-item-actions">
@@ -175,12 +223,13 @@
             <div class="cart-item-meta">Màu sắc: Bicoastal / Teal / Black</div>
             <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
               <span>Cỡ giày: <strong>EU 40.5</strong></span>
-              <div class="cart-qty-box">
-                <label for="qty-3">Số lượng:</label>
-                <select id="qty-3" class="cart-qty-select">
-                  <option value="1" selected>1</option>
-                  <option value="2">2</option>
-                </select>
+              <div class="cart-qty-control">
+                <label>Số lượng:</label>
+                <div class="qty-stepper">
+                  <button type="button" class="qty-btn btn-minus" aria-label="Giảm số lượng">−</button>
+                  <input type="text" class="qty-input" value="1" readonly>
+                  <button type="button" class="qty-btn btn-plus" aria-label="Tăng số lượng">+</button>
+                </div>
               </div>
             </div>
             <div class="cart-item-actions">
@@ -299,5 +348,26 @@
     </div>
   </footer>
 
+  <script>
+    document.querySelectorAll('.qty-stepper').forEach(stepper => {
+      const minusBtn = stepper.querySelector('.btn-minus');
+      const plusBtn = stepper.querySelector('.btn-plus');
+      const input = stepper.querySelector('.qty-input');
+
+      minusBtn.addEventListener('click', () => {
+        let val = parseInt(input.value) || 1;
+        if (val > 1) {
+          input.value = val - 1;
+        }
+      });
+
+      plusBtn.addEventListener('click', () => {
+        let val = parseInt(input.value) || 1;
+        if (val < 99) {
+          input.value = val + 1;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
