@@ -1,11 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nike. Just Do It. Nike VN</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
 
   <!-- Top Utility Bar -->
@@ -15,7 +17,8 @@
         <!-- Jordan Jumpman Minimal Silhouette -->
         <a href="brand.html" title="Jordan">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
           </svg>
         </a>
         <a href="brand.html" title="Converse" style="font-weight:700; font-size:11px; letter-spacing:1px;">CONVERSE</a>
@@ -24,12 +27,6 @@
         <a href="product.html">Tìm cửa hàng</a>
         <span>|</span>
         <a href="blog.html">Trợ giúp</a>
-        <span>|</span>
-        <a href="register.html">Tham gia cùng chúng tôi</a>
-        <span>|</span>
-        <a href="login.html">Đăng nhập</a>
-        <span>|</span>
-        <a href="../admin/dashboard.html" style="font-weight: 700; color: var(--color-sale);">Trang Quản Trị</a>
       </div>
     </div>
   </header>
@@ -41,7 +38,8 @@
         <a href="index.html" aria-label="Nike Trang Chủ">
           <!-- Official Nike Swoosh SVG -->
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+            <path
+              d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z" />
           </svg>
         </a>
       </div>
@@ -51,7 +49,6 @@
         <a href="product.html">Sản Phẩm</a>
         <a href="brand.html">Thương Hiệu</a>
         <a href="blog.html">Tin Tức / Blog</a>
-        <a href="product.html" style="color: var(--color-sale);">Giảm Giá</a>
       </div>
 
       <div class="nav-actions">
@@ -74,57 +71,69 @@
           <span class="cart-count-badge">3</span>
         </a>
 
-        <!-- User Account -->
-        <a href="user.html" class="nav-action-icon" aria-label="Tài khoản">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </a>
+        <!-- User Account Dropdown -->
+        <div class="user-dropdown-wrap">
+          <button type="button" class="nav-action-icon user-dropdown-btn" aria-label="Tài khoản" aria-expanded="false">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </button>
+          <div class="user-dropdown-menu">
+            <div class="user-dropdown-header">Tài Khoản</div>
+            <a href="login.html" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+              </svg>
+              <span>Đăng nhập</span>
+            </a>
+            <a href="register.html" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <line x1="20" y1="8" x2="20" y2="14"></line>
+                <line x1="23" y1="11" x2="17" y2="11"></line>
+              </svg>
+              <span>Đăng ký</span>
+            </a>
+            <a href="user.html" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Thông tin tài khoản</span>
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <a href="../admin/dashboard.html" class="user-dropdown-item user-dropdown-admin">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>Tới trang quản trị</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
 
   <!-- Hero Campaign Section (Strictly Futura 96px uppercase burned into full-bleed photo) -->
   <section class="campaign-hero">
-    <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1920&q=80" alt="Nike Air Max Hero Campaign" class="campaign-hero-bg">
+    <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1920&q=80"
+      alt="Nike Air Max Hero Campaign" class="campaign-hero-bg">
     <div class="campaign-hero-overlay"></div>
     <div class="container campaign-hero-content">
       <span class="campaign-tag">NIKE AIR MAX ROAM</span>
       <h1 class="campaign-headline">WIN ON AIR</h1>
-      <p class="campaign-subhead">Trải nghiệm bộ đệm Dynamic Air thế hệ mới mang lại năng lượng vô tận cho từng sải bước. Thiết kế đột phá dẫn đầu mọi giới hạn.</p>
+      <p class="campaign-subhead">Trải nghiệm bộ đệm Dynamic Air thế hệ mới mang lại năng lượng vô tận cho từng sải
+        bước. Thiết kế đột phá dẫn đầu mọi giới hạn.</p>
       <div class="campaign-cta-group">
         <a href="product.html" class="btn-outline-image">Khám Phá Ngay</a>
         <a href="product-detail.html" class="btn-primary">Xem Chi Tiết</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Editorial Split Rows (2-Up) -->
-  <section class="container section-gap">
-    <div class="section-header-row">
-      <h2 class="section-header-title">XU HƯỚNG MỚI NHẤT</h2>
-      <a href="product.html" class="link-md">Xem tất cả xu hướng</a>
-    </div>
-    <div class="editorial-grid">
-      <div class="editorial-tile">
-        <img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=900&q=80" alt="Nike Running Fast">
-        <div class="editorial-tile-overlay"></div>
-        <div class="editorial-tile-content">
-          <span class="caption-sm" style="color:#ffffff; text-transform:uppercase; letter-spacing:1px;">Nike Running</span>
-          <h3 class="editorial-tile-title">PEGASUS 41: BỨT PHÁ</h3>
-          <a href="product.html" class="btn-outline-image">Mua Giày Chạy</a>
-        </div>
-      </div>
-
-      <div class="editorial-tile">
-        <img src="https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=900&q=80" alt="Nike Lifestyle Retro">
-        <div class="editorial-tile-overlay"></div>
-        <div class="editorial-tile-content">
-          <span class="caption-sm" style="color:#ffffff; text-transform:uppercase; letter-spacing:1px;">Sportswear Heritage</span>
-          <h3 class="editorial-tile-title">DUNK & AIR FORCE 1</h3>
-          <a href="product.html" class="btn-outline-image">Xem Bộ Sưu Tập</a>
-        </div>
       </div>
     </div>
   </section>
@@ -137,7 +146,8 @@
         <h2 class="section-header-title">SẢN PHẨM NỔI BẬT</h2>
       </div>
       <div class="campaign-cta-group">
-        <a href="product.html" class="btn-secondary" style="height:40px; padding:0 20px; font-size:14px;">Xem Tất Cả (428)</a>
+        <a href="product.html" class="btn-secondary" style="height:40px; padding:0 20px; font-size:14px;">Xem Tất Cả
+          (428)</a>
       </div>
     </div>
 
@@ -148,22 +158,19 @@
           <span class="product-card-badge badge-promo">Mới Ra Mắt</span>
           <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
             </svg>
           </button>
           <a href="product-detail.html">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80" alt="Nike Air Max Pulse Roam">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
+              alt="Nike Air Max Pulse Roam">
           </a>
         </div>
         <div class="product-card-info">
-          <div class="swatch-row">
-            <span class="swatch-dot active" style="background-color: #d30005;"></span>
-            <span class="swatch-dot" style="background-color: #111111;"></span>
-            <span class="swatch-dot" style="background-color: #ffffff;"></span>
-          </div>
           <a href="product-detail.html" class="product-name">Nike Air Max Pulse Roam</a>
           <span class="product-category">Giày Nam Thể Thao & Phong Cách</span>
-          <span class="product-colors-count">3 Màu sắc</span>
           <div class="product-price-row">
             <span class="price-regular">4.499.000₫</span>
           </div>
@@ -173,24 +180,23 @@
       <!-- Card 2 (Sale Item) -->
       <article class="product-card">
         <div class="product-card-image-wrap">
-          <span class="product-card-badge badge-promo" style="border-color: var(--color-sale); color: var(--color-sale);">Giảm 25%</span>
+          <span class="product-card-badge badge-promo"
+            style="border-color: var(--color-sale); color: var(--color-sale);">Giảm 25%</span>
           <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
             </svg>
           </button>
           <a href="product-detail.html">
-            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80" alt="Nike Dunk Low Retro">
+            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80"
+              alt="Nike Dunk Low Retro">
           </a>
         </div>
         <div class="product-card-info">
-          <div class="swatch-row">
-            <span class="swatch-dot active" style="background-color: #111111;"></span>
-            <span class="swatch-dot" style="background-color: #707072;"></span>
-          </div>
           <a href="product-detail.html" class="product-name">Nike Dunk Low Retro</a>
           <span class="product-category">Giày Nam Cổ Thấp</span>
-          <span class="product-colors-count">4 Màu sắc</span>
           <div class="product-price-row">
             <span class="price-sale">2.699.000₫</span>
             <span class="price-original">3.599.000₫</span>
@@ -205,64 +211,24 @@
           <span class="product-card-badge badge-promo">Bền Vững</span>
           <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
             </svg>
           </button>
           <a href="product-detail.html">
-            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=700&q=80" alt="Nike Pegasus 41 GORE-TEX">
+            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=700&q=80"
+              alt="Nike Pegasus 41 GORE-TEX">
           </a>
         </div>
         <div class="product-card-info">
-          <div class="swatch-row">
-            <span class="swatch-dot active" style="background-color: #0a7281;"></span>
-            <span class="swatch-dot" style="background-color: #39393b;"></span>
-          </div>
           <a href="product-detail.html" class="product-name">Nike Pegasus 41 GORE-TEX</a>
           <span class="product-category">Giày Chạy Bộ Chống Nước</span>
-          <span class="product-colors-count">2 Màu sắc</span>
           <div class="product-price-row">
             <span class="price-regular">3.829.000₫</span>
           </div>
         </div>
       </article>
-    </div>
-  </section>
-
-  <!-- Shop By Sport (Sport Rail) -->
-  <section class="container section-gap">
-    <div class="section-header-row">
-      <h2 class="section-header-title">KHÁM PHÁ THEO MÔN THỂ THAO</h2>
-    </div>
-    <div class="sport-rail">
-      <!-- Sport 1: Running -->
-      <div class="sport-tile">
-        <img src="https://images.unsplash.com/photo-1486218119243-13883505764c?auto=format&fit=crop&w=800&q=80" alt="Nike Chạy Bộ">
-        <div class="sport-tile-overlay"></div>
-        <div class="sport-tile-content">
-          <h3 class="sport-tile-name">CHẠY BỘ</h3>
-          <a href="product.html" class="btn-outline-image">Xem Giày Chạy</a>
-        </div>
-      </div>
-
-      <!-- Sport 2: Basketball -->
-      <div class="sport-tile">
-        <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Nike Bóng Rổ">
-        <div class="sport-tile-overlay"></div>
-        <div class="sport-tile-content">
-          <h3 class="sport-tile-name">BÓNG RỔ</h3>
-          <a href="product.html" class="btn-outline-image">Xem Giày Bóng Rổ</a>
-        </div>
-      </div>
-
-      <!-- Sport 3: Training & Gym -->
-      <div class="sport-tile">
-        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80" alt="Nike Tập Luyện">
-        <div class="sport-tile-overlay"></div>
-        <div class="sport-tile-content">
-          <h3 class="sport-tile-name">TẬP LUYỆN & GYM</h3>
-          <a href="product.html" class="btn-outline-image">Xem Giày Tập</a>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -280,14 +246,16 @@
       <!-- Brand 1: Jordan -->
       <div class="brand-card">
         <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=700&q=80" alt="Jordan Brand">
+          <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=700&q=80"
+            alt="Jordan Brand">
         </div>
         <div class="brand-card-body">
           <div class="brand-card-logo-row">
             <h3 class="brand-card-title">JORDAN</h3>
             <span class="caption-sm" style="color:var(--color-mute);">Di sản vĩ đại</span>
           </div>
-          <p class="brand-card-desc">Cảm hứng từ huyền thoại Michael Jordan. Định hình văn hóa bóng rổ và phong cách đường phố toàn cầu.</p>
+          <p class="brand-card-desc">Cảm hứng từ huyền thoại Michael Jordan. Định hình văn hóa bóng rổ và phong cách
+            đường phố toàn cầu.</p>
           <a href="product.html" class="btn-secondary" style="height:44px;">Khám Phá Jordan</a>
         </div>
       </div>
@@ -295,14 +263,16 @@
       <!-- Brand 2: Nike ACG -->
       <div class="brand-card">
         <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=700&q=80" alt="Nike ACG">
+          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=700&q=80"
+            alt="Nike ACG">
         </div>
         <div class="brand-card-body">
           <div class="brand-card-logo-row">
             <h3 class="brand-card-title">NIKE ACG</h3>
             <span class="caption-sm" style="color:var(--color-mute);">All Conditions Gear</span>
           </div>
-          <p class="brand-card-desc">Thiết bị dã ngoại tối ưu được kiểm nghiệm tại bang Oregon. Sẵn sàng chinh phục mọi địa hình hiểm trở.</p>
+          <p class="brand-card-desc">Thiết bị dã ngoại tối ưu được kiểm nghiệm tại bang Oregon. Sẵn sàng chinh phục mọi
+            địa hình hiểm trở.</p>
           <a href="product.html" class="btn-secondary" style="height:44px;">Khám Phá ACG</a>
         </div>
       </div>
@@ -310,14 +280,16 @@
       <!-- Brand 3: Nike SB -->
       <div class="brand-card">
         <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=700&q=80" alt="Nike SB">
+          <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=700&q=80"
+            alt="Nike SB">
         </div>
         <div class="brand-card-body">
           <div class="brand-card-logo-row">
             <h3 class="brand-card-title">NIKE SB</h3>
             <span class="caption-sm" style="color:var(--color-mute);">Skateboarding</span>
           </div>
-          <p class="brand-card-desc">Dòng giày trượt ván hiệu năng cao, linh hồn của văn hóa ván trượt và phong cách thời trang bụi bặm.</p>
+          <p class="brand-card-desc">Dòng giày trượt ván hiệu năng cao, linh hồn của văn hóa ván trượt và phong cách
+            thời trang bụi bặm.</p>
           <a href="product.html" class="btn-secondary" style="height:44px;">Khám Phá SB</a>
         </div>
       </div>
@@ -338,7 +310,8 @@
       <!-- Article 1 -->
       <article class="blog-card">
         <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=700&q=80" alt="Nike Air Technology">
+          <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=700&q=80"
+            alt="Nike Air Technology">
         </div>
         <div class="blog-meta-row">
           <span class="blog-category-tag">Công Nghệ</span>
@@ -346,13 +319,15 @@
           <span>18 Tháng 10, 2026</span>
         </div>
         <h3 class="blog-title"><a href="blog.html">Kỷ Nguyên Mới Của Bộ Đệm Dynamic Air: Đột Phá Tại Đỉnh Cao</a></h3>
-        <p class="blog-summary">Tìm hiểu cách các kỹ sư tại phòng thí nghiệm thể thao Nike NSRL tạo ra dòng chảy áp suất kép hoàn hảo.</p>
+        <p class="blog-summary">Tìm hiểu cách các kỹ sư tại phòng thí nghiệm thể thao Nike NSRL tạo ra dòng chảy áp suất
+          kép hoàn hảo.</p>
       </article>
 
       <!-- Article 2 -->
       <article class="blog-card">
         <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=700&q=80" alt="Nike Athletes Running">
+          <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=700&q=80"
+            alt="Nike Athletes Running">
         </div>
         <div class="blog-meta-row">
           <span class="blog-category-tag">Vận Động Viên</span>
@@ -360,13 +335,15 @@
           <span>15 Tháng 10, 2026</span>
         </div>
         <h3 class="blog-title"><a href="blog.html">Eliud Kipchoge Và Hành Trình Bứt Phá Giới Hạn Marathon</a></h3>
-        <p class="blog-summary">Câu chuyện đằng sau công nghệ sợi Carbon Flyplate và bài học về tinh thần không bao giờ bỏ cuộc.</p>
+        <p class="blog-summary">Câu chuyện đằng sau công nghệ sợi Carbon Flyplate và bài học về tinh thần không bao giờ
+          bỏ cuộc.</p>
       </article>
 
       <!-- Article 3 -->
       <article class="blog-card">
         <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=700&q=80" alt="Nike Sneakers Style">
+          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=700&q=80"
+            alt="Nike Sneakers Style">
         </div>
         <div class="blog-meta-row">
           <span class="blog-category-tag">Phong Cách</span>
@@ -374,19 +351,28 @@
           <span>10 Tháng 10, 2026</span>
         </div>
         <h3 class="blog-title"><a href="blog.html">Hướng Dẫn Phối Đồ Streetwear Cùng Dòng Giày Dunk Cổ Thấp</a></h3>
-        <p class="blog-summary">Bí quyết phối hợp sắc sảo giữa quần ống thụng, tất cổ cao và đôi giày kinh điển mang dấu ấn thời gian.</p>
+        <p class="blog-summary">Bí quyết phối hợp sắc sảo giữa quần ống thụng, tất cổ cao và đôi giày kinh điển mang dấu
+          ấn thời gian.</p>
       </article>
     </div>
   </section>
 
   <!-- Member Benefits Banner -->
   <section class="container" style="margin-bottom: var(--space-section);">
-    <div style="background-color: var(--color-ink); color: var(--color-on-primary); padding: var(--space-section); text-align: center;">
-      <h2 style="font-family: var(--font-display); font-size: 64px; line-height: 0.95; text-transform: uppercase; margin-bottom: var(--space-sm);">THÀNH VIÊN NIKE</h2>
-      <p style="font-size: 18px; max-width: 650px; margin: 0 auto var(--space-xl) auto; color: var(--color-soft-cloud);">Đăng ký miễn phí để nhận quyền tiếp cận độc quyền các dòng sản phẩm giới hạn, miễn phí vận chuyển cho mọi đơn hàng và tham gia cộng đồng vận động viên toàn cầu.</p>
+    <div
+      style="background-color: var(--color-ink); color: var(--color-on-primary); padding: var(--space-section); text-align: center;">
+      <h2
+        style="font-family: var(--font-display); font-size: 64px; line-height: 0.95; text-transform: uppercase; margin-bottom: var(--space-sm);">
+        THÀNH VIÊN NIKE</h2>
+      <p
+        style="font-size: 18px; max-width: 650px; margin: 0 auto var(--space-xl) auto; color: var(--color-soft-cloud);">
+        Đăng ký miễn phí để nhận quyền tiếp cận độc quyền các dòng sản phẩm giới hạn, miễn phí vận chuyển cho mọi đơn
+        hàng và tham gia cộng đồng vận động viên toàn cầu.</p>
       <div style="display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
         <a href="register.html" class="btn-outline-image">Đăng Ký Thành Viên</a>
-        <a href="login.html" class="btn-secondary" style="background-color: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);">Đăng Nhập</a>
+        <a href="login.html" class="btn-secondary"
+          style="background-color: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);">Đăng
+          Nhập</a>
       </div>
     </div>
   </section>
@@ -443,16 +429,26 @@
         <!-- Col 5: Khu Vực & Mạng Xã Hội -->
         <div>
           <h4 class="footer-col-title">KẾT NỐI VỚI NIKE</h4>
-          <p class="caption-md" style="margin-bottom: var(--space-md);">Đồng hành cùng cộng đồng người yêu thể thao và thời trang trên các nền tảng số.</p>
+          <p class="caption-md" style="margin-bottom: var(--space-md);">Đồng hành cùng cộng đồng người yêu thể thao và
+            thời trang trên các nền tảng số.</p>
           <div class="footer-social-row">
             <a href="#" class="social-circle-btn" aria-label="Facebook">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
             </a>
             <a href="#" class="social-circle-btn" aria-label="Instagram">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
             </a>
             <a href="#" class="social-circle-btn" aria-label="YouTube">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
             </a>
           </div>
         </div>
@@ -473,5 +469,7 @@
     </div>
   </footer>
 
+  <script src="assets/js/main.js"></script>
 </body>
+
 </html>
