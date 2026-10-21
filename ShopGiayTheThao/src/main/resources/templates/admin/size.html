@@ -1,0 +1,388 @@
+﻿<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Kích Thước (Size) | Nike Admin Portal</title>
+  <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
+</head>
+<body>
+
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="admin-logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+        </svg>
+        <span>NIKE ADMIN</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-heading">Tổng Quan</div>
+      <a th:href="@{/admin/dashboard}" href="/admin/dashboard" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Bảng Điều Khiển</span>
+      </a>
+
+      <div class="sidebar-heading">Danh Mục Quản Lý</div>
+      <a th:href="@{/admin/products}" href="/admin/products" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <span>Sản Phẩm</span>
+      </a>
+
+      <a th:href="@{/admin/categories}" href="/admin/categories" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        <span>Danh Mục</span>
+      </a>
+
+      <a th:href="@{/admin/sizes}" href="/admin/sizes" class="nav-link-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"></rect><line x1="6" y1="7" x2="6" y2="11"></line><line x1="10" y1="7" x2="10" y2="13"></line><line x1="14" y1="7" x2="14" y2="11"></line><line x1="18" y1="7" x2="18" y2="13"></line></svg>
+        <span>Quản Lý Size</span>
+      </a>
+
+      <a th:href="@{/admin/users}" href="/admin/users" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>Khách Hàng / User</span>
+      </a>
+
+      <a th:href="@{/admin/brands}" href="/admin/brands" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <span>Thương Hiệu</span>
+      </a>
+
+      <a th:href="@{/admin/blogs}" href="/admin/blogs" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>Bài Viết / Blog</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a th:href="@{/}" href="/" class="store-preview-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        <span>Xem Cửa Hàng (Client)</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Admin Main Content -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="topbar-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" placeholder="Tìm kiếm kích cỡ...">
+      </div>
+      <div class="topbar-actions">
+        <div class="admin-profile-pill">
+          <div class="admin-avatar">AD</div>
+          <span class="admin-profile-name">Quản Trị Viên</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-body">
+      <div class="page-header-row">
+        <div class="page-title-box">
+          <h1>QUẢN LÝ KÍCH THƯỚC (SIZE)</h1>
+          <p>Quản lý danh sách các kích cỡ giày trong hệ thống.</p>
+        </div>
+        <div>
+          <button type="button" class="btn-primary">+ Thêm Kích Thước Mới</button>
+        </div>
+      </div>
+
+      <div class="admin-card-container">
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="table-toolbar-left">
+            <input type="text" class="table-search-input" placeholder="Tìm theo kích cỡ (VD: 39, 40, 41, 42)...">
+          </div>
+          <div>
+            <span class="caption-sm" style="color:var(--color-mute);">Tổng cộng 15 kích cỡ</span>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width:40px;"><input type="checkbox" style="accent-color:var(--color-ink);"></th>
+                <th style="width:120px;">ID</th>
+                <th>Kích Cỡ</th>
+                <th style="text-align:right; width:120px;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Size 1 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>1</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">36</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 2 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>2</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">36.5</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 3 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>3</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">37</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 4 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>4</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">38</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 5 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>5</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">38.5</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 6 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>6</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">39</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 7 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>7</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">40</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 8 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>8</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">40.5</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 9 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>9</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">41</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 10 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>10</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">42</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 11 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>11</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">42.5</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 12 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>12</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">43</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 13 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>13</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">44</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 14 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>14</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">44.5</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Size 15 -->
+              <tr>
+                <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
+                <td><strong>15</strong></td>
+                <td class="item-name-cell" style="font-weight:700; font-size:16px;">45</td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <button class="btn-action-icon" title="Sửa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa kích thước">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="table-footer-pagination">
+          <span>Trang 1 / 1</span>
+          <div class="pagination-controls">
+            <button class="page-chip active">1</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
