@@ -22,12 +22,6 @@
         <a href="product.html">Tìm cửa hàng</a>
         <span>|</span>
         <a href="blog.html">Trợ giúp</a>
-        <span>|</span>
-        <a href="register.html">Tham gia cùng chúng tôi</a>
-        <span>|</span>
-        <a href="login.html">Đăng nhập</a>
-        <span>|</span>
-        <a href="../admin/dashboard.html" style="font-weight: 700; color: var(--color-sale);">Trang Quản Trị</a>
       </div>
     </div>
   </header>
@@ -48,7 +42,6 @@
         <a href="product.html" class="active">Sản Phẩm</a>
         <a href="brand.html">Thương Hiệu</a>
         <a href="blog.html">Tin Tức / Blog</a>
-        <a href="product.html" style="color: var(--color-sale);">Giảm Giá</a>
       </div>
 
       <div class="nav-actions">
@@ -69,12 +62,35 @@
           <span class="cart-count-badge">3</span>
         </a>
 
-        <a href="user.html" class="nav-action-icon" aria-label="Tài khoản">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </a>
+        <!-- User Account Dropdown -->
+        <div class="user-dropdown-wrap">
+          <button type="button" class="nav-action-icon user-dropdown-btn" aria-label="Tài khoản" aria-expanded="false">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </button>
+          <div class="user-dropdown-menu">
+            <div class="user-dropdown-header">Tài Khoản</div>
+            <a href="login.html" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+              <span>Đăng nhập</span>
+            </a>
+            <a href="register.html" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+              <span>Đăng ký</span>
+            </a>
+            <a href="user.html" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>Thông tin tài khoản</span>
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <a href="../admin/dashboard.html" class="user-dropdown-item user-dropdown-admin">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Tới trang quản trị</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -145,25 +161,6 @@
           </div>
         </div>
 
-        <!-- Gender Filter -->
-        <div class="filter-group">
-          <div class="filter-group-title">Giới Tính</div>
-          <div class="filter-checkbox-list">
-            <label class="filter-checkbox-item">
-              <input type="checkbox" checked>
-              <span>Nam (290)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <input type="checkbox">
-              <span>Nữ (185)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <input type="checkbox">
-              <span>Unisex (110)</span>
-            </label>
-          </div>
-        </div>
-
         <!-- Shoe Size Grid -->
         <div class="filter-group">
           <div class="filter-group-title">Kích Thước Giày (EU)</div>
@@ -177,37 +174,6 @@
             <div class="filter-size-btn">42.5</div>
             <div class="filter-size-btn">43</div>
             <div class="filter-size-btn">44</div>
-          </div>
-        </div>
-
-        <!-- Colors Grid -->
-        <div class="filter-group">
-          <div class="filter-group-title">Màu Sắc</div>
-          <div class="filter-color-grid">
-            <div class="filter-color-item">
-              <div class="filter-color-circle" style="background-color:#111111;"></div>
-              <span>Đen</span>
-            </div>
-            <div class="filter-color-item">
-              <div class="filter-color-circle" style="background-color:#ffffff;"></div>
-              <span>Trắng</span>
-            </div>
-            <div class="filter-color-item">
-              <div class="filter-color-circle" style="background-color:#d30005;"></div>
-              <span>Đỏ</span>
-            </div>
-            <div class="filter-color-item">
-              <div class="filter-color-circle" style="background-color:#1151ff;"></div>
-              <span>Xanh</span>
-            </div>
-            <div class="filter-color-item">
-              <div class="filter-color-circle" style="background-color:#9e9ea0;"></div>
-              <span>Xám</span>
-            </div>
-            <div class="filter-color-item">
-              <div class="filter-color-circle" style="background-color:#0a7281;"></div>
-              <span>Teal</span>
-            </div>
           </div>
         </div>
 
@@ -250,14 +216,8 @@
               </a>
             </div>
             <div class="product-card-info">
-              <div class="swatch-row">
-                <span class="swatch-dot active" style="background-color: #d30005;"></span>
-                <span class="swatch-dot" style="background-color: #111111;"></span>
-                <span class="swatch-dot" style="background-color: #ffffff;"></span>
-              </div>
               <a href="product-detail.html" class="product-name">Nike Air Max Pulse Roam</a>
               <span class="product-category">Giày Nam Thể Thao & Đời Sống</span>
-              <span class="product-colors-count">3 Màu sắc</span>
               <div class="product-price-row">
                 <span class="price-regular">4.499.000₫</span>
               </div>
@@ -276,13 +236,8 @@
               </a>
             </div>
             <div class="product-card-info">
-              <div class="swatch-row">
-                <span class="swatch-dot active" style="background-color: #111111;"></span>
-                <span class="swatch-dot" style="background-color: #707072;"></span>
-              </div>
               <a href="product-detail.html" class="product-name">Nike Dunk Low Retro</a>
               <span class="product-category">Giày Nam Cổ Thấp</span>
-              <span class="product-colors-count">4 Màu sắc</span>
               <div class="product-price-row">
                 <span class="price-sale">2.699.000₫</span>
                 <span class="price-original">3.599.000₫</span>
@@ -303,13 +258,8 @@
               </a>
             </div>
             <div class="product-card-info">
-              <div class="swatch-row">
-                <span class="swatch-dot active" style="background-color: #0a7281;"></span>
-                <span class="swatch-dot" style="background-color: #39393b;"></span>
-              </div>
               <a href="product-detail.html" class="product-name">Nike Pegasus 41 GORE-TEX</a>
               <span class="product-category">Giày Chạy Bộ Chống Nước</span>
-              <span class="product-colors-count">2 Màu sắc</span>
               <div class="product-price-row">
                 <span class="price-regular">3.829.000₫</span>
               </div>
@@ -328,13 +278,8 @@
               </a>
             </div>
             <div class="product-card-info">
-              <div class="swatch-row">
-                <span class="swatch-dot active" style="background-color: #111111;"></span>
-                <span class="swatch-dot" style="background-color: #d30005;"></span>
-              </div>
               <a href="product-detail.html" class="product-name">Air Jordan 1 Low OG</a>
               <span class="product-category">Giày Nam Cổ Thấp Bóng Rổ</span>
-              <span class="product-colors-count">5 Màu sắc</span>
               <div class="product-price-row">
                 <span class="price-regular">4.109.000₫</span>
               </div>
@@ -353,13 +298,8 @@
               </a>
             </div>
             <div class="product-card-info">
-              <div class="swatch-row">
-                <span class="swatch-dot active" style="background-color: #0a7281;"></span>
-                <span class="swatch-dot" style="background-color: #707072;"></span>
-              </div>
               <a href="product-detail.html" class="product-name">Nike ACG Mountain Fly 2 Low</a>
               <span class="product-category">Giày Dã Ngoại & Leo Núi</span>
-              <span class="product-colors-count">3 Màu sắc</span>
               <div class="product-price-row">
                 <span class="price-regular">4.529.000₫</span>
               </div>
@@ -378,13 +318,8 @@
               </a>
             </div>
             <div class="product-card-info">
-              <div class="swatch-row">
-                <span class="swatch-dot active" style="background-color: #ffffff;"></span>
-                <span class="swatch-dot" style="background-color: #111111;"></span>
-              </div>
               <a href="product-detail.html" class="product-name">Nike Air Force 1 '07 LV8</a>
               <span class="product-category">Giày Nam Cổ Điển</span>
-              <span class="product-colors-count">6 Màu sắc</span>
               <div class="product-price-row">
                 <span class="price-sale">2.449.000₫</span>
                 <span class="price-original">3.499.000₫</span>
@@ -490,5 +425,6 @@
     </div>
   </footer>
 
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
