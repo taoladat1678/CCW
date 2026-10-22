@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -88,7 +88,7 @@
           <p>Quản lý danh sách các kích cỡ giày trong hệ thống.</p>
         </div>
         <div>
-          <button type="button" class="btn-primary">+ Thêm Kích Thước Mới</button>
+          <button type="button" class="btn-primary" id="btn-open-add">+ Thêm Kích Thước Mới</button>
         </div>
       </div>
 
@@ -384,5 +384,134 @@
     </main>
   </div>
 
+  <!-- ==================== MODAL THÊM KÍCH THƯỚC ==================== -->
+  <div class="modal-overlay" id="modal-add-size">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Thêm Kích Thước Mới</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-add-size">&times;</button>
+      </div>
+      <form id="form-add-size">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Giá trị kích cỡ (Size) <span class="req">*</span></label>
+            <input type="text" class="form-control" name="size_value" placeholder="Ví dụ: 39, 40, 40.5, 41, 42..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hệ đo lường / Tiêu chuẩn</label>
+            <select class="form-control" name="standard">
+              <option value="EU" selected>EU (Châu Âu / Tiêu chuẩn Việt Nam)</option>
+              <option value="US">US (Mỹ)</option>
+              <option value="UK">UK (Anh)</option>
+              <option value="CM">CM (Centimet bàn chân)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái áp dụng</label>
+            <select class="form-control" name="status">
+              <option value="active" selected>Đang sử dụng</option>
+              <option value="inactive">Tạm ngưng</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-add-size">Hủy</button>
+          <button type="submit" class="btn-primary">Lưu Kích Thước</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SỬA KÍCH THƯỚC ==================== -->
+  <div class="modal-overlay" id="modal-edit-size">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Chỉnh Sửa Kích Thước</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-edit-size">&times;</button>
+      </div>
+      <form id="form-edit-size">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">ID Kích thước</label>
+            <input type="text" class="form-control" id="edit-size-id" name="id" readonly style="background-color:var(--color-soft-cloud);">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Giá trị kích cỡ (Size) <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-size-val" name="size_value" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hệ đo lường / Tiêu chuẩn</label>
+            <select class="form-control" id="edit-size-std" name="standard">
+              <option value="EU">EU (Châu Âu / Tiêu chuẩn Việt Nam)</option>
+              <option value="US">US (Mỹ)</option>
+              <option value="UK">UK (Anh)</option>
+              <option value="CM">CM (Centimet bàn chân)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái áp dụng</label>
+            <select class="form-control" id="edit-size-status" name="status">
+              <option value="active">Đang sử dụng</option>
+              <option value="inactive">Tạm ngưng</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-edit-size">Hủy</button>
+          <button type="submit" class="btn-primary">Cập Nhật Kích Thước</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Mở modal Thêm
+    const btnOpenAdd = document.getElementById('btn-open-add');
+    if (btnOpenAdd) {
+      btnOpenAdd.addEventListener('click', () => {
+        document.getElementById('modal-add-size').classList.add('active');
+      });
+    }
+
+    // Mở modal Sửa khi bấm Sửa kích thước
+    document.querySelectorAll('button[title*="Sửa"]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const id = cells[1]?.innerText.trim() || '';
+        const sizeVal = cells[2]?.innerText.trim() || '';
+
+        document.getElementById('edit-size-id').value = id;
+        document.getElementById('edit-size-val').value = sizeVal;
+
+        document.getElementById('modal-edit-size').classList.add('active');
+      });
+    });
+
+    // Đóng modal
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-close');
+        const modal = document.getElementById(targetId);
+        if (modal) modal.classList.remove('active');
+      });
+    });
+
+    // Đóng khi click ngoài backdrop
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Đóng khi nhấn phím Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+      }
+    });
+  </script>
 </body>
 </html>

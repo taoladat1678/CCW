@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -88,7 +88,7 @@
           <p>Danh sách toàn bộ tài khoản thành viên Nike Member và quản trị viên hệ thống.</p>
         </div>
         <div>
-          <button type="button" class="btn-primary">+ Thêm Người Dùng Mới</button>
+          <button type="button" class="btn-primary" id="btn-open-add">+ Thêm Người Dùng Mới</button>
         </div>
       </div>
 
@@ -247,6 +247,9 @@
                     <a th:href="@{/user}" href="/user" target="_blank" class="btn-action-icon" title="Xem">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </a>
+                    <button class="btn-action-icon" title="Sửa thông tin">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
                     <button class="btn-action-icon" title="Mở khóa">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
                     </button>
@@ -274,5 +277,188 @@
     </main>
   </div>
 
+  <!-- ==================== MODAL THÊM NGƯỜI DÙNG ==================== -->
+  <div class="modal-overlay" id="modal-add-user">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Thêm Người Dùng Mới</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-add-user">&times;</button>
+      </div>
+      <form id="form-add-user">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã tài khoản <span class="req">*</span></label>
+            <input type="text" class="form-control" name="user_id" placeholder="Ví dụ: #USR-007..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Họ và tên <span class="req">*</span></label>
+            <input type="text" class="form-control" name="fullname" placeholder="Ví dụ: Nguyễn Văn A..." required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Email <span class="req">*</span></label>
+              <input type="email" class="form-control" name="email" placeholder="example@gmail.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số điện thoại <span class="req">*</span></label>
+              <input type="tel" class="form-control" name="phone" placeholder="0912 345 678" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật khẩu khởi tạo <span class="req">*</span></label>
+            <input type="password" class="form-control" name="password" placeholder="Tối thiểu 6 ký tự..." required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Vai trò</label>
+              <select class="form-control" name="role">
+                <option value="member" selected>Thành viên (Member)</option>
+                <option value="admin">Quản trị viên (Admin)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Trạng thái</label>
+              <select class="form-control" name="status">
+                <option value="active" selected>Hoạt động</option>
+                <option value="inactive">Tạm khóa</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-add-user">Hủy</button>
+          <button type="submit" class="btn-primary">Tạo Tài Khoản</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SỬA NGƯỜI DÙNG ==================== -->
+  <div class="modal-overlay" id="modal-edit-user">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Chỉnh Sửa Người Dùng</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-edit-user">&times;</button>
+      </div>
+      <form id="form-edit-user">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã tài khoản</label>
+            <input type="text" class="form-control" id="edit-user-id" name="user_id" readonly style="background-color:var(--color-soft-cloud);">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Họ và tên <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-user-name" name="fullname" required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Email <span class="req">*</span></label>
+              <input type="email" class="form-control" id="edit-user-email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số điện thoại <span class="req">*</span></label>
+              <input type="tel" class="form-control" id="edit-user-phone" name="phone" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Đổi mật khẩu mới (Bỏ trống nếu không đổi)</label>
+            <input type="password" class="form-control" id="edit-user-password" name="password" placeholder="Nhập mật khẩu mới nếu muốn thay đổi...">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Vai trò</label>
+              <select class="form-control" id="edit-user-role" name="role">
+                <option value="Thành Viên">Thành viên (Member)</option>
+                <option value="Quản Trị Viên">Quản trị viên (Admin)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Trạng thái</label>
+              <select class="form-control" id="edit-user-status" name="status">
+                <option value="Hoạt động">Hoạt động</option>
+                <option value="Đang khóa">Đang khóa</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-edit-user">Hủy</button>
+          <button type="submit" class="btn-primary">Cập Nhật Người Dùng</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Mở modal Thêm
+    const btnOpenAdd = document.getElementById('btn-open-add');
+    if (btnOpenAdd) {
+      btnOpenAdd.addEventListener('click', () => {
+        document.getElementById('modal-add-user').classList.add('active');
+      });
+    }
+
+    // Mở modal Sửa khi bấm Sửa
+    document.querySelectorAll('button[title*="Sửa"]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const name = row.querySelector('.item-name-cell')?.innerText.trim() || '';
+        const idText = row.querySelector('.caption-sm')?.innerText.trim() || '';
+        const email = cells[2]?.innerText.trim() || '';
+        const phone = cells[3]?.innerText.trim() || '';
+        const role = cells[4]?.querySelector('.badge-status')?.innerText.trim() || '';
+        const status = cells[6]?.querySelector('.badge-status')?.innerText.trim() || '';
+
+        document.getElementById('edit-user-id').value = idText;
+        document.getElementById('edit-user-name').value = name;
+        document.getElementById('edit-user-email').value = email;
+        document.getElementById('edit-user-phone').value = phone;
+
+        const roleSelect = document.getElementById('edit-user-role');
+        for (let i = 0; i < roleSelect.options.length; i++) {
+          if (role.toLowerCase().includes(roleSelect.options[i].value.toLowerCase())) {
+            roleSelect.selectedIndex = i;
+            break;
+          }
+        }
+
+        const statusSelect = document.getElementById('edit-user-status');
+        for (let i = 0; i < statusSelect.options.length; i++) {
+          if (status.includes(statusSelect.options[i].value)) {
+            statusSelect.selectedIndex = i;
+            break;
+          }
+        }
+
+        document.getElementById('modal-edit-user').classList.add('active');
+      });
+    });
+
+    // Đóng modal
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-close');
+        const modal = document.getElementById(targetId);
+        if (modal) modal.classList.remove('active');
+      });
+    });
+
+    // Đóng khi click ngoài backdrop
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Đóng khi nhấn phím Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+      }
+    });
+  </script>
 </body>
 </html>

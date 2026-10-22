@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -88,7 +88,7 @@
           <p>Nội dung biên tập, câu chuyện vận động viên và công nghệ thể thao.</p>
         </div>
         <div>
-          <button type="button" class="btn-primary">+ Viết Bài Mới</button>
+          <button type="button" class="btn-primary" id="btn-open-add">+ Viết Bài Mới</button>
         </div>
       </div>
 
@@ -276,5 +276,190 @@
     </main>
   </div>
 
+  <!-- ==================== MODAL THÊM BÀI VIẾT ==================== -->
+  <div class="modal-overlay" id="modal-add-blog">
+    <div class="admin-modal modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Viết Bài Viết Mới</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-add-blog">&times;</button>
+      </div>
+      <form id="form-add-blog">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Tiêu đề bài viết <span class="req">*</span></label>
+            <input type="text" class="form-control" name="title" placeholder="Nhập tiêu đề bài viết..." required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Chuyên mục <span class="req">*</span></label>
+              <select class="form-control" name="category" required>
+                <option value="Công Nghệ & Đổi Mới">Công Nghệ & Đổi Mới</option>
+                <option value="Vận Động Viên">Vận Động Viên</option>
+                <option value="Phong Cách Streetwear">Phong Cách Streetwear</option>
+                <option value="Cẩm Nang">Cẩm Nang Chọn Giày</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tác giả <span class="req">*</span></label>
+              <input type="text" class="form-control" name="author" placeholder="Ví dụ: Nike Newsroom..." required>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Link ảnh bài viết (URL)</label>
+              <input type="url" class="form-control" name="thumbnail" placeholder="https://images.unsplash.com/...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Trạng thái xuất bản</label>
+              <select class="form-control" name="status">
+                <option value="active" selected>Đã xuất bản</option>
+                <option value="inactive">Bản nháp</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tóm tắt ngắn (Excerpt)</label>
+            <textarea class="form-control" name="summary" rows="2" placeholder="Tóm tắt ngắn gọn nội dung bài viết hiển thị ở danh sách tin tức..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nội dung chi tiết bài viết</label>
+            <textarea class="form-control" name="content" rows="5" placeholder="Nhập toàn bộ nội dung bài viết..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-add-blog">Hủy</button>
+          <button type="submit" class="btn-primary">Xuất Bản Bài Viết</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SỬA BÀI VIẾT ==================== -->
+  <div class="modal-overlay" id="modal-edit-blog">
+    <div class="admin-modal modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Chỉnh Sửa Bài Viết</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-edit-blog">&times;</button>
+      </div>
+      <form id="form-edit-blog">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Tiêu đề bài viết <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-blog-title" name="title" required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Chuyên mục <span class="req">*</span></label>
+              <select class="form-control" id="edit-blog-category" name="category" required>
+                <option value="Công Nghệ & Đổi Mới">Công Nghệ & Đổi Mới</option>
+                <option value="Vận Động Viên">Vận Động Viên</option>
+                <option value="Phong Cách Streetwear">Phong Cách Streetwear</option>
+                <option value="Cẩm Nang">Cẩm Nang</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tác giả <span class="req">*</span></label>
+              <input type="text" class="form-control" id="edit-blog-author" name="author" required>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Link ảnh bài viết (URL)</label>
+              <input type="url" class="form-control" id="edit-blog-thumb" name="thumbnail">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Trạng thái xuất bản</label>
+              <select class="form-control" id="edit-blog-status" name="status">
+                <option value="Đã xuất bản">Đã xuất bản</option>
+                <option value="Bản nháp">Bản nháp</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tóm tắt ngắn (Excerpt)</label>
+            <textarea class="form-control" id="edit-blog-summary" name="summary" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nội dung chi tiết bài viết</label>
+            <textarea class="form-control" id="edit-blog-content" name="content" rows="5"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-edit-blog">Hủy</button>
+          <button type="submit" class="btn-primary">Cập Nhật Bài Viết</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Mở modal Thêm
+    const btnOpenAdd = document.getElementById('btn-open-add');
+    if (btnOpenAdd) {
+      btnOpenAdd.addEventListener('click', () => {
+        document.getElementById('modal-add-blog').classList.add('active');
+      });
+    }
+
+    // Mở modal Sửa khi bấm Sửa bài
+    document.querySelectorAll('button[title*="Sửa"]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const thumbSrc = row.querySelector('img')?.getAttribute('src') || '';
+        const title = row.querySelector('.item-name-cell')?.innerText.trim() || '';
+        const cate = cells[3]?.innerText.trim() || '';
+        const author = cells[4]?.innerText.trim() || '';
+        const statusText = cells[7]?.querySelector('.badge-status')?.innerText.trim() || '';
+
+        document.getElementById('edit-blog-title').value = title;
+        document.getElementById('edit-blog-author').value = author;
+        document.getElementById('edit-blog-thumb').value = thumbSrc;
+
+        const cateSelect = document.getElementById('edit-blog-category');
+        for (let i = 0; i < cateSelect.options.length; i++) {
+          if (cate.toLowerCase().includes(cateSelect.options[i].value.toLowerCase()) || cateSelect.options[i].value.toLowerCase().includes(cate.toLowerCase())) {
+            cateSelect.selectedIndex = i;
+            break;
+          }
+        }
+
+        const statusSelect = document.getElementById('edit-blog-status');
+        for (let i = 0; i < statusSelect.options.length; i++) {
+          if (statusText.includes(statusSelect.options[i].value)) {
+            statusSelect.selectedIndex = i;
+            break;
+          }
+        }
+
+        document.getElementById('modal-edit-blog').classList.add('active');
+      });
+    });
+
+    // Đóng modal
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-close');
+        const modal = document.getElementById(targetId);
+        if (modal) modal.classList.remove('active');
+      });
+    });
+
+    // Đóng khi click ngoài backdrop
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Đóng khi nhấn phím Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+      }
+    });
+  </script>
 </body>
 </html>
