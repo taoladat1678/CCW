@@ -1,0 +1,61 @@
+================================================================================
+                    TẦNG SERVICE (BUSINESS LOGIC LAYER) LÀ GÌ? ĐỂ LÀM GÌ?
+================================================================================
+
+1. ĐỊNH NGHĨA:
+- Service là tầng xử lý logic nghiệp vụ (Business Logic Layer) - được ví như "bộ não / trái tim" của toàn bộ ứng dụng.
+- Trong Spring Boot, một Service thường bao gồm:
+  + Service Interface (ví dụ: `ProductService`): Định nghĩa danh sách các hàm/hợp đồng nghiệp vụ cần có.
+  + Service Implementation (ví dụ: `ProductServiceImpl`): Cài đặt chi tiết các hàm đó, được đánh dấu bằng annotation `@Service`.
+
+2. SERVICE ĐỂ LÀM GÌ? (MỤC ĐÍCH & VAI TRÒ):
+- Xử lý toàn bộ logic nghiệp vụ (Business Logic):
+  + Tầng Controller chỉ nhận request và trả về kết quả; tầng Repository chỉ lấy/lưu dữ liệu DB. Mọi phép tính toán, điều kiện kiểm tra, quy tắc kinh doanh đều nằm ở tầng Service.
+- Quản lý giao dịch dữ liệu (Transaction Management):
+  + Sử dụng annotation `@Transactional` để đảm bảo tính toàn vẹn (ACID) của giao dịch.
+  + Ví dụ quy trình đặt đơn hàng:
+    Bước 1: Trừ số lượng tồn kho của đôi giày.
+    Bước 2: Tạo bản ghi Order.
+    Bước 3: Tạo các bản ghi OrderDetail.
+    Bước 4: Trừ tiền ví / ghi nhận thanh toán.
+    => Nếu bước 3 hoặc 4 bị lỗi, `@Transactional` sẽ tự động ROLLBACK (hoàn tác) lại toàn bộ, không để xảy ra tình trạng giày bị trừ kho mà đơn hàng không được tạo.
+- Kiểm tra logic và hợp lệ nâng cao (Business Validation):
+  + Kiểm tra xem email / username đã có ai đăng ký trước đó hay chưa.
+  + Kiểm tra xem size giày khách chọn có còn hàng trong kho hay không.
+  + Kiểm tra mã giảm giá (Voucher) còn hạn hay không, đủ điều kiện áp dụng hay không.
+  + Kiểm tra quyền hạn của người dùng đối với dữ liệu cần chỉnh sửa.
+- Xử lý dữ liệu trung gian và chuyển đổi dữ liệu (Mapping DTO <-> Entity):
+  + Nhận DTO từ Controller -> Validate nghiệp vụ -> Chuyển thành Entity để lưu vào DB qua Repository.
+  + Lấy Entity từ Repository -> Lọc/xử lý/bỏ bớt thông tin thừa -> Chuyển thành DTO trả về cho Controller.
+- Tích hợp các dịch vụ bên ngoài (Third-party integrations):
+  + Gửi email xác nhận đơn hàng, email đặt lại mật khẩu.
+  + Tích hợp cổng thanh toán (VNPay, Momo, ZaloPay, Stripe).
+  + Tải ảnh lên Cloudinary / AWS S3.
+  + Mã hóa mật khẩu người dùng bằng BCryptPasswordEncoder trước khi lưu vào DB.
+
+3. VÍ DỤ CÁC SERVICE TRONG DỰ ÁN SHOP GIÀY THỂ THAO:
+- ProductService:
+  + `getAllProducts(Pageable pageable)`: Lấy danh sách sản phẩm phân trang.
+  + `getProductById(Long id)`: Lấy chi tiết sản phẩm, nếu không tìm thấy ném ngoại lệ `ResourceNotFoundException`.
+  + `createProduct(ProductDTO dto)`: Kiểm tra trùng tên, upload ảnh, lưu vào DB.
+  + `filterProducts(Long brandId, Long sizeId, Double minPrice, Double maxPrice)`: Lọc sản phẩm theo nhiều tiêu chí.
+- OrderService:
+  + `checkout(OrderRequestDTO orderDTO)`: Kiểm tra tồn kho từng size giày, trừ số lượng tồn, áp mã giảm giá, tính phí ship, tạo hóa đơn.
+- UserService:
+  + `register(RegisterDTO dto)`: Kiểm tra trùng email/tên đăng nhập, mã hóa mật khẩu, gán role mặc định `ROLE_CUSTOMER`, gửi email kích hoạt.
+
+4. VỊ TRÍ TRONG LUỒNG HOẠT ĐỘNG:
+   Client (Web/App)
+         |  (gửi Request)
+         v
+     CONTROLLER   --> (Chỉ tiếp nhận Request, gọi Service, trả Response HTTP)
+         |
+         v
+      SERVICE     --> (Xử lý nghiệp vụ, kiểm tra điều kiện, tính toán, bọc Transaction)
+         |
+         v
+    REPOSITORY    --> (Truy vấn CSDL: SELECT, INSERT, UPDATE, DELETE)
+         |
+         v
+     DATABASE     --> (Lưu trữ dữ liệu)
+================================================================================
