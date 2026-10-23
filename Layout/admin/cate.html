@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản Lý Danh Mục | Nike Admin Portal</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
 </head>
 <body>
 
@@ -21,45 +21,45 @@
 
     <nav class="sidebar-nav">
       <div class="sidebar-heading">Tổng Quan</div>
-      <a href="dashboard.html" class="nav-link-item">
+      <a th:href="@{/admin/dashboard}" href="/admin/dashboard" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
         <span>Bảng Điều Khiển</span>
       </a>
 
       <div class="sidebar-heading">Danh Mục Quản Lý</div>
-      <a href="product.html" class="nav-link-item">
+      <a th:href="@{/admin/products}" href="/admin/products" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
         <span>Sản Phẩm</span>
       </a>
 
-      <a href="cate.html" class="nav-link-item active">
+      <a th:href="@{/admin/categories}" href="/admin/categories" class="nav-link-item active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
         <span>Danh Mục</span>
       </a>
 
-      <a href="size.html" class="nav-link-item">
+      <a th:href="@{/admin/sizes}" href="/admin/sizes" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"></rect><line x1="6" y1="7" x2="6" y2="11"></line><line x1="10" y1="7" x2="10" y2="13"></line><line x1="14" y1="7" x2="14" y2="11"></line><line x1="18" y1="7" x2="18" y2="13"></line></svg>
         <span>Quản Lý Size</span>
       </a>
 
-      <a href="user.html" class="nav-link-item">
+      <a th:href="@{/admin/users}" href="/admin/users" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         <span>Khách Hàng / User</span>
       </a>
 
-      <a href="brand.html" class="nav-link-item">
+      <a th:href="@{/admin/brands}" href="/admin/brands" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
         <span>Thương Hiệu</span>
       </a>
 
-      <a href="blog.html" class="nav-link-item">
+      <a th:href="@{/admin/blogs}" href="/admin/blogs" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
         <span>Bài Viết / Blog</span>
       </a>
     </nav>
 
     <div class="sidebar-footer">
-      <a href="../client/index.html" class="store-preview-btn">
+      <a th:href="@{/}" href="/" class="store-preview-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         <span>Xem Cửa Hàng (Client)</span>
       </a>
@@ -88,7 +88,7 @@
           <p>Thiết lập hệ thống phân loại giày theo bộ môn thể thao và phong cách sống.</p>
         </div>
         <div>
-          <button type="button" class="btn-primary">+ Thêm Danh Mục Mới</button>
+          <button type="button" class="btn-primary" id="btn-open-add">+ Thêm Danh Mục Mới</button>
         </div>
       </div>
 
@@ -116,9 +116,7 @@
                 <th style="width:40px;"><input type="checkbox" style="accent-color:var(--color-ink);"></th>
                 <th>Mã danh mục</th>
                 <th>Tên danh mục</th>
-                <th>Đường dẫn (Slug)</th>
-                <th>Mô tả chi tiết</th>
-                <th>Số lượng sản phẩm</th>
+                <th>Mô tả</th>
                 <th>Trạng thái</th>
                 <th style="text-align:right;">Thao tác</th>
               </tr>
@@ -127,15 +125,13 @@
               <!-- Cate 1 -->
               <tr>
                 <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
-                <td><strong>CAT-RUN</strong></td>
-                <td class="item-name-cell">Giày Chạy Bộ (Running)</td>
-                <td><code>/running-shoes</code></td>
-                <td>Các dòng giày phục vụ cự ly 5K, 10K, bán marathon và full marathon với đệm ZoomX & Air Zoom.</td>
-                <td><strong>92 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hiển thị</span></td>
+                <td class="cate-code"><strong>CAT-RUN</strong></td>
+                <td class="item-name-cell cate-name">Giày Chạy Bộ (Running)</td>
+                <td class="cate-desc">Các dòng giày phục vụ cự ly 5K, 10K, bán marathon và full marathon với đệm ZoomX & Air Zoom.</td>
+                <td class="cate-status"><span class="badge-status active">Hiển thị</span></td>
                 <td style="text-align:right;">
                   <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <button class="btn-action-icon" title="Sửa danh mục">
+                    <button class="btn-action-icon btn-edit-cate" title="Sửa danh mục">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </button>
                     <button class="btn-action-icon danger" title="Xóa danh mục">
@@ -148,15 +144,13 @@
               <!-- Cate 2 -->
               <tr>
                 <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
-                <td><strong>CAT-LIFE</strong></td>
-                <td class="item-name-cell">Đời Sống & Phong Cách (Lifestyle)</td>
-                <td><code>/lifestyle-shoes</code></td>
-                <td>Dòng sản phẩm thời trang đường phố biểu tượng: Air Max, Air Force 1, Dunk, Blazer.</td>
-                <td><strong>184 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hiển thị</span></td>
+                <td class="cate-code"><strong>CAT-LIFE</strong></td>
+                <td class="item-name-cell cate-name">Đời Sống & Phong Cách (Lifestyle)</td>
+                <td class="cate-desc">Dòng sản phẩm thời trang đường phố biểu tượng: Air Max, Air Force 1, Dunk, Blazer.</td>
+                <td class="cate-status"><span class="badge-status active">Hiển thị</span></td>
                 <td style="text-align:right;">
                   <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <button class="btn-action-icon" title="Sửa">
+                    <button class="btn-action-icon btn-edit-cate" title="Sửa">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </button>
                     <button class="btn-action-icon danger" title="Xóa">
@@ -169,15 +163,13 @@
               <!-- Cate 3 -->
               <tr>
                 <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
-                <td><strong>CAT-BASKET</strong></td>
-                <td class="item-name-cell">Bóng Rổ (Basketball)</td>
-                <td><code>/basketball-shoes</code></td>
-                <td>Giày bóng rổ hiệu năng thi đấu sàn gỗ và sân bê tông: LeBron, Giannis, Sabrina, Jordan.</td>
-                <td><strong>64 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hiển thị</span></td>
+                <td class="cate-code"><strong>CAT-BASKET</strong></td>
+                <td class="item-name-cell cate-name">Bóng Rổ (Basketball)</td>
+                <td class="cate-desc">Giày bóng rổ hiệu năng thi đấu sàn gỗ và sân bê tông: LeBron, Giannis, Sabrina, Jordan.</td>
+                <td class="cate-status"><span class="badge-status active">Hiển thị</span></td>
                 <td style="text-align:right;">
                   <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <button class="btn-action-icon" title="Sửa">
+                    <button class="btn-action-icon btn-edit-cate" title="Sửa">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </button>
                     <button class="btn-action-icon danger" title="Xóa">
@@ -190,15 +182,13 @@
               <!-- Cate 4 -->
               <tr>
                 <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
-                <td><strong>CAT-TRAIL</strong></td>
-                <td class="item-name-cell">Dã Ngoại & Leo Núi (Trail & ACG)</td>
-                <td><code>/trail-outdoor</code></td>
-                <td>Giày chạy địa hình có gai bám sâu Vibram, màng chống nước GORE-TEX bảo vệ bàn chân.</td>
-                <td><strong>28 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hiển thị</span></td>
+                <td class="cate-code"><strong>CAT-TRAIL</strong></td>
+                <td class="item-name-cell cate-name">Dã Ngoại & Leo Núi (Trail & ACG)</td>
+                <td class="cate-desc">Giày chạy địa hình có gai bám sâu Vibram, màng chống nước GORE-TEX bảo vệ bàn chân.</td>
+                <td class="cate-status"><span class="badge-status active">Hiển thị</span></td>
                 <td style="text-align:right;">
                   <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <button class="btn-action-icon" title="Sửa">
+                    <button class="btn-action-icon btn-edit-cate" title="Sửa">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </button>
                     <button class="btn-action-icon danger" title="Xóa">
@@ -211,15 +201,13 @@
               <!-- Cate 5 -->
               <tr>
                 <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
-                <td><strong>CAT-SKATE</strong></td>
-                <td class="item-name-cell">Trượt Ván (Skateboarding - SB)</td>
-                <td><code>/skateboarding-sb</code></td>
-                <td>Dành riêng cho cộng đồng Skater với đệm Zoom ở gót chân và đế bám ván linh hoạt.</td>
-                <td><strong>45 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hiển thị</span></td>
+                <td class="cate-code"><strong>CAT-SKATE</strong></td>
+                <td class="item-name-cell cate-name">Trượt Ván (Skateboarding - SB)</td>
+                <td class="cate-desc">Dành riêng cho cộng đồng Skater với đệm Zoom ở gót chân và đế bám ván linh hoạt.</td>
+                <td class="cate-status"><span class="badge-status active">Hiển thị</span></td>
                 <td style="text-align:right;">
                   <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <button class="btn-action-icon" title="Sửa">
+                    <button class="btn-action-icon btn-edit-cate" title="Sửa">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </button>
                     <button class="btn-action-icon danger" title="Xóa">
@@ -232,15 +220,13 @@
               <!-- Cate 6 -->
               <tr>
                 <td><input type="checkbox" style="accent-color:var(--color-ink);"></td>
-                <td><strong>CAT-TRAIN</strong></td>
-                <td class="item-name-cell">Tập Luyện & Gym (Training)</td>
-                <td><code>/training-gym</code></td>
-                <td>Dòng sản phẩm Metcon hỗ trợ tạ nặng, thăng bằng và các bài tập nhảy cường độ cao.</td>
-                <td><strong>43 sản phẩm</strong></td>
-                <td><span class="badge-status inactive">Tạm ẩn</span></td>
+                <td class="cate-code"><strong>CAT-TRAIN</strong></td>
+                <td class="item-name-cell cate-name">Tập Luyện & Gym (Training)</td>
+                <td class="cate-desc">Dòng sản phẩm Metcon hỗ trợ tạ nặng, thăng bằng và các bài tập nhảy cường độ cao.</td>
+                <td class="cate-status"><span class="badge-status inactive">Tạm ẩn</span></td>
                 <td style="text-align:right;">
                   <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <button class="btn-action-icon" title="Sửa">
+                    <button class="btn-action-icon btn-edit-cate" title="Sửa">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </button>
                     <button class="btn-action-icon danger" title="Xóa">
@@ -267,5 +253,132 @@
     </main>
   </div>
 
+  <!-- ==================== MODAL THÊM DANH MỤC ==================== -->
+  <div class="modal-overlay" id="modal-add-category">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Thêm Danh Mục Mới</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-add-category">&times;</button>
+      </div>
+      <form id="form-add-category">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã danh mục <span class="req">*</span></label>
+            <input type="text" class="form-control" name="code" placeholder="Ví dụ: CAT-RUN, CAT-LIFE..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tên danh mục <span class="req">*</span></label>
+            <input type="text" class="form-control" name="name" placeholder="Ví dụ: Giày Chạy Bộ (Running)..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả</label>
+            <textarea class="form-control" name="description" rows="3" placeholder="Nhập mô tả chi tiết về danh mục..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái</label>
+            <select class="form-control" name="status">
+              <option value="1" selected>Hiển thị</option>
+              <option value="0">Tạm ẩn</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-add-category">Hủy</button>
+          <button type="submit" class="btn-primary">Lưu Danh Mục</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SỬA DANH MỤC ==================== -->
+  <div class="modal-overlay" id="modal-edit-category">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Chỉnh Sửa Danh Mục</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-edit-category">&times;</button>
+      </div>
+      <form id="form-edit-category">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã danh mục <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-cate-code" name="code" readonly style="background-color:var(--color-soft-cloud);">
+            <div class="form-help">Mã danh mục cố định không được phép thay đổi</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tên danh mục <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-cate-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả</label>
+            <textarea class="form-control" id="edit-cate-desc" name="description" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái</label>
+            <select class="form-control" id="edit-cate-status" name="status">
+              <option value="1">Hiển thị</option>
+              <option value="0">Tạm ẩn</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-edit-category">Hủy</button>
+          <button type="submit" class="btn-primary">Cập Nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Mở modal Thêm
+    const btnOpenAdd = document.getElementById('btn-open-add');
+    if (btnOpenAdd) {
+      btnOpenAdd.addEventListener('click', () => {
+        document.getElementById('modal-add-category').classList.add('active');
+      });
+    }
+
+    // Mở modal Sửa khi bấm icon Sửa trên từng dòng
+    document.querySelectorAll('.btn-edit-cate').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const code = row.querySelector('.cate-code')?.innerText.trim() || '';
+        const name = row.querySelector('.cate-name')?.innerText.trim() || '';
+        const desc = row.querySelector('.cate-desc')?.innerText.trim() || '';
+        const statusText = row.querySelector('.cate-status')?.innerText.trim() || '';
+
+        document.getElementById('edit-cate-code').value = code;
+        document.getElementById('edit-cate-name').value = name;
+        document.getElementById('edit-cate-desc').value = desc;
+        document.getElementById('edit-cate-status').value = statusText.includes('Hiển thị') ? '1' : '0';
+
+        document.getElementById('modal-edit-category').classList.add('active');
+      });
+    });
+
+    // Đóng modal
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-close');
+        const modal = document.getElementById(targetId);
+        if (modal) modal.classList.remove('active');
+      });
+    });
+
+    // Đóng khi click ra ngoài backdrop
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Đóng khi nhấn phím Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+      }
+    });
+  </script>
 </body>
 </html>
