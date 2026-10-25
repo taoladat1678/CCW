@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       e.stopPropagation();
       const isActive = wrap.classList.contains('active');
-      
+
       // Close any other open dropdowns
       dropdownWraps.forEach(w => {
         w.classList.remove('active');

@@ -123,9 +123,34 @@ public class UserService {
     }
 
     /**
-     * Kiểm tra email đã đăng ký chưa.
+     * Xác thực đăng nhập
+     */
+    public User login(String email, String password) {
+        if (email == null || email.isBlank() || password == null || password.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vui lòng nhập đầy đủ email và mật khẩu!");
+        }
+
+        User user = userRepository.findByEmail(email.trim())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email hoặc mật khẩu không chính xác!"));
+
+        if (!password.equals(user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email hoặc mật khẩu không chính xác!");
+        }
+
+        if (user.getStatus() != null && user.getStatus() == 0) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tài khoản của bạn đã bị khóa!");
+        }
+
+        return user;
+    }
+
+    /**
+     * Kiểm tra email đã tồn tại hay chưa
      */
     public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        if (email == null || email.isBlank()) {
+            return false;
+        }
+        return userRepository.existsByEmail(email.trim());
     }
 }
