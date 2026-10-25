@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -161,7 +161,7 @@
             </div>
           </div>
           <div>
-            <div class="stat-card-number">24,850</div>
+            <div class="stat-card-number" id="totalCustomerCount">--</div>
           </div>
         </article>
 
@@ -383,6 +383,29 @@
     </main>
   </div>
 
+  <script>
+    // Gọi REST API lấy tổng số khách hàng tự động khi tải trang
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('/api/admin/stats/customers/count')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Lỗi mạng hoặc server không phản hồi');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const el = document.getElementById('totalCustomerCount');
+          if (el && data && data.totalCustomers !== undefined) {
+            el.textContent = Number(data.totalCustomers).toLocaleString('vi-VN');
+          }
+        })
+        .catch(error => {
+          console.warn('Chưa kết nối được database hoặc API:', error);
+          const el = document.getElementById('totalCustomerCount');
+          if (el) el.textContent = '0';
+        });
+    });
+  </script>
 </body>
 
 </html>
