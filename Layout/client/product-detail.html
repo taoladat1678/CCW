@@ -1,11 +1,45 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nike Air Max Pulse Roam - Giày Nam | Nike VN</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <title th:text="${product != null ? product.name + ' | Nike VN' : 'Chi tiết sản phẩm | Nike VN'}">Nike Air Max Pulse Roam - Giày Nam | Nike VN</title>
+  <link rel="stylesheet" th:href="@{/client/css/style.css}" href="/client/css/style.css">
   <style>
+    .toast-popup {
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50px);
+      background: #111;
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 30px;
+      border: 1px solid #333;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 10000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .toast-popup.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast-popup.toast-error {
+      background: #dc2626;
+      border-color: #b91c1c;
+      color: #fff;
+    }
+    .toast-popup.toast-success {
+      background: #15803d;
+      border-color: #166534;
+      color: #fff;
+    }
     .qty-stepper {
       display: inline-flex !important;
       align-items: center !important;
@@ -65,16 +99,16 @@
   <header class="utility-bar">
     <div class="container utility-content">
       <div class="jordan-swoosh">
-        <a href="brand.html" title="Jordan">
+        <a th:href="@{/brand}" href="/brand" title="Jordan">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
           </svg>
         </a>
       </div>
       <div class="utility-links">
-        <a href="product.html">Tìm cửa hàng</a>
+        <a th:href="@{/products}" href="/products">Tìm cửa hàng</a>
         <span>|</span>
-        <a href="blog.html">Trợ giúp</a>
+        <a th:href="@{/blog}" href="/blog">Trợ giúp</a>
       </div>
     </div>
   </header>
@@ -83,7 +117,7 @@
   <nav class="primary-nav">
     <div class="container nav-container">
       <div class="nav-logo">
-        <a href="index.html" aria-label="Nike Trang Chủ">
+        <a th:href="@{/}" href="/" aria-label="Nike Trang Chủ">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
           </svg>
@@ -91,10 +125,10 @@
       </div>
 
       <div class="nav-menu">
-        <a href="index.html">Mới & Nổi Bật</a>
-        <a href="product.html" class="active">Sản Phẩm</a>
-        <a href="brand.html">Thương Hiệu</a>
-        <a href="blog.html">Tin Tức / Blog</a>
+        <a th:href="@{/}" href="/">Mới & Nổi Bật</a>
+        <a th:href="@{/products}" href="/products" class="active">Sản Phẩm</a>
+        <a th:href="@{/brand}" href="/brand">Thương Hiệu</a>
+        <a th:href="@{/blog}" href="/blog">Tin Tức / Blog</a>
       </div>
 
       <div class="nav-actions">
@@ -106,39 +140,54 @@
           <input type="text" placeholder="Tìm kiếm">
         </div>
 
-        <a href="cart.html" class="nav-action-icon" aria-label="Giỏ hàng">
+        <a th:href="@{/cart}" href="/cart" class="nav-action-icon" aria-label="Giỏ hàng">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <span class="cart-count-badge">3</span>
+          <span class="cart-count-badge" id="cartBadge" th:text="${cartCount != null ? cartCount : 0}">0</span>
         </a>
 
         <!-- User Account Dropdown -->
         <div class="user-dropdown-wrap">
-          <button type="button" class="nav-action-icon user-dropdown-btn" aria-label="Tài khoản" aria-expanded="false">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <button type="button" class="nav-action-icon user-dropdown-btn" aria-label="Tài khoản" style="display:inline-flex; align-items:center; gap:8px; width:auto; padding:6px 14px; border-radius:20px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0;">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
+            <span th:if="${currentUser != null}" th:text="${currentUser.fullName}" style="font-size:13px; font-weight:600; color:#111; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
           </button>
           <div class="user-dropdown-menu">
-            <div class="user-dropdown-header">Tài Khoản</div>
-            <a href="login.html" class="user-dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-              <span>Đăng nhập</span>
-            </a>
-            <a href="register.html" class="user-dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-              <span>Đăng ký</span>
-            </a>
-            <a href="user.html" class="user-dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              <span>Thông tin tài khoản</span>
-            </a>
-            <div class="user-dropdown-divider"></div>
-            <a href="../admin/dashboard.html" class="user-dropdown-item user-dropdown-admin">
+            <th:block th:if="${currentUser != null}">
+              <div class="user-dropdown-header" th:text="'Xin chào, ' + ${currentUser.fullName}"></div>
+              <a th:href="@{/user}" class="user-dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Hồ sơ cá nhân</span>
+              </a>
+              <a th:href="@{/cart}" class="user-dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
+                <span>Giỏ hàng của tôi</span>
+              </a>
+              <div class="user-dropdown-divider"></div>
+              <a th:href="@{/logout}" class="user-dropdown-item" style="color:#e50914;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Đăng xuất</span>
+              </a>
+            </th:block>
+            <th:block th:unless="${currentUser != null}">
+              <div class="user-dropdown-header">Tài Khoản</div>
+              <a th:href="@{/login}" class="user-dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                <span>Đăng nhập</span>
+              </a>
+              <a th:href="@{/register}" class="user-dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                <span>Đăng ký</span>
+              </a>
+            </th:block>
+            <div class="user-dropdown-divider" th:if="${currentUser != null and currentUser.role == 'ADMIN'}"></div>
+            <a th:if="${currentUser != null and currentUser.role == 'ADMIN'}" th:href="@{/admin/dashboard}" class="user-dropdown-item user-dropdown-admin">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
               <span>Tới trang quản trị</span>
             </a>
@@ -152,13 +201,15 @@
   <div class="sub-nav-strip">
     <div class="container sub-nav-container">
       <div class="breadcrumb-list">
-        <a href="index.html">Trang Chủ</a>
+        <a th:href="@{/}" href="/">Trang Chủ</a>
         <span>/</span>
-        <a href="product.html">Giày Nam</a>
+        <a th:href="@{/products}" href="/products">Sản Phẩm</a>
+        <span th:if="${product != null and product.categoryName != null}">/</span>
+        <a th:if="${product != null and product.categoryName != null}"
+           th:href="@{/products(categoryId=${product.categoryId})}"
+           th:text="${product.categoryName}">Danh Mục</a>
         <span>/</span>
-        <a href="product.html">Air Max</a>
-        <span>/</span>
-        <span style="color:var(--color-ink); font-weight:600;">Nike Air Max Pulse Roam</span>
+        <span style="color:var(--color-ink); font-weight:600;" th:text="${product != null ? product.name : 'Chi tiết sản phẩm'}">Tên sản phẩm</span>
       </div>
     </div>
   </div>
@@ -169,52 +220,34 @@
       <!-- PDP Gallery: Left Thumbnail Rail + Main Square Photo -->
       <div class="pdp-gallery">
         <div class="pdp-thumbs">
-          <div class="pdp-thumb-item active">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80" alt="Nike Air Max Góc nhìn 1">
-          </div>
-          <div class="pdp-thumb-item">
-            <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=300&q=80" alt="Nike Air Max Góc nhìn 2">
-          </div>
-          <div class="pdp-thumb-item">
-            <img src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?auto=format&fit=crop&w=300&q=80" alt="Nike Air Max Góc nhìn 3">
-          </div>
-          <div class="pdp-thumb-item">
-            <img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=300&q=80" alt="Nike Air Max Đế giày">
-          </div>
+          <th:block th:if="${product.images != null and !product.images.isEmpty()}">
+            <div th:each="img, stat : ${product.images}"
+                 class="pdp-thumb-item"
+                 th:classappend="${stat.first ? 'active' : ''}">
+              <img th:src="${img}" th:alt="${product.name}">
+            </div>
+          </th:block>
+          <th:block th:unless="${product.images != null and !product.images.isEmpty()}">
+            <div class="pdp-thumb-item active">
+              <img th:src="${product.thumbnail}" th:alt="${product.name}">
+            </div>
+          </th:block>
         </div>
 
         <div class="pdp-main-image">
-          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1000&q=80" alt="Nike Air Max Pulse Roam Chi tiết chính">
+          <img id="pdpMainImg" th:src="${product.thumbnail}" th:alt="${product.name}">
         </div>
       </div>
 
       <!-- PDP Product Info Panel -->
       <div class="pdp-info-panel">
         <div class="pdp-header">
-          <div class="pdp-brand-tag">NIKE SPORTSWEAR</div>
-          <h1 class="pdp-title">Nike Air Max Pulse Roam</h1>
-          <p class="pdp-category">Giày Nam Thể Thao & Đời Sống</p>
+          <div class="pdp-brand-tag" th:text="${product.brandName ?: 'NIKE'}">NIKE</div>
+          <h1 class="pdp-title" th:text="${product.name}">Nike Air Max Pulse Roam</h1>
+          <p class="pdp-category" th:text="${product.categoryName ?: 'Giày Thể Thao Nam & Nữ'}">Giày Thể Thao</p>
           <div class="pdp-price-box">
-            <span class="price-regular">4.499.000₫</span>
-            <span class="badge-promo" style="font-size:11px;">Bán Chạy Nhất</span>
-          </div>
-        </div>
-
-        <!-- Colorway Selector -->
-        <div class="pdp-color-picker">
-          <div class="pdp-section-label">
-            <span>Màu sắc: <strong>Đỏ Đô / Đen / Trắng Sứ</strong></span>
-          </div>
-          <div class="pdp-color-swatches">
-            <div class="pdp-color-swatch-thumb active" title="Đỏ Đô / Đen">
-              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" alt="Đỏ Đô">
-            </div>
-            <div class="pdp-color-swatch-thumb" title="Đen Tuyền">
-              <img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=150&q=80" alt="Đen Tuyền">
-            </div>
-            <div class="pdp-color-swatch-thumb" title="Trắng Platinum">
-              <img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=150&q=80" alt="Trắng Platinum">
-            </div>
+            <span class="price-regular" th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + '₫'">4.499.000₫</span>
+            <span class="badge-promo" style="font-size:11px;">Chính Hãng</span>
           </div>
         </div>
 
@@ -222,22 +255,22 @@
         <div class="pdp-size-picker">
           <div class="pdp-section-label">
             <span>Chọn Kích Thước (EU)</span>
-            <a href="#" class="size-guide-link">Bảng hướng dẫn chọn cỡ</a>
+            <span style="font-size:12px; color:var(--color-charcoal); font-weight:normal;">Bảng size tiêu chuẩn</span>
           </div>
 
-          <div class="size-grid">
-            <div class="size-tile">EU 39</div>
-            <div class="size-tile">EU 40</div>
-            <div class="size-tile active">EU 40.5</div>
-            <div class="size-tile">EU 41</div>
-            <div class="size-tile">EU 42</div>
-            <div class="size-tile">EU 42.5</div>
-            <div class="size-tile">EU 43</div>
-            <div class="size-tile">EU 44</div>
-            <div class="size-tile">EU 44.5</div>
-            <div class="size-tile">EU 45</div>
-            <div class="size-tile disabled">EU 45.5</div>
-            <div class="size-tile disabled">EU 46</div>
+          <div class="size-grid" id="pdpSizeGrid">
+            <th:block th:if="${product.sizes != null and !product.sizes.isEmpty()}">
+              <div th:each="s, stat : ${product.sizes}"
+                   class="size-tile"
+                   th:classappend="${stat.first ? 'active' : ''}"
+                   th:data-size-id="${s.id}"
+                   th:text="'EU ' + ${s.name}">
+                EU 40
+              </div>
+            </th:block>
+            <th:block th:unless="${product.sizes != null and !product.sizes.isEmpty()}">
+              <div class="size-tile active" data-size-id="">Tiêu Chuẩn</div>
+            </th:block>
           </div>
         </div>
 
@@ -257,20 +290,17 @@
 
         <!-- CTA Buttons -->
         <div class="pdp-cta-group">
-          <a href="cart.html" class="btn-primary">
+          <button type="button" class="btn-primary" id="btnAddToCartDetail" style="width:100%; height:50px; font-size:15px; font-weight:700; cursor:pointer;">
             THÊM VÀO GIỎ HÀNG
-          </a>
-          <a href="cart.html" class="btn-secondary" style="background-color: var(--color-canvas); border: 1px solid var(--color-hairline);">
+          </button>
+          <button type="button" class="btn-secondary" id="btnBuyNowDetail" style="width:100%; height:50px; font-size:15px; font-weight:700; background-color: var(--color-canvas); border: 1px solid var(--color-hairline); cursor:pointer;">
             MUA NGAY BẰNG 1-CHẠM
-          </a>
-          <button type="button" class="btn-secondary" style="width:100%; height:50px;">
-            YÊU THÍCH ♡
           </button>
         </div>
 
         <!-- Product Description -->
-        <div class="pdp-description">
-          Lấy cảm hứng từ nhịp sống đường phố năng động của London và công nghệ chạy bộ đỉnh cao, Nike Air Max Pulse Roam kết hợp phong cách thể thao tiện ích cùng bộ đệm Air cải tiến. Phần thân giày dệt sợi gia cố chống mài mòn, bọc da cao cấp và lớp đệm bọt xốp đàn hồi mang lại độ êm ái chưa từng có.
+        <div class="pdp-description" th:text="${product.description ?: 'Lấy cảm hứng từ nhịp sống đường phố năng động và công nghệ đệm giày thể thao đỉnh cao, đôi giày mang lại độ êm ái, bám đường tuyệt vời và phong cách thời trang vượt thời gian.'}">
+          Mô tả sản phẩm
         </div>
 
         <ul class="pdp-details-list">
@@ -306,60 +336,30 @@
     <section class="section-gap">
       <div class="section-header-row">
         <h2 class="section-header-title">BẠN CŨNG CÓ THỂ THÍCH</h2>
-        <a href="product.html" class="link-md">Xem thêm sản phẩm cùng loại</a>
+        <a th:href="${product != null and product.categoryId != null} ? @{/products(categoryId=${product.categoryId})} : @{/products}" href="/products" class="link-md">Xem thêm sản phẩm cùng loại</a>
       </div>
 
       <div class="product-grid">
-        <!-- Related 1 -->
-        <article class="product-card">
-          <div class="product-card-image-wrap">
-            <span class="product-card-badge badge-promo">Mới</span>
-            <a href="product-detail.html">
-              <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80" alt="Nike Dunk Low">
-            </a>
-          </div>
-          <div class="product-card-info">
-            <a href="product-detail.html" class="product-name">Nike Dunk Low Retro</a>
-            <span class="product-category">Giày Nam Cổ Thấp</span>
-            <div class="product-price-row">
-              <span class="price-regular">3.599.000₫</span>
+        <th:block th:if="${relatedProducts != null and !relatedProducts.isEmpty()}">
+          <article th:each="rel : ${relatedProducts}" class="product-card">
+            <div class="product-card-image-wrap">
+              <span class="product-card-badge badge-promo">Gợi ý</span>
+              <a th:href="@{/product-detail(id=${rel.id})}">
+                <img th:src="${rel.thumbnail ?: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80'}" th:alt="${rel.name}">
+              </a>
             </div>
-          </div>
-        </article>
-
-        <!-- Related 2 -->
-        <article class="product-card">
-          <div class="product-card-image-wrap">
-            <span class="product-card-badge badge-promo">Air Max</span>
-            <a href="product-detail.html">
-              <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=700&q=80" alt="Nike Air Max 90">
-            </a>
-          </div>
-          <div class="product-card-info">
-            <a href="product-detail.html" class="product-name">Nike Air Max 90 GORE-TEX</a>
-            <span class="product-category">Giày Nam Chống Nước</span>
-            <div class="product-price-row">
-              <span class="price-regular">4.699.000₫</span>
+            <div class="product-card-info">
+              <a th:href="@{/product-detail(id=${rel.id})}" class="product-name" th:text="${rel.name}">Nike Dunk Low Retro</a>
+              <span class="product-category" th:text="${rel.categoryName ?: 'Giày Thể Thao'}">Giày Thể Thao</span>
+              <div class="product-price-row">
+                <span class="price-regular" th:text="${#numbers.formatDecimal(rel.price, 0, 'POINT', 0, 'COMMA')} + '₫'">3.599.000₫</span>
+              </div>
             </div>
-          </div>
-        </article>
-
-        <!-- Related 3 -->
-        <article class="product-card">
-          <div class="product-card-image-wrap">
-            <span class="product-card-badge badge-promo">Bán Chạy</span>
-            <a href="product-detail.html">
-              <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=700&q=80" alt="Nike Pegasus 41">
-            </a>
-          </div>
-          <div class="product-card-info">
-            <a href="product-detail.html" class="product-name">Nike Pegasus 41</a>
-            <span class="product-category">Giày Chạy Bộ Nam</span>
-            <div class="product-price-row">
-              <span class="price-regular">3.829.000₫</span>
-            </div>
-          </div>
-        </article>
+          </article>
+        </th:block>
+        <th:block th:unless="${relatedProducts != null and !relatedProducts.isEmpty()}">
+          <p class="caption-md" style="grid-column: 1 / -1; color: var(--color-charcoal); padding: var(--space-xl) 0;">Chưa có sản phẩm liên quan trong cùng danh mục này.</p>
+        </th:block>
       </div>
     </section>
   </main>
@@ -372,10 +372,10 @@
         <div>
           <h4 class="footer-col-title">TÀI NGUYÊN</h4>
           <ul class="footer-links-list">
-            <li><a href="product.html">Tìm cửa hàng</a></li>
-            <li><a href="register.html">Trở thành thành viên</a></li>
-            <li><a href="blog.html">Gửi phản hồi</a></li>
-            <li><a href="product.html">Khuyến mãi & Ưu đãi</a></li>
+            <li><a th:href="@{/products}" href="/products">Tìm cửa hàng</a></li>
+            <li><a th:href="@{/register}" href="/register">Trở thành thành viên</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Gửi phản hồi</a></li>
+            <li><a th:href="@{/products}" href="/products">Khuyến mãi & Ưu đãi</a></li>
           </ul>
         </div>
 
@@ -383,11 +383,11 @@
         <div>
           <h4 class="footer-col-title">TRỢ GIÚP</h4>
           <ul class="footer-links-list">
-            <li><a href="cart.html">Tình trạng đơn hàng</a></li>
-            <li><a href="product.html">Giao hàng & Vận chuyển</a></li>
-            <li><a href="product-detail.html">Đổi trả hàng</a></li>
-            <li><a href="user.html">Tùy chọn thanh toán</a></li>
-            <li><a href="blog.html">Liên hệ chúng tôi</a></li>
+            <li><a th:href="@{/cart}" href="/cart">Tình trạng đơn hàng</a></li>
+            <li><a th:href="@{/products}" href="/products">Giao hàng & Vận chuyển</a></li>
+            <li><a th:href="@{/product-detail}" href="/product-detail">Đổi trả hàng</a></li>
+            <li><a th:href="@{/user}" href="/user">Tùy chọn thanh toán</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Liên hệ chúng tôi</a></li>
           </ul>
         </div>
 
@@ -395,10 +395,10 @@
         <div>
           <h4 class="footer-col-title">VỀ NIKE</h4>
           <ul class="footer-links-list">
-            <li><a href="blog.html">Tin tức công ty</a></li>
-            <li><a href="blog.html">Cơ hội nghề nghiệp</a></li>
-            <li><a href="blog.html">Nhà đầu tư</a></li>
-            <li><a href="blog.html">Bền vững môi trường</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Tin tức công ty</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Cơ hội nghề nghiệp</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Nhà đầu tư</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Bền vững môi trường</a></li>
           </ul>
         </div>
 
@@ -406,10 +406,10 @@
         <div>
           <h4 class="footer-col-title">HỆ THỐNG</h4>
           <ul class="footer-links-list">
-            <li><a href="../admin/dashboard.html">Bảng điều khiển Admin</a></li>
-            <li><a href="../admin/product.html">Quản lý sản phẩm</a></li>
-            <li><a href="../admin/cate.html">Quản lý danh mục</a></li>
-            <li><a href="../admin/user.html">Quản lý người dùng</a></li>
+            <li><a th:href="@{/admin/dashboard}" href="/admin/dashboard">Bảng điều khiển Admin</a></li>
+            <li><a th:href="@{/admin/products}" href="/admin/products">Quản lý sản phẩm</a></li>
+            <li><a th:href="@{/admin/categories}" href="/admin/categories">Quản lý danh mục</a></li>
+            <li><a th:href="@{/admin/users}" href="/admin/users">Quản lý người dùng</a></li>
           </ul>
         </div>
 
@@ -446,27 +446,148 @@
     </div>
   </footer>
 
-  <script>
+  <!-- Notification Toast Container -->
+  <div id="toastBox" class="toast-popup"></div>
+
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    const isUserLoggedIn = /*[[${currentUser != null}]]*/ false;
+    const currentProductId = /*[[${product != null ? product.id : null}]]*/ null;
+    /*]]>*/
+
+    // Toast Notification Utility
+    function showToast(message, type) {
+      const toast = document.getElementById('toastBox');
+      if (!toast) return;
+      toast.textContent = message;
+      toast.className = 'toast-popup show' + (type === 'error' ? ' toast-error' : type === 'success' ? ' toast-success' : '');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.className = 'toast-popup';
+      }, 3000);
+    }
+
+    // Size Selection Handler
+    document.querySelectorAll('.size-tile').forEach(tile => {
+      tile.addEventListener('click', function() {
+        document.querySelectorAll('.size-tile').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Gallery Thumbnail Switching
+    document.querySelectorAll('.pdp-thumb-item').forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        document.querySelectorAll('.pdp-thumb-item').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const img = this.querySelector('img');
+        const mainImg = document.getElementById('pdpMainImg');
+        if (img && mainImg) {
+          mainImg.src = img.src;
+        }
+      });
+    });
+
+    // Quantity Stepper Controls
     document.querySelectorAll('.qty-stepper').forEach(stepper => {
       const minusBtn = stepper.querySelector('.btn-minus');
       const plusBtn = stepper.querySelector('.btn-plus');
       const input = stepper.querySelector('.qty-input');
 
-      minusBtn.addEventListener('click', () => {
-        let val = parseInt(input.value) || 1;
-        if (val > 1) {
-          input.value = val - 1;
-        }
-      });
+      if (minusBtn && input) {
+        minusBtn.addEventListener('click', () => {
+          let val = parseInt(input.value) || 1;
+          if (val > 1) {
+            input.value = val - 1;
+          }
+        });
+      }
 
-      plusBtn.addEventListener('click', () => {
-        let val = parseInt(input.value) || 1;
-        if (val < 99) {
-          input.value = val + 1;
-        }
-      });
+      if (plusBtn && input) {
+        plusBtn.addEventListener('click', () => {
+          let val = parseInt(input.value) || 1;
+          if (val < 99) {
+            input.value = val + 1;
+          }
+        });
+      }
     });
+
+    // Add To Cart & Buy Now Handlers
+    function handleAddToCart(andCheckout) {
+      if (!isUserLoggedIn) {
+        showToast('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!', 'error');
+        setTimeout(() => {
+          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }, 1200);
+        return;
+      }
+
+      if (!currentProductId) {
+        showToast('Không tìm thấy thông tin sản phẩm!', 'error');
+        return;
+      }
+
+      const activeSize = document.querySelector('.size-tile.active');
+      const sizeId = activeSize && activeSize.dataset.sizeId ? parseInt(activeSize.dataset.sizeId) : null;
+      const qtyInput = document.getElementById('pdp-qty');
+      const quantity = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
+
+      const btn = document.getElementById('btnAddToCartDetail');
+      if (btn) btn.disabled = true;
+
+      fetch('/api/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          productId: currentProductId,
+          sizeId: sizeId,
+          quantity: quantity
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (btn) btn.disabled = false;
+        if (data.success) {
+          if (andCheckout) {
+            window.location.href = '/cart';
+            return;
+          }
+          showToast(data.message || 'Đã thêm sản phẩm vào giỏ hàng!', 'success');
+          const cartBadge = document.getElementById('cartBadge');
+          if (cartBadge && data.totalCartCount !== undefined) {
+            cartBadge.textContent = data.totalCartCount;
+            cartBadge.style.display = data.totalCartCount > 0 ? 'inline-block' : 'none';
+          }
+        } else {
+          if (data.requireLogin) {
+            showToast(data.message, 'error');
+            setTimeout(() => {
+              window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+            }, 1200);
+          } else {
+            showToast(data.message || 'Không thể thêm sản phẩm vào giỏ hàng', 'error');
+          }
+        }
+      })
+      .catch(err => {
+        if (btn) btn.disabled = false;
+        showToast('Lỗi kết nối máy chủ, vui lòng thử lại sau!', 'error');
+      });
+    }
+
+    const btnAddToCart = document.getElementById('btnAddToCartDetail');
+    if (btnAddToCart) {
+      btnAddToCart.addEventListener('click', () => handleAddToCart(false));
+    }
+
+    const btnBuyNow = document.getElementById('btnBuyNowDetail');
+    if (btnBuyNow) {
+      btnBuyNow.addEventListener('click', () => handleAddToCart(true));
+    }
   </script>
-  <script src="assets/js/main.js"></script>
+  <script th:src="@{/client/js/main.js}" src="/client/js/main.js"></script>
 </body>
 </html>
