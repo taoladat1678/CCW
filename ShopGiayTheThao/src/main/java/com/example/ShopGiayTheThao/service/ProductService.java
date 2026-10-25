@@ -10,8 +10,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.ShopGiayTheThao.dto.ProductResponse;
+import com.example.ShopGiayTheThao.dto.SizeDto;
 import com.example.ShopGiayTheThao.entity.Brand;
 import com.example.ShopGiayTheThao.entity.Category;
+import com.example.ShopGiayTheThao.entity.Product;
+import com.example.ShopGiayTheThao.entity.ProductImage;
+import com.example.ShopGiayTheThao.entity.ProductSize;
 import com.example.ShopGiayTheThao.entity.Size;
 import com.example.ShopGiayTheThao.repository.BrandRepository;
 import com.example.ShopGiayTheThao.repository.CategoryRepository;
@@ -35,6 +39,58 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
         this.brandRepository = brandRepository;
         this.sizeRepository = sizeRepository;
+    }
+
+    /**
+     * Chuyển đổi từ Entity Product sang ProductResponse DTO (Xử lý nghiệp vụ mapping dữ liệu)
+     */
+    public ProductResponse convertToResponse(Product p) {
+        if (p == null) {
+            return null;
+        }
+
+        ProductResponse dto = new ProductResponse();
+        dto.setId(p.getId());
+        dto.setName(p.getName());
+        dto.setDescription(p.getDescription());
+        dto.setPrice(p.getPrice());
+        dto.setSalePrice(p.getSalePrice());
+        dto.setThumbnail(p.getThumbnail());
+
+        if (p.getCategory() != null) {
+            dto.setCategoryId(p.getCategory().getId());
+            dto.setCategoryName(p.getCategory().getName());
+        }
+
+        if (p.getBrand() != null) {
+            dto.setBrandId(p.getBrand().getId());
+            dto.setBrandName(p.getBrand().getName());
+        }
+
+        if (p.getImages() != null && !p.getImages().isEmpty()) {
+            for (ProductImage pi : p.getImages()) {
+                if (pi.getUrl() != null && !pi.getUrl().isBlank()) {
+                    dto.getImages().add(pi.getUrl());
+                }
+            }
+        }
+        if (dto.getImages().isEmpty() && p.getThumbnail() != null && !p.getThumbnail().isBlank()) {
+            dto.getImages().add(p.getThumbnail());
+        }
+
+        if (p.getProductSizes() != null) {
+            for (ProductSize ps : p.getProductSizes()) {
+                if (ps.getSize() != null) {
+                    dto.getSizes().add(new SizeDto(
+                        ps.getSize().getId(),
+                        ps.getSize().getName(),
+                        ps.getStock()
+                    ));
+                }
+            }
+        }
+
+        return dto;
     }
 
     /**
@@ -76,7 +132,7 @@ public class ProductService {
                 maxPrice,
                 (keyword != null && !keyword.trim().isEmpty()) ? keyword.trim() : null,
                 pageable
-        ).map(ProductResponse::fromEntity);
+        ).map(this::convertToResponse);
     }
 
     /**
@@ -111,22 +167,22 @@ public class ProductService {
         if (id == null) {
             throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "ID sản phẩm không hợp lệ!");
         }
-        com.example.ShopGiayTheThao.entity.Product product = productRepository.findById(id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm với ID: " + id));
-        return ProductResponse.fromEntity(product);
+        return convertToResponse(product);
     }
 
     /**
      * Lấy danh sách sản phẩm cùng danh mục
      */
     public List<ProductResponse> getRelatedProducts(Long categoryId, Long excludeId) {
-        List<com.example.ShopGiayTheThao.entity.Product> list = java.util.Collections.emptyList();
+        List<Product> list = java.util.Collections.emptyList();
         if (categoryId != null && excludeId != null) {
             list = productRepository.findTop4ByCategoryIdAndIdNotAndStatus(categoryId, excludeId, 1);
         }
         if (list.isEmpty() && excludeId != null) {
             list = productRepository.findTop4ByIdNotAndStatus(excludeId, 1);
         }
-        return list.stream().map(ProductResponse::fromEntity).collect(java.util.stream.Collectors.toList());
+        return list.stream().map(this::convertToResponse).collect(java.util.stream.Collectors.toList());
     }
 }

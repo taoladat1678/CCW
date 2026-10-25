@@ -4,9 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.ShopGiayTheThao.entity.Product;
-import com.example.ShopGiayTheThao.entity.ProductSize;
-
 public class ProductResponse {
 
     private Long id;
@@ -23,51 +20,6 @@ public class ProductResponse {
     private List<String> images = new ArrayList<>();
 
     public ProductResponse() {
-    }
-
-    public static ProductResponse fromEntity(Product p) {
-        ProductResponse dto = new ProductResponse();
-        dto.setId(p.getId());
-        dto.setName(p.getName());
-        dto.setDescription(p.getDescription());
-        dto.setPrice(p.getPrice());
-        dto.setSalePrice(p.getSalePrice());
-        dto.setThumbnail(p.getThumbnail());
-
-        if (p.getCategory() != null) {
-            dto.setCategoryId(p.getCategory().getId());
-            dto.setCategoryName(p.getCategory().getName());
-        }
-
-        if (p.getBrand() != null) {
-            dto.setBrandId(p.getBrand().getId());
-            dto.setBrandName(p.getBrand().getName());
-        }
-
-        if (p.getImages() != null && !p.getImages().isEmpty()) {
-            for (com.example.ShopGiayTheThao.entity.ProductImage pi : p.getImages()) {
-                if (pi.getUrl() != null && !pi.getUrl().isBlank()) {
-                    dto.getImages().add(pi.getUrl());
-                }
-            }
-        }
-        if (dto.getImages().isEmpty() && p.getThumbnail() != null && !p.getThumbnail().isBlank()) {
-            dto.getImages().add(p.getThumbnail());
-        }
-
-        if (p.getProductSizes() != null) {
-            for (ProductSize ps : p.getProductSizes()) {
-                if (ps.getSize() != null) {
-                    dto.getSizes().add(new SizeDto(
-                        ps.getSize().getId(),
-                        ps.getSize().getName(),
-                        ps.getStock()
-                    ));
-                }
-            }
-        }
-
-        return dto;
     }
 
     public List<String> getImages() {
