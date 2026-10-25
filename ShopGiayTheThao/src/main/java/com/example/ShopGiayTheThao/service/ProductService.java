@@ -1,0 +1,132 @@
+package com.example.ShopGiayTheThao.service;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import com.example.ShopGiayTheThao.dto.ProductResponse;
+import com.example.ShopGiayTheThao.entity.Brand;
+import com.example.ShopGiayTheThao.entity.Category;
+import com.example.ShopGiayTheThao.entity.Size;
+import com.example.ShopGiayTheThao.repository.BrandRepository;
+import com.example.ShopGiayTheThao.repository.CategoryRepository;
+import com.example.ShopGiayTheThao.repository.ProductRepository;
+import com.example.ShopGiayTheThao.repository.SizeRepository;
+
+@Service
+public class ProductService {
+
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final BrandRepository brandRepository;
+    private final SizeRepository sizeRepository;
+
+    public ProductService(
+            ProductRepository productRepository,
+            CategoryRepository categoryRepository,
+            BrandRepository brandRepository,
+            SizeRepository sizeRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.brandRepository = brandRepository;
+        this.sizeRepository = sizeRepository;
+    }
+
+    /**
+     * Lấy danh sách sản phẩm có lọc theo nhiều tiêu chí, phân trang và sắp xếp.
+     */
+    public Page<ProductResponse> getProducts(
+            Integer page,
+            Integer size,
+            Long categoryId,
+            Long brandId,
+            Long sizeId,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            String keyword,
+            String sort) {
+
+        int pageNumber = (page != null && page >= 0) ? page : 0;
+        int pageSize = (size != null && size > 0) ? size : 9;
+
+        // Xử lý sắp xếp
+        Sort sortObj = Sort.by(Sort.Direction.DESC, "id");
+        if ("price-low".equalsIgnoreCase(sort)) {
+            sortObj = Sort.by(Sort.Direction.ASC, "price");
+        } else if ("price-high".equalsIgnoreCase(sort)) {
+            sortObj = Sort.by(Sort.Direction.DESC, "price");
+        } else if ("newest".equalsIgnoreCase(sort)) {
+            sortObj = Sort.by(Sort.Direction.DESC, "createdAt");
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortObj);
+
+        // Chỉ lấy sản phẩm đang hoạt động status = 1
+        return productRepository.filterProducts(
+                1,
+                categoryId,
+                brandId,
+                sizeId,
+                minPrice,
+                maxPrice,
+                (keyword != null && !keyword.trim().isEmpty()) ? keyword.trim() : null,
+                pageable
+        ).map(ProductResponse::fromEntity);
+    }
+
+    /**
+     * Lấy danh sách danh mục đang hoạt động
+     */
+    public List<Category> getAllCategories() {
+        List<Category> list = categoryRepository.findByStatus(1);
+        if (list.isEmpty()) {
+            return categoryRepository.findAll();
+        }
+        return list;
+    }
+
+    /**
+     * Lấy danh sách thương hiệu
+     */
+    public List<Brand> getAllBrands() {
+        return brandRepository.findAll();
+    }
+
+    /**
+     * Lấy danh sách kích thước (Size)
+     */
+    public List<Size> getAllSizes() {
+        return sizeRepository.findAll();
+    }
+
+    /**
+     * Lấy chi tiết sản phẩm theo ID
+     */
+    public ProductResponse getProductById(Long id) {
+        if (id == null) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "ID sản phẩm không hợp lệ!");
+        }
+        com.example.ShopGiayTheThao.entity.Product product = productRepository.findById(id)
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm với ID: " + id));
+        return ProductResponse.fromEntity(product);
+    }
+
+    /**
+     * Lấy danh sách sản phẩm cùng danh mục
+     */
+    public List<ProductResponse> getRelatedProducts(Long categoryId, Long excludeId) {
+        List<com.example.ShopGiayTheThao.entity.Product> list = java.util.Collections.emptyList();
+        if (categoryId != null && excludeId != null) {
+            list = productRepository.findTop4ByCategoryIdAndIdNotAndStatus(categoryId, excludeId, 1);
+        }
+        if (list.isEmpty() && excludeId != null) {
+            list = productRepository.findTop4ByIdNotAndStatus(excludeId, 1);
+        }
+        return list.stream().map(ProductResponse::fromEntity).collect(java.util.stream.Collectors.toList());
+    }
+}
