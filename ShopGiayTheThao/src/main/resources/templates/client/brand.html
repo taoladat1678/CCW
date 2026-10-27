@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -59,7 +59,7 @@
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <span class="cart-count-badge">3</span>
+          <span class="cart-count-badge" th:text="${cart != null ? cart.totalQuantity : 0}">0</span>
         </a>
 
         <!-- User Account Dropdown -->
@@ -106,125 +106,24 @@
     </div>
   </section>
 
-  <!-- Brands Grid (6 iconic brands) -->
+  <!-- Brands Grid -->
   <main class="container" style="margin-bottom:var(--space-section);">
-    <div class="brand-grid">
-      <!-- Brand 1: Nike Sportswear -->
-      <article class="brand-card">
+    <div class="brand-grid" id="brand-list-grid">
+      <article class="brand-card" th:each="b : ${brands}" th:attr="data-brand-id=${b.id}">
         <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="Nike Sportswear">
+          <img th:src="${b.logo}" th:alt="${b.name}" loading="lazy">
         </div>
         <div class="brand-card-body">
           <div class="brand-card-logo-row">
-            <h2 class="brand-card-title">NIKE SPORTSWEAR</h2>
-            <span class="badge-promo">Cốt Lõi</span>
+            <h2 class="brand-card-title" th:text="${b.name}">NIKE SPORTSWEAR</h2>
+            <span class="badge-promo" th:text="${b.subtitle != null ? b.subtitle : 'Biểu Tượng'}">Cốt Lõi</span>
           </div>
-          <p class="brand-card-desc">
-            Trọng tâm của mọi công nghệ đột phá từ đệm Air Max, ZoomX đến Flyknit. Sự kết hợp hoàn mỹ giữa thể thao đỉnh cao và phong cách thời trang đương đại.
+          <p class="brand-card-desc" th:text="${b.description}">
+            Mô tả thương hiệu...
           </p>
           <div style="display:flex; gap:var(--space-sm);">
-            <a th:href="@{/products}" href="/products" class="btn-primary" style="flex:1; height:44px; font-size:14px;">Xem Sản Phẩm</a>
-            <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px; font-size:14px; padding:0 16px;">Chi Tiết</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Brand 2: Jordan Brand -->
-      <article class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=800&q=80" alt="Jordan Brand">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h2 class="brand-card-title">JORDAN BRAND</h2>
-            <span class="badge-promo">Bóng Rổ</span>
-          </div>
-          <p class="brand-card-desc">
-            Kế thừa di sản huyền thoại của số 23 Michael Jordan. Những mẫu giày kinh điển Air Jordan 1 đến 39 làm say đắm hàng triệu sneakerhead toàn thế giới.
-          </p>
-          <div style="display:flex; gap:var(--space-sm);">
-            <a th:href="@{/products}" href="/products" class="btn-primary" style="flex:1; height:44px; font-size:14px;">Xem Sản Phẩm</a>
-            <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px; font-size:14px; padding:0 16px;">Chi Tiết</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Brand 3: Nike ACG -->
-      <article class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=800&q=80" alt="Nike ACG">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h2 class="brand-card-title">NIKE ACG</h2>
-            <span class="badge-promo">Dã Ngoại</span>
-          </div>
-          <p class="brand-card-desc">
-            All Conditions Gear — thiết kế dành riêng cho điều kiện thời tiết khắc nghiệt. Khả năng chống thấm GORE-TEX và độ bám siêu hạng trên mọi vách đá hiểm trở.
-          </p>
-          <div style="display:flex; gap:var(--space-sm);">
-            <a th:href="@{/products}" href="/products" class="btn-primary" style="flex:1; height:44px; font-size:14px;">Xem Sản Phẩm</a>
-            <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px; font-size:14px; padding:0 16px;">Chi Tiết</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Brand 4: Nike SB -->
-      <article class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=800&q=80" alt="Nike SB">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h2 class="brand-card-title">NIKE SB</h2>
-            <span class="badge-promo">Trượt Ván</span>
-          </div>
-          <p class="brand-card-desc">
-            Dòng sản phẩm chuyên biệt cho văn hóa Skateboarding với lưỡi gà dày êm, đệm Zoom Air hỗ trợ tiếp đất và chất liệu da lộn bền chắc chống rách khi tiếp xúc ván.
-          </p>
-          <div style="display:flex; gap:var(--space-sm);">
-            <a th:href="@{/products}" href="/products" class="btn-primary" style="flex:1; height:44px; font-size:14px;">Xem Sản Phẩm</a>
-            <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px; font-size:14px; padding:0 16px;">Chi Tiết</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Brand 5: Nike Pro -->
-      <article class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80" alt="Nike Pro">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h2 class="brand-card-title">NIKE PRO & GYM</h2>
-            <span class="badge-promo">Hiệu Năng</span>
-          </div>
-          <p class="brand-card-desc">
-            Trang phục nén cơ và giày tập luyện cường độ cao Metcon. Điểm tựa vững chắc cho các vận động viên thể hình, Crossfit và thể lực chuyên nghiệp.
-          </p>
-          <div style="display:flex; gap:var(--space-sm);">
-            <a th:href="@{/products}" href="/products" class="btn-primary" style="flex:1; height:44px; font-size:14px;">Xem Sản Phẩm</a>
-            <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px; font-size:14px; padding:0 16px;">Chi Tiết</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Brand 6: Converse -->
-      <article class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1607522370275-f14206abe5d3?auto=format&fit=crop&w=800&q=80" alt="Converse">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h2 class="brand-card-title">CONVERSE</h2>
-            <span class="badge-promo">Kinh Điển</span>
-          </div>
-          <p class="brand-card-desc">
-            Thương hiệu biểu tượng thành viên trực thuộc tập đoàn Nike. Dòng giày Chuck Taylor All Star và One Star gắn liền với âm nhạc, hội họa và thanh xuân.
-          </p>
-          <div style="display:flex; gap:var(--space-sm);">
-            <a th:href="@{/products}" href="/products" class="btn-primary" style="flex:1; height:44px; font-size:14px;">Xem Sản Phẩm</a>
-            <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px; font-size:14px; padding:0 16px;">Chi Tiết</a>
+            <a th:href="@{/products(brand=${b.id})}" class="btn-primary" style="flex:1; height:44px; font-size:14px; text-align:center; display:inline-flex; align-items:center; justify-content:center;">Xem Sản Phẩm</a>
+            <a th:href="@{/products(brand=${b.id})}" class="btn-secondary" style="height:44px; font-size:14px; padding:0 16px; display:inline-flex; align-items:center; justify-content:center;">Chi Tiết</a>
           </div>
         </div>
       </article>
@@ -314,5 +213,6 @@
   </footer>
 
   <script th:src="@{/client/js/main.js}" src="/client/js/main.js"></script>
+  <script th:src="@{/client/js/client-api.js}" src="/client/js/client-api.js"></script>
 </body>
 </html>

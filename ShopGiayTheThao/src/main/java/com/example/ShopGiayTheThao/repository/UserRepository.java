@@ -1,6 +1,8 @@
 package com.example.ShopGiayTheThao.repository;
 
+
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +12,7 @@ import com.example.ShopGiayTheThao.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
 
     // Đếm số lượng người dùng theo vai trò nếu cần lọc riêng
     long countByRole(String role);
@@ -30,4 +33,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Fallback theo ID giảm dần
     List<User> findTop5ByOrderByIdDesc();
+
+    Optional<User> findByEmail(String email);
+    Optional<User> findFirstByOrderByIdAsc();
+
 }

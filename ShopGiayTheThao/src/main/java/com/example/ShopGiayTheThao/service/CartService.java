@@ -1,5 +1,6 @@
 package com.example.ShopGiayTheThao.service;
 
+
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,8 @@ import com.example.ShopGiayTheThao.repository.CartItemRepository;
 import com.example.ShopGiayTheThao.repository.ProductRepository;
 import com.example.ShopGiayTheThao.repository.SizeRepository;
 import com.example.ShopGiayTheThao.repository.UserRepository;
-
+import com.example.ShopGiayTheThao.dto.CartItemDTO;
+import com.example.ShopGiayTheThao.dto.CartResponseDTO;
 @Service
 public class CartService {
 
@@ -92,4 +94,13 @@ public class CartService {
         }
         return cartItemRepository.countByUserId(userId);
     }
+
+
+
+public interface CartService {
+    CartResponseDTO getCart(Long userId);
+    CartItemDTO updateQuantity(Long userId, Long cartItemId, Integer quantity);
+    void removeItem(Long userId, Long cartItemId);
+    CartItemDTO addToCart(Long userId, Long productId, Long sizeId, Integer quantity);
+
 }

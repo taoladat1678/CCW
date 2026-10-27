@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -59,7 +59,7 @@
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <span class="cart-count-badge">3</span>
+          <span class="cart-count-badge" th:text="${cart != null ? cart.totalQuantity : 0}">0</span>
         </a>
 
         <!-- User Account Dropdown -->
@@ -112,116 +112,52 @@
   <!-- Filter Category Chips -->
   <div class="container" style="margin-bottom:var(--space-xl);" id="articles">
     <div style="display:flex; gap:var(--space-sm); flex-wrap:wrap; align-items:center;">
-      <button class="filter-chip active">Tất Cả Bài Viết (56)</button>
-      <button class="filter-chip">Công Nghệ & Đổi Mới (18)</button>
-      <button class="filter-chip">Vận Động Viên (14)</button>
-      <button class="filter-chip">Phong Cách Streetwear (15)</button>
-      <button class="filter-chip">Cẩm Nang Chọn Giày (9)</button>
+      <a th:href="@{/blog(page=0, category='ALL')}" class="filter-chip" th:classappend="${selectedCategory == 'ALL' || selectedCategory == null} ? 'active' : ''">Tất Cả Bài Viết</a>
+      <a th:href="@{/blog(page=0, category='Công Nghệ')}" class="filter-chip" th:classappend="${selectedCategory == 'Công Nghệ'} ? 'active' : ''">Công Nghệ & Đổi Mới</a>
+      <a th:href="@{/blog(page=0, category='Vận Động Viên')}" class="filter-chip" th:classappend="${selectedCategory == 'Vận Động Viên'} ? 'active' : ''">Vận Động Viên</a>
+      <a th:href="@{/blog(page=0, category='Phong Cách')}" class="filter-chip" th:classappend="${selectedCategory == 'Phong Cách'} ? 'active' : ''">Phong Cách Streetwear</a>
+      <a th:href="@{/blog(page=0, category='Cẩm Nang')}" class="filter-chip" th:classappend="${selectedCategory == 'Cẩm Nang'} ? 'active' : ''">Cẩm Nang Chọn Giày</a>
     </div>
   </div>
 
   <!-- Articles 3-Column Grid -->
   <main class="container" style="margin-bottom:var(--space-section);">
-    <div class="blog-grid">
-      <!-- Story 1 -->
-      <article class="blog-card">
+    <div class="blog-grid" id="blog-list-grid">
+      <article class="blog-card" th:each="b : ${blogs}" th:attr="data-blog-id=${b.id}">
         <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=700&q=80" alt="Nike Technology">
+          <img th:src="${b.thumbnail}" th:alt="${b.title}" loading="lazy"
+               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=700&q=80';">
         </div>
         <div class="blog-meta-row">
-          <span class="blog-category-tag">Công Nghệ</span>
+          <span class="blog-category-tag" th:text="${b.categoryTag != null ? b.categoryTag : 'Tin Tức'}">Công Nghệ</span>
           <span>•</span>
-          <span>18 Tháng 10, 2026</span>
+          <span th:text="${b.createdAt != null ? #temporals.format(b.createdAt, 'dd/MM/yyyy') : 'Mới nhất'}">18 Tháng 10, 2026</span>
         </div>
-        <h2 class="blog-title"><a href="#">Kỷ Nguyên Mới Của Bộ Đệm Dynamic Air: Đột Phá Tại Đỉnh Cao</a></h2>
-        <p class="blog-summary">Tìm hiểu cách các kỹ sư tại phòng thí nghiệm thể thao Nike NSRL tạo ra dòng chảy áp suất kép hoàn hảo trong từng bước chạy.</p>
-        <a href="#" class="link-md" style="font-size:14px;">Đọc thêm →</a>
-      </article>
-
-      <!-- Story 2 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=700&q=80" alt="Eliud Kipchoge">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Vận Động Viên</span>
-          <span>•</span>
-          <span>15 Tháng 10, 2026</span>
-        </div>
-        <h2 class="blog-title"><a href="#">Eliud Kipchoge Và Hành Trình Bứt Phá Giới Hạn Marathon</a></h2>
-        <p class="blog-summary">Hành trình cùng đôi Alphafly Next% và bài học sâu sắc về sức mạnh ý chí không bao giờ chấp nhận giới hạn bản thân.</p>
-        <a href="#" class="link-md" style="font-size:14px;">Đọc thêm →</a>
-      </article>
-
-      <!-- Story 3 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=700&q=80" alt="Streetwear Dunk Low">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Phong Cách</span>
-          <span>•</span>
-          <span>10 Tháng 10, 2026</span>
-        </div>
-        <h2 class="blog-title"><a href="#">Hướng Dẫn Phối Đồ Streetwear Cùng Dòng Giày Dunk Cổ Thấp</a></h2>
-        <p class="blog-summary">Bí quyết phối hợp sắc sảo giữa quần ống thụng cargo, tất cổ cao và đôi giày kinh điển mang dấu ấn thời đại đường phố.</p>
-        <a href="#" class="link-md" style="font-size:14px;">Đọc thêm →</a>
-      </article>
-
-      <!-- Story 4 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=700&q=80" alt="Nike ACG Trail">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Dã Ngoại</span>
-          <span>•</span>
-          <span>05 Tháng 10, 2026</span>
-        </div>
-        <h2 class="blog-title"><a href="#">Khám Phá Dòng Giày Chạy Địa Hình ACG Zegama Trail</a></h2>
-        <p class="blog-summary">Kiểm nghiệm thực tế trên những triền dốc đá trơn trượt của dãy Alps để mang lại độ tin cậy tuyệt đối cho người chạy trail.</p>
-        <a href="#" class="link-md" style="font-size:14px;">Đọc thêm →</a>
-      </article>
-
-      <!-- Story 5 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=700&q=80" alt="Bảo quản giày">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Cẩm Nang</span>
-          <span>•</span>
-          <span>28 Tháng 09, 2026</span>
-        </div>
-        <h2 class="blog-title"><a href="#">Bảo Vệ Đôi Giày Trắng Air Force 1 Của Bạn Luôn Sáng Bóng</a></h2>
-        <p class="blog-summary">Các bước vệ sinh giày thể thao chuẩn chuyên gia Nike: từ bàn chải lông mềm, dung dịch bọt bọt cho đến cách phơi khô tự nhiên.</p>
-        <a href="#" class="link-md" style="font-size:14px;">Đọc thêm →</a>
-      </article>
-
-      <!-- Story 6 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=700&q=80" alt="Lịch sử Jordan">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Di Sản</span>
-          <span>•</span>
-          <span>20 Tháng 09, 2026</span>
-        </div>
-        <h2 class="blog-title"><a href="#">Lịch Sử Đằng Sau Đôi Giày "Bị Cấm" Air Jordan 1 1985</a></h2>
-        <p class="blog-summary">Nhìn lại câu chuyện huyền thoại làm rung chuyển giải đấu NBA và khởi đầu cho đế chế giày thể thao có sức ảnh hưởng nhất lịch sử.</p>
-        <a href="#" class="link-md" style="font-size:14px;">Đọc thêm →</a>
+        <h2 class="blog-title"><a th:href="@{/blog(id=${b.id})}" th:text="${b.title}">Tiêu đề bài viết</a></h2>
+        <p class="blog-summary" th:text="${b.content}">Nội dung bài viết...</p>
+        <a th:href="@{/blog(id=${b.id})}" class="link-md" style="font-size:14px;">Đọc thêm →</a>
       </article>
     </div>
 
     <!-- Pagination -->
-    <div class="pagination-bar">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn" aria-label="Trang tiếp">
+    <div class="pagination-bar" id="blog-pagination" th:if="${totalPages > 0}">
+      <!-- Previous button -->
+      <a th:if="${currentPage > 0}" th:href="@{/blog(page=${currentPage - 1}, category=${selectedCategory})}" class="page-btn" aria-label="Trang trước">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(180deg);"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+
+      <!-- Page numbers -->
+      <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/blog(page=${i}, category=${selectedCategory})}"
+           class="page-btn"
+           th:classappend="${i == currentPage} ? 'active' : ''"
+           th:text="${i + 1}">1</a>
+      </th:block>
+
+      <!-- Next button -->
+      <a th:if="${currentPage < totalPages - 1}" th:href="@{/blog(page=${currentPage + 1}, category=${selectedCategory})}" class="page-btn" aria-label="Trang tiếp">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
+      </a>
     </div>
   </main>
 
@@ -308,5 +244,6 @@
   </footer>
 
   <script th:src="@{/client/js/main.js}" src="/client/js/main.js"></script>
+  <script th:src="@{/client/js/client-api.js}" src="/client/js/client-api.js"></script>
 </body>
 </html>

@@ -68,7 +68,11 @@
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
+
           <span class="cart-count-badge" th:text="${cartCount != null ? cartCount : 0}">0</span>
+
+          <span class="cart-count-badge" th:text="${cart != null ? cart.totalQuantity : 0}">0</span>
+
         </a>
 
         <!-- User Account Dropdown -->
@@ -149,81 +153,35 @@
       </div>
     </div>
 
-    <div class="product-grid">
-      <!-- Card 1 -->
-      <article class="product-card">
-        <div class="product-card-image-wrap">
-          <span class="product-card-badge badge-promo">Mới Ra Mắt</span>
-          <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path
-                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-              </path>
-            </svg>
-          </button>
-          <a th:href="@{/product-detail}" href="/product-detail">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
-              alt="Nike Air Max Pulse Roam">
-          </a>
-        </div>
-        <div class="product-card-info">
-          <a th:href="@{/product-detail}" href="/product-detail" class="product-name">Nike Air Max Pulse Roam</a>
-          <span class="product-category">Giày Nam Thể Thao & Phong Cách</span>
-          <div class="product-price-row">
-            <span class="price-regular">4.499.000₫</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 2 (Sale Item) -->
-      <article class="product-card">
+    <div class="product-grid" id="featured-products-grid">
+      <article class="product-card" th:each="p : ${featuredProducts}" th:attr="data-product-id=${p.id}">
         <div class="product-card-image-wrap">
           <span class="product-card-badge badge-promo"
-            style="border-color: var(--color-sale); color: var(--color-sale);">Giảm 25%</span>
-          <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                th:style="${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price} ? 'border-color: var(--color-sale); color: var(--color-sale);' : ''"
+                th:text="${p.badge != null and !p.badge.isEmpty()} ? ${p.badge} : (${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price} ? 'Giảm giá' : 'Mới Ra Mắt')">Mới Ra Mắt</span>
+          <button class="product-card-favorite" aria-label="Thêm vào yêu thích" type="button">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path
                 d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
               </path>
             </svg>
           </button>
-          <a th:href="@{/product-detail}" href="/product-detail">
-            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80"
-              alt="Nike Dunk Low Retro">
+          <a th:href="@{/product-detail(id=${p.id})}">
+            <img th:src="${p.thumbnail}" th:alt="${p.name}" loading="lazy">
           </a>
         </div>
         <div class="product-card-info">
-          <a th:href="@{/product-detail}" href="/product-detail" class="product-name">Nike Dunk Low Retro</a>
-          <span class="product-category">Giày Nam Cổ Thấp</span>
+          <a th:href="@{/product-detail(id=${p.id})}" class="product-name" th:text="${p.name}">Nike Air Max Pulse Roam</a>
+          <span class="product-category" th:text="${p.categoryName != null ? p.categoryName : 'Giày Nam Thể Thao'}">Giày Nam Thể Thao & Phong Cách</span>
           <div class="product-price-row">
-            <span class="price-sale">2.699.000₫</span>
-            <span class="price-original">3.599.000₫</span>
-            <span class="price-discount">25% off</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="product-card">
-        <div class="product-card-image-wrap">
-          <span class="product-card-badge badge-promo">Bền Vững</span>
-          <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path
-                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-              </path>
-            </svg>
-          </button>
-          <a th:href="@{/product-detail}" href="/product-detail">
-            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=700&q=80"
-              alt="Nike Pegasus 41 GORE-TEX">
-          </a>
-        </div>
-        <div class="product-card-info">
-          <a th:href="@{/product-detail}" href="/product-detail" class="product-name">Nike Pegasus 41 GORE-TEX</a>
-          <span class="product-category">Giày Chạy Bộ Chống Nước</span>
-          <div class="product-price-row">
-            <span class="price-regular">3.829.000₫</span>
+            <th:block th:if="${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price}">
+              <span class="price-sale" th:text="${#numbers.formatDecimal(p.salePrice, 0, 'POINT', 0, 'POINT')} + '₫'">2.699.000₫</span>
+              <span class="price-original" th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'POINT')} + '₫'">3.599.000₫</span>
+              <span class="price-discount" th:text="${p.badge != null ? p.badge : '25% off'}">25% off</span>
+            </th:block>
+            <th:block th:unless="${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price}">
+              <span class="price-regular" th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'POINT')} + '₫'">4.499.000₫</span>
+            </th:block>
           </div>
         </div>
       </article>
@@ -240,55 +198,18 @@
       <a th:href="@{/brand}" href="/brand" class="link-md">Xem tất cả thương hiệu</a>
     </div>
 
-    <div class="brand-grid">
-      <!-- Brand 1: Jordan -->
-      <div class="brand-card">
+    <div class="brand-grid" id="home-brands-grid">
+      <div class="brand-card" th:each="b : ${brands}" th:attr="data-brand-id=${b.id}">
         <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=700&q=80"
-            alt="Jordan Brand">
+          <img th:src="${b.logo}" th:alt="${b.name}" loading="lazy">
         </div>
         <div class="brand-card-body">
           <div class="brand-card-logo-row">
-            <h3 class="brand-card-title">JORDAN</h3>
-            <span class="caption-sm" style="color:var(--color-mute);">Di sản vĩ đại</span>
+            <h3 class="brand-card-title" th:text="${b.name}">JORDAN</h3>
+            <span class="caption-sm" style="color:var(--color-mute);" th:text="${b.subtitle != null ? b.subtitle : 'Di sản vĩ đại'}">Di sản vĩ đại</span>
           </div>
-          <p class="brand-card-desc">Cảm hứng từ huyền thoại Michael Jordan. Định hình văn hóa bóng rổ và phong cách
-            đường phố toàn cầu.</p>
-          <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px;">Khám Phá Jordan</a>
-        </div>
-      </div>
-
-      <!-- Brand 2: Nike ACG -->
-      <div class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=700&q=80"
-            alt="Nike ACG">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h3 class="brand-card-title">NIKE ACG</h3>
-            <span class="caption-sm" style="color:var(--color-mute);">All Conditions Gear</span>
-          </div>
-          <p class="brand-card-desc">Thiết bị dã ngoại tối ưu được kiểm nghiệm tại bang Oregon. Sẵn sàng chinh phục mọi
-            địa hình hiểm trở.</p>
-          <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px;">Khám Phá ACG</a>
-        </div>
-      </div>
-
-      <!-- Brand 3: Nike SB -->
-      <div class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=700&q=80"
-            alt="Nike SB">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h3 class="brand-card-title">NIKE SB</h3>
-            <span class="caption-sm" style="color:var(--color-mute);">Skateboarding</span>
-          </div>
-          <p class="brand-card-desc">Dòng giày trượt ván hiệu năng cao, linh hồn của văn hóa ván trượt và phong cách
-            thời trang bụi bặm.</p>
-          <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:44px;">Khám Phá SB</a>
+          <p class="brand-card-desc" th:text="${b.description}">Mô tả thương hiệu</p>
+          <a th:href="@{/products(brand=${b.id})}" class="btn-secondary" style="height:44px;" th:text="'Khám Phá ' + ${b.name}">Khám Phá</a>
         </div>
       </div>
     </div>
@@ -304,53 +225,21 @@
       <a th:href="@{/blog}" href="/blog" class="link-md">Xem tất cả bài viết</a>
     </div>
 
-    <div class="blog-grid">
-      <!-- Article 1 -->
-      <article class="blog-card">
+    <div class="blog-grid" id="home-blogs-grid">
+      <article class="blog-card" th:each="b : ${latestBlogs}" th:attr="data-blog-id=${b.id}">
         <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=700&q=80"
-            alt="Nike Air Technology">
+          <img th:src="${b.thumbnail}" th:alt="${b.title}" loading="lazy"
+               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=700&q=80';">
         </div>
         <div class="blog-meta-row">
-          <span class="blog-category-tag">Công Nghệ</span>
+          <span class="blog-category-tag" th:text="${b.categoryTag != null ? b.categoryTag : 'Tin Tức'}">Công Nghệ</span>
           <span>•</span>
-          <span>18 Tháng 10, 2026</span>
+          <span th:text="${b.createdAt != null ? #temporals.format(b.createdAt, 'dd/MM/yyyy') : 'Mới nhất'}">18 Tháng 10, 2026</span>
         </div>
-        <h3 class="blog-title"><a th:href="@{/blog}" href="/blog">Kỷ Nguyên Mới Của Bộ Đệm Dynamic Air: Đột Phá Tại Đỉnh Cao</a></h3>
-        <p class="blog-summary">Tìm hiểu cách các kỹ sư tại phòng thí nghiệm thể thao Nike NSRL tạo ra dòng chảy áp suất
-          kép hoàn hảo.</p>
-      </article>
-
-      <!-- Article 2 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=700&q=80"
-            alt="Nike Athletes Running">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Vận Động Viên</span>
-          <span>•</span>
-          <span>15 Tháng 10, 2026</span>
-        </div>
-        <h3 class="blog-title"><a th:href="@{/blog}" href="/blog">Eliud Kipchoge Và Hành Trình Bứt Phá Giới Hạn Marathon</a></h3>
-        <p class="blog-summary">Câu chuyện đằng sau công nghệ sợi Carbon Flyplate và bài học về tinh thần không bao giờ
-          bỏ cuộc.</p>
-      </article>
-
-      <!-- Article 3 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=700&q=80"
-            alt="Nike Sneakers Style">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Phong Cách</span>
-          <span>•</span>
-          <span>10 Tháng 10, 2026</span>
-        </div>
-        <h3 class="blog-title"><a th:href="@{/blog}" href="/blog">Hướng Dẫn Phối Đồ Streetwear Cùng Dòng Giày Dunk Cổ Thấp</a></h3>
-        <p class="blog-summary">Bí quyết phối hợp sắc sảo giữa quần ống thụng, tất cổ cao và đôi giày kinh điển mang dấu
-          ấn thời gian.</p>
+        <h3 class="blog-title">
+          <a th:href="@{/blog(id=${b.id})}" th:text="${b.title}">Tiêu đề bài viết</a>
+        </h3>
+        <p class="blog-summary" th:text="${b.content}">Tóm tắt nội dung bài viết...</p>
       </article>
     </div>
   </section>
@@ -468,6 +357,7 @@
   </footer>
 
   <script th:src="@{/client/js/main.js}" src="/client/js/main.js"></script>
+  <script th:src="@{/client/js/client-api.js}" src="/client/js/client-api.js"></script>
 </body>
 
 </html>
