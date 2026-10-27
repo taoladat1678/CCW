@@ -1,0 +1,1045 @@
+1. Dashboard.html - fetch tổng số khách hàng, sản phẩm, danh mục, blog, thương hiệu, sản phẩm cập nhật gần đây, khách hàng mới đăng ký
+
+====================================================================================================
+DANH SÁCH CÁC HÀM, TÊN HÀM, VỊ TRÍ FILE VÀ CÁC CHỨC NĂNG ĐÃ TRIỂN KHAI
+====================================================================================================
+
+I. STATE CARD: TỔNG SỐ NGƯỜI DÙNG (CUSTOMERS / USERS)
+----------------------------------------------------------------------------------------------------
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/CustomerStatsResponse.java
+   - Class / Constructor: 
+     + public CustomerStatsResponse(long totalCustomers, boolean success)
+     + getTotalCustomers(), setTotalCustomers(), isSuccess(), setSuccess()
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/UserRepository.java
+   - Hàm sử dụng: userRepository.count() (kế thừa từ org.springframework.data.jpa.repository.JpaRepository)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/UserService.java
+   - Các hàm:
+     + public long getTotalCustomers() : Đếm tổng số lượng người dùng qua userRepository.count()
+     + public CustomerStatsResponse getCustomerStats() : Đóng gói dữ liệu trả về đối tượng CustomerStatsResponse
+
+4. Tầng REST API Controller (Trả dữ liệu JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm: 
+     + public ResponseEntity<CustomerStatsResponse> getCustomerCount()
+     + URL API: GET /api/admin/stats/customers/count (hoặc /api/admin/customers/count)
+
+5. Tầng Spring MVC Controller (Render giao diện):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String dashboard(Model model)
+     + Code truyền dữ liệu: model.addAttribute("totalCustomers", totalCustomers);
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/dashboard.html
+   - Vị trí: Thẻ div ID "totalCustomerCount", dòng th:text="${totalCustomers != null ? totalCustomers : 0}"
+
+
+II. STATE CARD: TỔNG SẢN PHẨM (PRODUCTS)
+----------------------------------------------------------------------------------------------------
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductStatsResponse.java
+   - Class / Constructor:
+     + public ProductStatsResponse(long totalProducts, boolean success)
+     + getTotalProducts(), setTotalProducts(), isSuccess(), setSuccess()
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+   - Hàm sử dụng: productRepository.count() (kế thừa từ JpaRepository)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Các hàm:
+     + public long getTotalProducts() : Đếm tổng số lượng sản phẩm qua productRepository.count()
+     + public ProductStatsResponse getProductStats() : Đóng gói dữ liệu trả về ProductStatsResponse
+
+4. Tầng REST API Controller (Trả dữ liệu JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm:
+     + public ResponseEntity<ProductStatsResponse> getProductCount()
+     + URL API: GET /api/admin/stats/products/count (hoặc /api/admin/products/count)
+
+5. Tầng Spring MVC Controller (Render giao diện):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String dashboard(Model model)
+     + Code truyền dữ liệu: model.addAttribute("totalProducts", totalProducts);
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/dashboard.html
+   - Vị trí: Thẻ div ID "totalProductCount", dòng th:text="${totalProducts != null ? totalProducts : 0}"
+
+
+III. STATE CARD: TỔNG DANH MỤC (CATEGORIES)
+----------------------------------------------------------------------------------------------------
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/CategoryStatsResponse.java
+   - Class / Constructor:
+     + public CategoryStatsResponse(long totalCategories, boolean success)
+     + getTotalCategories(), setTotalCategories(), isSuccess(), setSuccess()
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/CategoryRepository.java
+   - Hàm sử dụng: categoryRepository.count() (kế thừa từ JpaRepository)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Các hàm:
+     + public long getTotalCategories() : Đếm tổng danh mục qua categoryRepository.count()
+     + public CategoryStatsResponse getCategoryStats() : Đóng gói dữ liệu trả về CategoryStatsResponse
+
+4. Tầng REST API Controller (Trả dữ liệu JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm:
+     + public ResponseEntity<CategoryStatsResponse> getCategoryCount()
+     + URL API: GET /api/admin/stats/categories/count (hoặc /api/admin/categories/count)
+
+5. Tầng Spring MVC Controller (Render giao diện):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String dashboard(Model model)
+     + Code truyền dữ liệu: model.addAttribute("totalCategories", totalCategories);
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/dashboard.html
+   - Vị trí: Thẻ div ID "totalCategoryCount", dòng th:text="${totalCategories != null ? totalCategories : 0}"
+
+
+IV. STATE CARD: TỔNG BÀI VIẾT BLOG (BLOGS)
+----------------------------------------------------------------------------------------------------
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/BlogStatsResponse.java
+   - Class / Constructor:
+     + public BlogStatsResponse(long totalBlogs, boolean success)
+     + getTotalBlogs(), setTotalBlogs(), isSuccess(), setSuccess()
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/BlogRepository.java
+   - Hàm sử dụng: blogRepository.count() (kế thừa từ JpaRepository)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/BlogService.java
+   - Các hàm:
+     + public long getTotalBlogs() : Đếm tổng số bài viết qua blogRepository.count()
+     + public BlogStatsResponse getBlogStats() : Đóng gói dữ liệu trả về BlogStatsResponse
+
+4. Tầng REST API Controller (Trả dữ liệu JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm:
+     + public ResponseEntity<BlogStatsResponse> getBlogCount()
+     + URL API: GET /api/admin/stats/blogs/count (hoặc /api/admin/blogs/count)
+
+5. Tầng Spring MVC Controller (Render giao diện):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String dashboard(Model model)
+     + Code truyền dữ liệu: model.addAttribute("totalBlogs", totalBlogs);
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/dashboard.html
+   - Vị trí: Thẻ div ID "totalBlogCount", dòng th:text="${totalBlogs != null ? totalBlogs : 0}"
+
+
+V. STATE CARD: TỔNG THƯƠNG HIỆU (BRANDS)
+----------------------------------------------------------------------------------------------------
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/BrandStatsResponse.java
+   - Class / Constructor:
+     + public BrandStatsResponse(long totalBrands, boolean success)
+     + getTotalBrands(), setTotalBrands(), isSuccess(), setSuccess()
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/BrandRepository.java
+   - Hàm sử dụng: brandRepository.count() (kế thừa từ JpaRepository)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Các hàm:
+     + public long getTotalBrands() : Đếm tổng số thương hiệu qua brandRepository.count()
+     + public BrandStatsResponse getBrandStats() : Đóng gói dữ liệu trả về BrandStatsResponse
+
+4. Tầng REST API Controller (Trả dữ liệu JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm:
+     + public ResponseEntity<BrandStatsResponse> getBrandCount()
+     + URL API: GET /api/admin/stats/brands/count (hoặc /api/admin/brands/count)
+
+5. Tầng Spring MVC Controller (Render giao diện):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String dashboard(Model model)
+     + Code truyền dữ liệu: model.addAttribute("totalBrands", totalBrands);
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/dashboard.html
+   - Vị trí: Thẻ div ID "totalBrandCount", dòng th:text="${totalBrands != null ? totalBrands : 0}"
+
+
+VI. SẢN PHẨM CẬP NHẬT GẦN ĐÂY (RECENT PRODUCTS - TOP 5 MỚI NHẤT)
+----------------------------------------------------------------------------------------------------
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductResponse.java
+   - Thuộc tính bổ sung: Integer status, LocalDateTime createdAt kèm get/set tương ứng
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+   - Các hàm:
+     + List<Product> findTop5ByOrderByIdDesc(); : Lấy 5 sản phẩm mới nhất theo ID giảm dần (đảm bảo sản phẩm vừa thêm có ID lớn nhất luôn hiển thị ngay lập tức lên đầu Dashboard)
+     + List<Product> findTop5ByOrderByCreatedAtDesc(); : Lấy theo ngày tạo giảm dần
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Các hàm:
+     + public ProductResponse convertToResponse(Product p) : Ánh xạ các trường entity sang DTO, gồm status và createdAt
+     + public List<ProductResponse> getRecentProducts() : Gọi productRepository.findTop5ByOrderByIdDesc() lấy top 5 sản phẩm mới nhất và convert sang List<ProductResponse>
+
+4. Tầng REST API Controller (Trả dữ liệu JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm:
+     + public ResponseEntity<List<ProductResponse>> getRecentProducts()
+     + URL API: GET /api/admin/products/recent (hoặc /api/admin/stats/recent-products)
+
+5. Tầng Spring MVC Controller (Render giao diện):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String dashboard(Model model)
+     + Code truyền dữ liệu: model.addAttribute("recentProducts", productService.getRecentProducts());
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/dashboard.html
+   - Vị trí: Bảng "Sản Phẩm Cập Nhật Gần Đây", thẻ <tbody>
+     + Duyệt danh sách: <tr th:each="product : ${recentProducts}">
+     + Hiển thị: Thumbnail (${product.thumbnail}), Tên (${product.name}), Thương hiệu (${product.brandName}), Giá bán (${product.salePrice != null ? ... : ...}), Trạng thái (${product.status == 1 ? 'Còn hàng' : 'Hết hàng'})
+
+
+VII. NGƯỜI DÙNG MỚI ĐĂNG KÝ (RECENT USERS - TOP 5 MỚI NHẤT)
+----------------------------------------------------------------------------------------------------
+1. Tầng Entity:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/entity/User.java
+   - Thuộc tính sử dụng: fullName, email, role, status, createdAt
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/UserRepository.java
+   - Các hàm:
+     + List<User> findTop5ByOrderByCreatedAtDesc(); : Lấy 5 người dùng mới nhất sắp xếp theo ngày tạo giảm dần
+     + List<User> findTop5ByOrderByIdDesc(); : Fallback lấy theo ID giảm dần
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/UserService.java
+   - Hàm:
+     + public List<User> getRecentUsers() : Gọi repository lấy top 5 người dùng mới nhất trả về List<User>
+
+4. Tầng REST API Controller (Trả dữ liệu JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm:
+     + public ResponseEntity<List<User>> getRecentUsers()
+     + URL API: GET /api/admin/users/recent (hoặc /api/admin/stats/recent-users)
+
+5. Tầng Spring MVC Controller (Render giao diện):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String dashboard(Model model)
+     + Code truyền dữ liệu: model.addAttribute("recentUsers", userService.getRecentUsers());
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/dashboard.html
+   - Vị trí: Bảng "Người Dùng Mới Đăng Ký", thẻ <tbody>
+     + Duyệt danh sách: <tr th:each="user : ${recentUsers}">
+     + Hiển thị: Họ tên (${user.fullName}), Email (${user.email}), Vai trò (${user.role == 'ADMIN' ? 'Admin' : 'Member'}), Trạng thái (${user.status == 1 ? 'Hoạt động' : 'Khóa'})
+====================================================================================================
+
+
+
+2. product.html - fetch sản phẩm , làm thêm sửa xóa XEM sản phẩm , tìm kiếm sản phẩm , lọc sản phẩm theo danh mục , thương hiệu, làm phân trang
+
+====================================================================================================
+CHỨC NĂNG: FETCH VÀ PHÂN TRANG DANH SÁCH SẢN PHẨM CHO PRODUCT.HTML Ở ADMIN (1 TRANG 4 SẢN PHẨM)
+====================================================================================================
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductResponse.java
+   - Thuộc tính bổ sung: 
+     + Integer totalStock : Tổng số lượng tồn kho cộng dồn từ các kích thước (size)
+     + getTotalStock() : Tính tổng tồn kho nếu chưa set hoặc trả về totalStock
+     + setTotalStock(Integer totalStock) : Cập nhật tổng tồn kho
+
+2. Tầng Entity & Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+   - Hàm sử dụng:
+     + productRepository.findAll(Pageable pageable) : Phân trang sản phẩm theo kích thước trang (kế thừa từ org.springframework.data.jpa.repository.JpaRepository)
+     + productRepository.findAll(Sort.by(Sort.Direction.DESC, "id")) : Lấy toàn bộ sắp xếp ID giảm dần
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Các hàm:
+     + public ProductResponse convertToResponse(Product p) : Tính toán totalStock = sum(ps.getStock()), gán status, createdAt, category, brand, images, sizes vào ProductResponse
+     + public Page<ProductResponse> getProductsForAdmin(int page, int size) :
+       * Cấu hình phân trang: PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"))
+       * Mặc định: size = 4 sản phẩm / 1 trang
+       * Trả về: Page<ProductResponse>
+     + public List<ProductResponse> getAllProducts() : Lấy toàn bộ sản phẩm không phân trang
+
+4. Tầng REST API Controller (Trả dữ liệu JSON phân trang cho Admin):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm:
+     + public ResponseEntity<Page<ProductResponse>> getAdminProducts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "4") int size)
+     + URL API: GET /api/admin/products?page=0&size=4
+     + Mục đích: Trả về JSON đối tượng Page chứa content (4 sản phẩm), totalPages, totalElements, số trang hiện tại...
+
+5. Tầng Spring MVC Controller (Render giao diện product.html có phân trang):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String products(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "4") int size, Model model)
+     + Code truyền dữ liệu: 
+       * Page<ProductResponse> productPage = productService.getProductsForAdmin(page, size);
+       * model.addAttribute("productPage", productPage);
+       * model.addAttribute("products", productPage.getContent());
+       * model.addAttribute("currentPage", productPage.getNumber());
+       * model.addAttribute("totalPages", productPage.getTotalPages());
+       * model.addAttribute("totalElements", productPage.getTotalElements());
+       * model.addAttribute("pageSize", size); // Mặc định là 4
+       * model.addAttribute("categories", productService.getAllCategories());
+       * model.addAttribute("brands", productService.getAllBrands());
+
+6. Tầng View (Thymeleaf):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/product.html
+   - Các vị trí:
+     + Toolbar:
+       * Tổng số lượng sản phẩm: th:text="'Hiển thị ' + (${products != null ? #lists.size(products) : 0}) + ' / ' + (${totalElements != null ? totalElements : 0}) + ' sản phẩm'"
+       * Dropdown lọc Danh mục: thẻ <select id="filter-category"> duyệt th:each="c : ${categories}"
+       * Dropdown lọc Thương hiệu: thẻ <select id="filter-brand"> duyệt th:each="b : ${brands}"
+     + Bảng hiển thị sản phẩm (Table body):
+       * Dòng rỗng thông báo: <tr th:if="${products == null or #lists.isEmpty(products)}">
+       * Lặp 4 sản phẩm của trang: <tr th:each="product : ${products}" th:data-id="${product.id}" th:data-desc="${product.description}">
+       * Cột Checkbox: value="${product.id}"
+       * Cột Hình ảnh: img src "${product.thumbnail}"
+       * Cột Tên sản phẩm: "${product.name}", mã SP-${product.id} và số lượng size
+       * Cột Thương hiệu: "${product.brandName}"
+       * Cột Danh mục: "${product.categoryName}"
+       * Cột Giá bán: Giá sale "${product.salePrice}" / Giá gốc "${product.price}" định dạng VNĐ
+       * Cột Kho hàng: "${product.totalStock} đôi"
+       * Cột Trạng thái: "Còn hàng" / "Sắp hết hàng" / "Hết hàng" dựa theo status và totalStock
+       * Cột Thao tác: Nút Xem (btn-view-prod), Sửa (btn-edit-prod), Xóa
+     + Khu vực phân trang (Table footer pagination):
+       * Dòng thông tin: Trang [[${currentPage + 1}]] / [[${totalPages}]] (Tổng [[${totalElements}]] sản phẩm)
+       * Nút "← Trước": <a th:if="${currentPage > 0}" th:href="@{/admin/products(page=${currentPage - 1}, size=${pageSize})}" class="page-chip">← Trước</a>
+       * Danh sách số trang: duyệt th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+         - Trang hiện tại: thẻ <span class="page-chip active">
+         - Các trang khác: thẻ <a class="page-chip" th:href="@{/admin/products(page=${pageNum}, size=${pageSize})}">
+       * Nút "Sau →": <a th:if="${currentPage < totalPages - 1}" th:href="@{/admin/products(page=${currentPage + 1}, size=${pageSize})}" class="page-chip">Sau →</a>
+====================================================================================================
+
+====================================================================================================
+CHỨC NĂNG: XEM CHI TIẾT SẢN PHẨM (VIEW PRODUCT DETAILS) CHO ADMIN (KHÔNG DÙNG JAVASCRIPT)
+====================================================================================================
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductResponse.java
+   - Chứa thông tin chi tiết đầy đủ gồm id, name, description, price, salePrice, thumbnail, categoryName, brandName, status, totalStock, sizes (danh sách SizeDto gồm id, name, stock), images, createdAt.
+   - Các hàm helper tiện ích:
+     + public boolean hasSize(Long sizeId): Kiểm tra sản phẩm có size cụ thể hay không (dùng để tick chọn checkbox th:checked ở form sửa).
+     + public Integer getStockForSize(Long sizeId): Lấy số lượng tồn kho tương ứng của size đó trong sản phẩm.
+     + public String getSizeDisplay(): Định dạng chuỗi danh sách các size hiện có (ví dụ: "Size 39, Size 40").
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+   - Hàm sử dụng: productRepository.findById(Long id) (kế thừa từ org.springframework.data.jpa.repository.JpaRepository)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Hàm: public ProductResponse getProductById(Long id)
+     + Tìm sản phẩm theo id qua findById(id)
+     + Nếu không tìm thấy, ném ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm...")
+     + Trả về đối tượng ProductResponse thông qua convertToResponse(product) chứa đầy đủ danh sách kích thước (sizes).
+
+4. Tầng REST API Controller:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm: public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id)
+     + URL API: GET /api/admin/products/{id}
+     + Trả về ProductResponse dạng JSON
+
+5. Tầng Spring MVC Controller (Render Thymeleaf không dùng JS):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm: public String products(...)
+     + Nhận các tham số @RequestParam: action ("view", "edit", "stock"), id (mã sản phẩm), page, size
+     + Xử lý: khi action = "view", gọi productService.getProductById(id), đưa vào model: model.addAttribute("viewProduct", p) và model.addAttribute("action", "view")
+     + Khi action = "stock" hoặc "quick_stock", nạp model.addAttribute("quickStockProduct", p)
+
+6. Tầng View (Thymeleaf - product.html):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/product.html
+   - File CSS: ShopGiayTheThao/src/main/resources/static/admin/css/style.css
+   - Cột Tồn kho trên bảng (Table) - Nút Xem Nhanh mở Modal (Không làm dropdown):
+     + Tiêu đề cột: <th>Tồn kho</th>
+     + Dữ liệu dòng: Hiển thị duy nhất nút <a th:href="'#modal-stock-' + ${product.id}" class="btn-quick-stock">Xem nhanh</a> (hoàn toàn không làm dropdown).
+     + Modal Xem Nhanh Tồn Kho (Pure CSS :target + Thymeleaf active, hoàn toàn không dùng JS, không reload trang):
+       * Cấu hình CSS .modal-stock-overlay:target và .modal-overlay:target với:
+         display: flex !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; z-index: 99999 !important;
+         Đảm bảo modal hiển thị ngay lập tức khi click nút "Xem nhanh" (sửa triệt để lỗi bị thuộc tính visibility: hidden và opacity: 0 của .modal-overlay chặn hiển thị).
+       * Click nút X, nút "Đóng" hoặc click vào nền đen mờ (backdrop) có link href="#close" sẽ đóng modal tức thì mà không cần reload trang và không dùng 1 dòng JS nào.
+       * Hiển thị thông tin sản phẩm (ảnh, tên, mã SP) và danh sách số lượng của từng size theo định dạng: "Size : [Tên Size]" và "Số lượng : [Số lượng]".
+   - Nút Xem trên bảng: 
+     <a th:href="@{/admin/products(action='view', id=${product.id}, page=${currentPage}, size=${pageSize})}" class="btn-action-icon" title="Xem chi tiết sản phẩm">
+   - Modal hiển thị chi tiết sản phẩm (Form Xem - Đã bỏ hoàn toàn mục Tồn kho vì không cần thiết):
+     <div class="modal-overlay" id="modal-view-product" th:classappend="${action == 'view' and viewProduct != null} ? 'active' : ''">
+     + Thẻ img: th:src="${viewProduct.thumbnail}"
+     + Tên sản phẩm: th:text="${viewProduct.name}"
+     + Mã sản phẩm: th:text="'SP-' + ${viewProduct.id}"
+     + Thương hiệu: th:text="${viewProduct.brandName}"
+     + Trạng thái: hiển thị badge theo viewProduct.status và viewProduct.totalStock
+     + Giá bán / Giá sale: th:text định dạng tiền tệ VNĐ
+     + Danh mục phân loại: th:value="${viewProduct.categoryName}" (ĐÃ BỎ HOÀN TOÀN MỤC TỒN KHO)
+     + Kích thước hiện có: Thẻ <label class="form-label">Kích thước hiện có</label>, duyệt th:each="sz : ${viewProduct.sizes}", hiển thị từng badge định dạng: Size : [Tên] : [Số lượng].
+     + Mô tả: th:text="${viewProduct.description}"
+     + Nút Đóng modal: <a th:href="@{/admin/products(page=${currentPage}, size=${pageSize})}" class="btn-secondary">Đóng</a>
+     + Nút Chuyển sang sửa: <a th:href="@{/admin/products(action='edit', id=${viewProduct.id}, page=${currentPage}, size=${pageSize})}" class="btn-primary">Chỉnh Sửa Sản Phẩm Này</a>
+
+
+====================================================================================================
+CHỨC NĂNG: THÊM MỚI SẢN PHẨM KÈM NHẬP SỐ LƯỢNG CHO TỪNG SIZE (KHÔNG DÙNG JAVASCRIPT)
+====================================================================================================
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductRequest.java
+   - Các trường dữ liệu: id, name, description, price, salePrice, thumbnail, categoryId, brandId, status.
+   - Bổ sung trường sizeIds (List<Long>) để nhận danh sách size được tick chọn.
+   - Bổ sung trường sizeStocks (Map<String, Integer>) và hàm getStockForSize(Long sizeId) để nhận và bóc tách số lượng tồn kho riêng biệt cho từng size từ form POST mà không bị phụ thuộc vào 1 ô số lượng chung.
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+     + Hàm: productRepository.save(Product product)
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/CategoryRepository.java
+     + Hàm: categoryRepository.findById(Long id)
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/BrandRepository.java
+     + Hàm: brandRepository.findById(Long id)
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/SizeRepository.java
+     + Hàm: sizeRepository.findAll(), sizeRepository.findById(Long id)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Hàm: @Transactional public ProductResponse createProduct(ProductRequest request)
+     + Kiểm tra hợp lệ: Tên sản phẩm và Giá không được để trống
+     + Khởi tạo entity Product, gán name, description, price, salePrice, thumbnail, status
+     + Gán Category và Brand theo categoryId và brandId được chọn
+     + Lưu vào cơ sở dữ liệu qua productRepository.save(product)
+     + Xử lý Danh sách kích thước và Số lượng từng size: Đọc danh sách request.getSizeIds(). Với mỗi sizeId được chọn, lấy số lượng tồn kho riêng của size đó qua request.getStockForSize(sId), tìm Size qua sizeRepository.findById(sId) và tạo bản ghi ProductSize(saved, size, sizeStock) đưa vào bảng product_sizes.
+     + Trả về ProductResponse
+
+4. Tầng REST API Controller:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm: public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest request)
+     + URL API: POST /api/admin/products
+     + Trả về mã HTTP 201 CREATED kèm ProductResponse JSON
+
+5. Tầng Spring MVC Controller (Xử lý Form submit không dùng JS):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm 1: public String products(...) với @RequestParam(name = "action") String action
+     + Truyền danh sách kích thước sang model: model.addAttribute("sizes", productService.getAllSizes());
+     + Khi action = "add", kích hoạt modal thêm sản phẩm qua classappend 'active'
+   - Hàm 2: public String addProduct(@ModelAttribute ProductRequest request, @RequestParam int page, @RequestParam int size)
+     + Đường dẫn: POST /admin/products/add
+     + Spring MVC tự động bind các checkbox name="sizeIds" và các input số lượng name="sizeStocks[${s.id}]" vào request
+     + Gọi productService.createProduct(request)
+     + Redirect: return "redirect:/admin/products?page=" + page + "&size=" + size + "&success=add";
+
+6. Tầng View (Thymeleaf - product.html):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/product.html
+   - Nút Thêm sản phẩm ở tiêu đề: 
+     <a th:href="@{/admin/products(action='add', page=${currentPage}, size=${pageSize})}" class="btn-primary">+ Thêm Sản Phẩm</a>
+   - Modal Thêm (Mở bằng Thymeleaf classappend, không dùng JS):
+     <div class="modal-overlay" id="modal-add-product" th:classappend="${action == 'add'} ? 'active' : ''">
+   - Form gửi dữ liệu (Pure HTML POST Form):
+     <form th:action="@{/admin/products/add}" method="post">
+     + Input ẩn: name="page", name="size", name="keyword", name="categoryIdFilter", name="brandIdFilter", name="statusFilter"
+     + Input Tên sản phẩm: name="name" required
+     + Dropdown Thương hiệu: select name="brandId" duyệt th:each="b : ${brands}"
+     + Dropdown Danh mục: select name="categoryId" duyệt th:each="c : ${categories}"
+     + Dropdown Trạng thái: select name="status" (1: Còn hàng, 0: Hết hàng)
+     + Input Giá niêm yết: name="price" type="number" required
+     + Input Giá khuyến mãi: name="salePrice" type="number"
+     + Tiêu đề kích thước: <label class="form-label">Kích thước hiện có <span class="req">*</span> <small>(Tích chọn size để hiển thị ô nhập số lượng tồn kho cho size đó)</small></label>
+     + ĐÃ BỎ HOÀN TOÀN Ô NHẬP SỐ LƯỢNG BAN ĐẦU DÙNG CHUNG.
+     + Cơ chế hiển thị ô nhập số lượng riêng cho từng size bằng CSS thuần (Không dùng JavaScript):
+       - Mỗi size là một thẻ .size-choice-card gồm checkbox name="sizeIds", label tên size và khối nhập số lượng .size-qty-input-wrap chứa input name="sizeStocks[${s.id}]".
+       - Khi chưa tick: .size-qty-input-wrap có style display: none.
+       - Khi người dùng click checkbox vào size nào: Selector CSS thuần .size-checkbox-toggle:checked ~ .size-qty-input-wrap { display: inline-flex; } lập tức hiển thị ô nhập số lượng cho size đó.
+     + Input Link hình ảnh: name="thumbnail" type="url"
+     + Textarea Mô tả: name="description"
+     + Nút Lưu sản phẩm: button type="submit" class="btn-primary"
+     + Nút Hủy: <a th:href="@{/admin/products(page=${currentPage}, size=${pageSize})}" class="btn-secondary">Hủy</a>
+
+
+====================================================================================================
+CHỨC NĂNG: SỬA / CẬP NHẬT SẢN PHẨM VÀ SỐ LƯỢNG TỒN CHO TỪNG SIZE (KHÔNG DÙNG JAVASCRIPT)
+====================================================================================================
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductRequest.java: Nhận danh sách sizeIds (List<Long>) và sizeStocks (Map<String, Integer>) từ form sửa.
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductResponse.java: Cung cấp helper methods hasSize(Long sizeId) và getStockForSize(Long sizeId) giúp Thymeleaf bind trạng thái th:checked và hiển thị số lượng tồn kho từng size trực tiếp lúc render HTML mà không cần JavaScript.
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+     + Hàm: productRepository.findById(Long id), productRepository.save(Product product)
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/CategoryRepository.java
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/BrandRepository.java
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/SizeRepository.java
+     + Hàm: sizeRepository.findAll(), sizeRepository.findById(Long id)
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Hàm: @Transactional public ProductResponse updateProduct(Long id, ProductRequest request)
+     + Tìm sản phẩm theo id
+     + Cập nhật các trường: name, description, price, salePrice, thumbnail, status
+     + Cập nhật quan hệ Category và Brand theo id mới
+     + Xử lý Danh sách kích thước và Số lượng tồn kho cho từng size:
+       * Lấy danh sách targetSizeIds = request.getSizeIds()
+       * Sử dụng cơ chế orphanRemoval = true và cascade = CascadeType.ALL của JPA trên quan hệ productSizes:
+         1) Loại bỏ các size không còn được chọn khỏi collection: product.getProductSizes().removeIf(ps -> ps.getSize() == null || !targetSizeIds.contains(ps.getSize().getId()))
+         2) Lấy số lượng tồn kho riêng của từng size từ request.getStockForSize(sId)
+         3) Cập nhật số lượng tồn kho riêng cho các size đang có trong sản phẩm: ps.setStock(sizeStock)
+         4) Thêm mới những size mới được tick chọn: product.getProductSizes().add(new ProductSize(product, s, sizeStock))
+       * Tự động đồng bộ chính xác dữ liệu trong bảng product_sizes đúng theo quan hệ 1 sản phẩm nhiều size với số lượng tồn kho riêng từng size mà không gây lỗi khóa ngoại.
+     + Lưu thay đổi qua productRepository.save(product) và trả về ProductResponse
+
+4. Tầng REST API Controller:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm: public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request)
+     + URL API: PUT /api/admin/products/{id}
+     + Trả về mã HTTP 200 OK kèm ProductResponse cập nhật
+
+5. Tầng Spring MVC Controller (Xử lý Form submit không dùng JS):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm 1: public String products(...) với @RequestParam action="edit" và id
+     + Nạp danh sách tất cả các size vào model: model.addAttribute("sizes", productService.getAllSizes());
+     + Gọi productService.getProductById(id)
+     + Truyền vào model: model.addAttribute("editProduct", p) và model.addAttribute("action", "edit")
+   - Hàm 2: public String editProduct(@ModelAttribute ProductRequest request, @RequestParam int page, @RequestParam int size)
+     + Đường dẫn: POST /admin/products/edit
+     + Tự động bind danh sách các checkbox name="sizeIds" và các ô số lượng từng size name="sizeStocks[${s.id}]" vào request
+     + Gọi productService.updateProduct(request.getId(), request)
+     + Redirect: return "redirect:/admin/products?page=" + page + "&size=" + size + "&success=edit";
+
+6. Tầng View (Thymeleaf - product.html):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/product.html
+   - Nút Sửa trên bảng: 
+     <a th:href="@{/admin/products(action='edit', id=${product.id}, page=${currentPage}, size=${pageSize})}" class="btn-action-icon" title="Chỉnh sửa">
+   - Modal Sửa (Hiển thị bằng Thymeleaf classappend, không dùng JS):
+     <div class="modal-overlay" id="modal-edit-product" th:classappend="${action == 'edit' and editProduct != null} ? 'active' : ''">
+   - Form gửi dữ liệu (Pure HTML POST Form):
+     <form th:action="@{/admin/products/edit}" method="post">
+     + Input ẩn lưu ID: name="id" th:value="${editProduct.id}"
+     + Input ẩn: name="page", name="size", name="keyword", name="categoryIdFilter", name="brandIdFilter", name="statusFilter"
+     + Input hiển thị mã SKU: readonly th:value="'SP-' + ${editProduct.id}"
+     + Input Tên sản phẩm: name="name" th:value="${editProduct.name}" required
+     + Dropdown Thương hiệu: select name="brandId" với th:selected="${editProduct.brandName == b.name}"
+     + Dropdown Danh mục: select name="categoryId" với th:selected="${editProduct.categoryName == c.name}"
+     + Input Giá niêm yết: name="price" th:value="${editProduct.price}" required
+     + Input Giá khuyến mãi: name="salePrice" th:value="${editProduct.salePrice}"
+     + Tiêu đề kích thước: <label class="form-label">Kích thước hiện có <span class="req">*</span> <small>(Tích chọn size và chỉnh sửa số lượng tồn kho riêng cho từng size)</small></label>
+     + ĐÃ BỎ Ô NHẬP SỐ LƯỢNG KHO HÀNG DÙNG CHUNG.
+     + Hiển thị ô nhập số lượng cho từng size:
+       - Duyệt th:each="s : ${sizes}", mỗi size là một thẻ .size-choice-card.
+       - Checkbox: <input type="checkbox" name="sizeIds" th:value="${s.id}" th:checked="${editProduct.hasSize(s.id)}" class="size-checkbox-toggle">
+       - Input số lượng từng size: name="sizeStocks[${s.id}]" với th:value="${editProduct.getStockForSize(s.id)}".
+       - Các size mà sản phẩm đang có sẵn sẽ tự động hiển thị số lượng của size đó lúc mở modal (nhờ Thymeleaf render th:checked kết hợp selector CSS thuần .size-checkbox-toggle:checked ~ .size-qty-input-wrap).
+       - Khi admin tick chọn thêm size mới, ô nhập số lượng của size đó xuất hiện ngay lập tức mà không cần bất kỳ đoạn mã JavaScript nào.
+     + Dropdown Trạng thái: select name="status" với th:selected="${editProduct.status == 1}"
+     + Input Link hình ảnh: name="thumbnail" th:value="${editProduct.thumbnail}"
+     + Textarea Mô tả: name="description" th:text="${editProduct.description}"
+     + Nút Cập nhật sản phẩm: button type="submit" class="btn-primary"
+     + Nút Hủy: <a th:href="@{/admin/products(page=${currentPage}, size=${pageSize})}" class="btn-secondary">Hủy</a>
+
+
+====================================================================================================
+CHỨC NĂNG: XÓA SẢN PHẨM (DELETE PRODUCT) CHO ADMIN (KHÔNG DÙNG JAVASCRIPT)
+====================================================================================================
+1. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/CartItemRepository.java
+     + Hàm: void deleteByProductId(Long productId)
+     + Tác dụng: Xóa sạch các mục trong giỏ hàng tham chiếu đến sản phẩm để triệt tiêu lỗi khóa ngoại ForeignKeyConstraintViolationException trước khi xóa sản phẩm.
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+     + Hàm: productRepository.existsById(id), productRepository.deleteById(id)
+
+2. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Hàm: @Transactional public void deleteProduct(Long id)
+     + Kiểm tra sản phẩm có tồn tại bằng productRepository.existsById(id)
+     + Xóa các liên kết giỏ hàng: cartItemRepository.deleteByProductId(id)
+     + Xóa sản phẩm: productRepository.deleteById(id)
+     + Nhờ thiết lập CascadeType.ALL, các bản ghi trong product_sizes và product_images cũng tự động được xóa an toàn.
+
+3. Tầng REST API Controller:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm: public ResponseEntity<Void> deleteProduct(@PathVariable Long id)
+     + URL API: DELETE /api/admin/products/{id}
+     + Trả về mã HTTP 204 NO_CONTENT
+
+4. Tầng Spring MVC Controller (Xử lý xóa bằng Form POST / GET không dùng JS):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm 1 (Xử lý POST Form):
+     @PostMapping("/products/delete/{id}")
+     public String deleteProductPost(@PathVariable Long id, @RequestParam int page, @RequestParam int size) {
+         productService.deleteProduct(id);
+         return "redirect:/admin/products?page=" + page + "&size=" + size + "&success=delete";
+     }
+   - Hàm 2 (Hỗ trợ GET fallback):
+     @GetMapping("/products/delete/{id}")
+     public String deleteProductGet(@PathVariable Long id, @RequestParam int page, @RequestParam int size) {
+         productService.deleteProduct(id);
+         return "redirect:/admin/products?page=" + page + "&size=" + size + "&success=delete";
+     }
+
+5. Tầng View (Thymeleaf - product.html):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/product.html
+   - Vị trí cột Thao tác trên từng dòng bảng (Pure HTML Form Submit, không dùng JS):
+     <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post" style="display:inline; margin:0;">
+       <input type="hidden" name="page" th:value="${currentPage}">
+       <input type="hidden" name="size" th:value="${pageSize}">
+       <button type="submit" class="btn-action-icon danger" title="Xóa">
+         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+       </button>
+     </form>
+   - Banner thông báo xóa thành công sau khi redirect:
+     <span th:if="${param.success[0] == 'delete'}">✓ Đã xóa sản phẩm khỏi hệ thống thành công!</span>
+====================================================================================================
+
+====================================================================================================
+CHỨC NĂNG: TÌM KIẾM SẢN PHẨM, FILTER THEO DANH MỤC, THƯƠNG HIỆU, TRẠNG THÁI & HIỂN THỊ SIZE CỤ THỂ TRÊN TABLE (KHÔNG DÙNG JAVASCRIPT)
+====================================================================================================
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/ProductResponse.java
+   - Hàm bổ sung: public String getSizeDisplay()
+     + Chức năng: Định dạng và trả về chuỗi tên kích thước cụ thể thay cho việc hiển thị số lượng "X size" (ví dụ: hiển thị "Size 40" hoặc "Size 39, Size 40").
+     + Tự động kiểm tra và thêm tiền tố "Size " nếu tên kích thước trong database chưa có chữ "Size".
+
+2. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+   - Hàm bổ sung:
+     @Query(value = "SELECT p FROM Product p " +
+            "WHERE (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR CAST(p.id AS string) LIKE CONCAT('%', :cleanKeyword, '%')) " +
+            "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
+            "AND (:brandId IS NULL OR p.brand.id = :brandId) " +
+            "AND (" +
+            "     :statusFilter IS NULL OR :statusFilter = '' " +
+            "     OR (:statusFilter = '1' AND p.status = 1) " +
+            "     OR (:statusFilter = '0' AND (p.status = 0 OR (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) = 0)) " +
+            "     OR (:statusFilter = 'in_stock' AND p.status = 1 AND (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) > 5) " +
+            "     OR (:statusFilter = 'low_stock' AND p.status = 1 AND (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) > 0 AND (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) <= 5) " +
+            "     OR (:statusFilter = 'out_stock' AND (p.status = 0 OR (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) = 0)) " +
+            ")",
+            countQuery = "SELECT COUNT(p) FROM Product p " +
+            "WHERE (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR CAST(p.id AS string) LIKE CONCAT('%', :cleanKeyword, '%')) " +
+            "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
+            "AND (:brandId IS NULL OR p.brand.id = :brandId) " +
+            "AND (" +
+            "     :statusFilter IS NULL OR :statusFilter = '' " +
+            "     OR (:statusFilter = '1' AND p.status = 1) " +
+            "     OR (:statusFilter = '0' AND (p.status = 0 OR (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) = 0)) " +
+            "     OR (:statusFilter = 'in_stock' AND p.status = 1 AND (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) > 5) " +
+            "     OR (:statusFilter = 'low_stock' AND p.status = 1 AND (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) > 0 AND (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) <= 5) " +
+            "     OR (:statusFilter = 'out_stock' AND (p.status = 0 OR (SELECT COALESCE(SUM(ps2.stock), 0) FROM ProductSize ps2 WHERE ps2.product = p) = 0)) " +
+            ")")
+     Page<Product> filterProductsForAdmin(
+         @Param("keyword") String keyword,
+         @Param("cleanKeyword") String cleanKeyword,
+         @Param("categoryId") Long categoryId,
+         @Param("brandId") Long brandId,
+         @Param("statusFilter") String statusFilter,
+         Pageable pageable
+     );
+     + Hỗ trợ tìm kiếm từ khóa theo cả Tên sản phẩm và Mã ID sản phẩm (tự động xử lý tiền tố "SP-", "sp-").
+     + Lọc theo danh mục (categoryId), thương hiệu (brandId).
+     + Lọc linh hoạt theo trạng thái:
+       * "in_stock" / "1": Còn hàng (status = 1 và tổng tồn kho > 5).
+
+       * "out_stock" / "0": Hết hàng / Tạm ẩn (status = 0 hoặc tổng tồn kho = 0).
+
+3. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/ProductService.java
+   - Hàm bổ sung:
+     @Transactional(readOnly = true)
+     public Page<ProductResponse> getProductsForAdmin(
+             int page,
+             int size,
+             String keyword,
+             Long categoryId,
+             Long brandId,
+             String status)
+     + Chuẩn hóa tham số tìm kiếm (xử lý tiền tố "SP-", "sp-", loại bỏ khoảng trắng).
+     + Gọi repository filterProductsForAdmin(...) kết hợp phân trang PageRequest sắp xếp giảm dần theo ID.
+     + Ánh xạ Page<Product> thành Page<ProductResponse> qua convertToResponse(product) trong phạm vi transaction read-only.
+   - Hàm nạp chồng giữ tương thích ngược: public Page<ProductResponse> getProductsForAdmin(int page, int size)
+
+4. Tầng REST API Controller:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Hàm cập nhật:
+     @GetMapping("/products")
+     public ResponseEntity<Page<ProductResponse>> getAdminProducts(
+             @RequestParam(name = "page", defaultValue = "0") int page,
+             @RequestParam(name = "size", defaultValue = "4") int size,
+             @RequestParam(name = "keyword", required = false) String keyword,
+             @RequestParam(name = "categoryId", required = false) Long categoryId,
+             @RequestParam(name = "brandId", required = false) Long brandId,
+             @RequestParam(name = "status", required = false) String status)
+     + URL: GET /api/admin/products
+     + Hỗ trợ các query params: page, size, keyword, categoryId, brandId, status.
+
+5. Tầng Spring MVC Controller:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Hàm cập nhật:
+     @GetMapping({ "/products", "/product.html" })
+     public String products(
+             @RequestParam(name = "page", defaultValue = "0") int page,
+             @RequestParam(name = "size", defaultValue = "4") int size,
+             @RequestParam(name = "keyword", required = false) String keyword,
+             @RequestParam(name = "categoryId", required = false) Long categoryId,
+             @RequestParam(name = "brandId", required = false) Long brandId,
+             @RequestParam(name = "status", required = false) String status,
+             @RequestParam(name = "action", required = false) String action,
+             @RequestParam(name = "id", required = false) Long id,
+             Model model)
+     + Đưa các giá trị tìm kiếm/bộ lọc vào model ("keyword", "categoryId", "brandId", "status") để bind lại vào form và các link phân trang.
+   - Hàm private: buildRedirectUrl(int page, int size, String success, String keyword, Long categoryId, Long brandId, String status)
+     + Đảm bảo sau khi Thêm, Sửa hoặc Xóa sản phẩm, trình duyệt redirect lại giữ nguyên toàn bộ bộ lọc và từ khóa tìm kiếm đang áp dụng.
+
+6. Tầng View (Thymeleaf - product.html):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/product.html
+   - Topbar search: Form GET submit trực tiếp đến /admin/products với input name="keyword".
+   - Thanh công cụ Table Toolbar (Pure HTML Form GET - Không sử dụng bất kỳ code JavaScript nào):
+     <form method="get" th:action="@{/admin/products}" class="table-toolbar-left">
+       <input type="text" name="keyword" class="table-search-input" placeholder="Tìm kiếm theo mã, tên giày..." th:value="${keyword}">
+       <select class="table-select" name="categoryId">
+         <option value="">Tất cả danh mục</option>
+         <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}" th:selected="${categoryId != null and categoryId == c.id}">Danh mục</option>
+       </select>
+       <select class="table-select" name="brandId">
+         <option value="">Tất cả thương hiệu</option>
+         <option th:each="b : ${brands}" th:value="${b.id}" th:text="${b.name}" th:selected="${brandId != null and brandId == b.id}">Thương hiệu</option>
+       </select>
+       <select class="table-select" name="status">
+         <option value="">Tất cả trạng thái</option>
+         <option value="in_stock" th:selected="${status == 'in_stock' or status == '1'}">Còn hàng</option>
+
+         <option value="out_stock" th:selected="${status == 'out_stock' or status == '0'}">Hết hàng / Tạm ẩn</option>
+       </select>
+       <button type="submit" class="btn-primary">Lọc</button>
+       <a th:if="..." th:href="@{/admin/products}" class="btn-secondary">Đặt lại</a>
+     </form>
+   - Hiển thị Size cụ thể tại cột Tên sản phẩm trên bảng (thay thế "X size"):
+     <div class="caption-sm" th:text="'Mã: SP-' + ${product.id} + (${product.sizeDisplay != null and !product.sizeDisplay.isEmpty()} ? (' • ' + ${product.sizeDisplay}) : '')">Mã: DZ3544-600 • Size 40</div>
+   - Giữ trạng thái tìm kiếm & lọc trên các nút phân trang, nút thao tác Xem, Sửa, Xóa và các nút Hủy/Đóng của modal:
+     th:href="@{/admin/products(..., keyword=${keyword}, categoryId=${categoryId}, brandId=${brandId}, status=${status})}"
+====================================================================================================
+
+
+
+====================================================================================================
+CHỨC NĂNG: QUẢN LÝ DANH MỤC CHO CATE.HTML (GET, THÊM, SỬA, XÓA, LỌC TRẠNG THÁI, TÌM KIẾM, PHÂN TRANG - 100% SPRING BOOT, KHÔNG DÙNG JAVASCRIPT)
+====================================================================================================
+1. Tầng Entity:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/entity/Category.java
+   - Các trường dữ liệu lưu trong Database (HOÀN TOÀN KHÔNG CÓ CỘT CODE TRONG DB):
+     + @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id; (ID số nguyên tự tăng trong MySQL: 1, 2, 3...)
+     + @Column(nullable = false, length = 100) private String name;
+     + @Column(columnDefinition = "TEXT") private String description;
+     + @Column(nullable = false) private Integer status = 1; (1: Hiển thị, 0: Tạm ẩn)
+   - Thuộc tính ảo (Transient Getter - Chỉ dùng hiển thị trên View cate.html, KHÔNG lưu DB):
+     + @Transient public String getCode() : Tự động định dạng mã hiển thị dạng "CAT-XXX" (ví dụ: CAT-001, CAT-002, CAT-015...) dựa trên số ID tự tăng (String.format("CAT-%03d", id)).
+   - Các hàm / Constructor:
+     + public Category() : Constructor mặc định.
+     + public Category(String name, String description, Integer status) : Constructor lưu dữ liệu vào DB.
+     + public void prePersist() : Gán status mặc định là 1 nếu null trước khi lưu entity mới.
+
+2. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/CategoryRequest.java
+   - Chức năng: Đóng gói dữ liệu thêm/sửa danh mục từ HTML Form (Spring MVC) và REST API.
+   - Các trường dữ liệu:
+     + private Long id;
+     + private String name;
+     + private String description;
+     + private Integer status;
+   - Toàn bộ Getter / Setter: getId(), setId(), getName(), setName(), getDescription(), setDescription(), getStatus(), setStatus().
+
+3. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/CategoryRepository.java
+   - Kế thừa: org.springframework.data.jpa.repository.JpaRepository<Category, Long>
+   - Các hàm tùy biến:
+     + public List<Category> findByStatus(Integer status) : Lấy danh sách danh mục theo trạng thái kích hoạt (status = 1) để load dropdown.
+     + @Query(value = "SELECT c FROM Category c WHERE " +
+              "(:keyword IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+              " OR CONCAT(c.id, '') LIKE CONCAT('%', :cleanKeyword, '%')) " +
+              "AND (:status IS NULL OR c.status = :status)")
+       Page<Category> filterCategories(
+               @Param("keyword") String keyword,
+               @Param("cleanKeyword") String cleanKeyword,
+               @Param("status") Integer status,
+               Pageable pageable);
+       -> Chức năng: Tìm kiếm danh mục theo tên hoặc ID số tự sinh (đã bóc tách tiền tố "CAT-" và số 0 ở đầu) và lọc theo trạng thái (status = 1, status = 0 hoặc tất cả), hỗ trợ phân trang Pageable và sắp xếp giảm dần theo ID.
+
+4. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/CategoryService.java
+   - Các hàm nghiệp vụ:
+     + public Page<Category> getCategoriesForAdmin(int page, int size, String keyword, String status) :
+       * Xử lý chuẩn hóa từ khóa tìm kiếm (bóc tách tiền tố "CAT-", "cat-", loại bỏ số 0 ở đầu nếu người dùng tìm "CAT-001" hoặc "001" để khớp với ID số).
+       * Phân tích chuỗi trạng thái status: "active" hoặc "1" -> 1, "hidden" hoặc "0" -> 0, null hoặc rỗng -> null (mặc định lấy tất cả danh mục cả ẩn lẫn hiện).
+       * Khởi tạo PageRequest sắp xếp giảm dần theo ID (Sort.by(Sort.Direction.DESC, "id")).
+       * Gọi categoryRepository.filterCategories(keyword, cleanKeyword, statusFilter, pageable).
+     + public Category getCategoryById(Long id) :
+       * Tìm kiếm danh mục theo ID qua categoryRepository.findById(id), ném ngoại lệ ResponseStatusException(HttpStatus.NOT_FOUND) nếu không tìm thấy.
+     + public Category createCategory(CategoryRequest request) :
+       * Kiểm tra tên danh mục không được để trống.
+       * Khởi tạo entity Category và CHỈ lưu các trường: name, description, status.
+       * MySQL tự động cấp phát ID số nguyên tự tăng (1, 2, 3...). KHÔNG có cột code trong DB.
+       * Gọi categoryRepository.save(category).
+     + public Category updateCategory(CategoryRequest request) :
+       * Tìm danh mục theo request.getId().
+       * Cập nhật các thông tin: name, description.
+       * CẬP NHẬT TRẠNG THÁI STATUS: Khi người dùng chọn trạng thái "Tạm ẩn" (status = 0) hoặc "Hiển thị" (status = 1), hàm CHỈ CẬP NHẬT CỘT STATUS TRONG CƠ SỞ DỮ LIỆU, tuyệt đối KHÔNG xóa bản ghi khỏi database.
+       * Lưu cập nhật vào database qua categoryRepository.save(category).
+     + public void deleteCategory(Long id) :
+       * Kiểm tra an toàn ràng buộc khóa ngoại (Foreign Key Safety): đếm số lượng sản phẩm liên kết qua category.getProducts().
+       * Nếu danh mục có sản phẩm liên kết: soft-delete bằng cách cập nhật status = 0 và lưu lại (tránh lỗi khóa ngoại MySQL foreign key constraint).
+       * Nếu danh mục không có sản phẩm liên kết: xóa hoàn toàn qua categoryRepository.deleteById(id).
+     + public long getTotalCategories() : Đếm tổng số danh mục qua categoryRepository.count().
+     + public long getActiveCategories() : Đếm số danh mục đang kích hoạt qua categoryRepository.countByStatus(1).
+     + public List<Category> getAllCategories() : Lấy toàn bộ danh sách danh mục đang kích hoạt qua categoryRepository.findByStatus(1).
+
+5. Tầng REST API Controller (Cung cấp API JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Các hàm endpoint:
+     + @GetMapping("/categories") : GET /api/admin/categories (trả về JSON danh sách phân trang, lọc và tìm kiếm danh mục).
+     + @GetMapping("/categories/{id}") : GET /api/admin/categories/{id} (trả về JSON chi tiết 1 danh mục).
+     + @PostMapping("/categories") : POST /api/admin/categories (tạo mới danh mục, MySQL tự sinh ID số).
+     + @PutMapping("/categories/{id}") : PUT /api/admin/categories/{id} (cập nhật thông tin và trạng thái ẩn/hiển thị).
+     + @DeleteMapping("/categories/{id}") : DELETE /api/admin/categories/{id} (xóa hoặc tạm ẩn danh mục).
+
+6. Tầng Spring MVC Controller (Render giao diện & Xử lý Form 100% không dùng JS):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Các hàm MVC:
+     + @GetMapping({ "/categories", "/cate.html" }) :
+       * Xử lý hiển thị danh sách, phân trang, lọc và mở modal Thêm/Sửa qua tham số URL "action".
+       * Nếu action == "edit" và có id: gọi categoryService.getCategoryById(id) để truyền editCategory vào Model.
+       * Đưa đầy đủ dữ liệu vào Model: categories, currentPage, totalPages, totalElements, pageSize, keyword, status, action, editCategory.
+       * Render view: "admin/cate".
+     + @GetMapping("/categories/add") : Chuyển hướng an toàn về /admin/categories?action=add khi gọi bằng GET.
+     + @GetMapping("/categories/edit") : Chuyển hướng an toàn về /admin/categories khi gọi bằng GET hoặc F5 trình duyệt.
+     + @PostMapping("/categories/add") :
+       * Nhận dữ liệu POST từ Form Thêm danh mục.
+       * Dùng statusFilter tách biệt hoàn toàn với thuộc tính status của entity để tránh lỗi TypeMismatchException.
+       * Bọc try-catch gọi categoryService.createCategory(request) (chỉ lưu các trường nghiệp vụ và sinh ID số trong MySQL).
+       * Redirect về danh sách qua buildCategoryRedirectUrl(page, size, "add", keyword, filter).
+     + @PostMapping("/categories/edit") :
+       * Nhận dữ liệu POST từ Form Sửa danh mục.
+       * Nhận statusFilter riêng biệt, dự phòng idParam nếu request.getId() bị thiếu.
+       * Bọc try-catch gọi categoryService.updateCategory(request) (chỉ cập nhật status = 0/1 trong DB, không xóa bản ghi).
+       * Redirect về danh sách qua buildCategoryRedirectUrl(page, size, "edit", keyword, filter).
+     + @PostMapping("/categories/delete/{id}") :
+       * Nhận yêu cầu xóa từ Form POST trên từng dòng bảng.
+       * Gọi categoryService.deleteCategory(id).
+       * Redirect về danh sách qua buildCategoryRedirectUrl(page, size, "delete", keyword, filter).
+     + @GetMapping("/categories/delete/{id}") : Dự phòng xử lý link GET xóa an toàn.
+     + private String buildCategoryRedirectUrl(int page, int size, String success, String keyword, String status) :
+       * Helper build URL redirect mã hóa UTF-8 giữ nguyên trang, bộ lọc trạng thái và từ khóa tìm kiếm sau thao tác.
+
+7. Tầng View (Thymeleaf - cate.html - 100% Không dùng JavaScript):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/cate.html
+   - Loại bỏ hoàn toàn các thẻ <script> và logic JavaScript.
+   - Thao tác Tìm kiếm & Lọc trạng thái (Toolbar GET Form):
+     + Form GET thuần: <form method="get" th:action="@{/admin/categories}" class="table-toolbar-left">
+     + Ô tìm kiếm: <input type="text" name="keyword" class="table-search-input" placeholder="Tìm kiếm theo mã, tên danh mục..." th:value="${keyword}">
+     + Select lọc trạng thái: <select class="table-select" name="status"> với các option "Tất cả trạng thái", "Đang hiển thị", "Đang ẩn" tự động th:selected="${status == '...'}".
+     + Nút submit: <button type="submit" class="btn-primary">Lọc</button>
+     + Nút reset: <a th:if="${(keyword != null and !keyword.isEmpty()) or (status != null and !status.isEmpty())}" th:href="@{/admin/categories}" class="btn-secondary">Đặt lại</a>
+   - Bảng hiển thị danh mục động:
+     + Vòng lặp: <tr th:each="cat : ${categories}">
+     + Hiển thị Mã: <strong th:text="${cat.code}">CAT-001</strong> -> Gọi transient getter getCode() tự sinh chuỗi dạng "CAT-XXX" từ số id, không lưu cột code trong DB.
+     + Hiển thị Tên: <td class="item-name-cell cate-name" th:text="${cat.name}">Giày Chạy Bộ</td>
+     + Hiển thị Mô tả: <td class="cate-desc" th:text="${cat.description != null and !cat.description.isBlank() ? cat.description : 'Chưa có mô tả'}">Mô tả</td>
+     + Hiển thị Trạng thái: <span th:if="${cat.status == 1}" class="badge-status active">Hiển thị</span><span th:unless="${cat.status == 1}" class="badge-status inactive">Tạm ẩn</span>
+   - Phân trang động (Thymeleaf Pagination Controls):
+     + Thông tin trang: <span th:text="'Trang ' + (${currentPage + 1}) + ' / ' + (${totalPages > 0 ? totalPages : 1}) + ' (Tổng ' + ${totalElements} + ' danh mục)'"></span>
+     + Nút Trước: <a th:href="@{/admin/categories(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword}, status=${status})}">← Trước</a>
+     + Nút số trang: <a th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:href="@{/admin/categories(page=${pageNum}, size=${pageSize}, keyword=${keyword}, status=${status})}" th:text="${pageNum + 1}" th:classappend="${pageNum == currentPage} ? 'active' : ''"></a>
+     + Nút Sau: <a th:href="@{/admin/categories(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword}, status=${status})}">Sau →</a>
+   - Modal Thêm Danh Mục (Pure CSS/Thymeleaf Server-side State):
+     + Nút mở modal Thêm trên header: <a th:href="@{/admin/categories(action='add', page=${currentPage}, size=${pageSize}, keyword=${keyword}, status=${status})}" class="btn-primary">+ Thêm Danh Mục Mới</a>
+     + Container Modal: <div class="modal-overlay" id="modal-add-category" th:classappend="${action == 'add'} ? 'active' : ''">
+     + Bỏ hoàn toàn ô input mã danh mục thừa thãi.
+     + Form POST thêm: <form th:action="@{/admin/categories/add}" method="post"> gồm các input: Tên danh mục (bắt buộc), Mô tả, Trạng thái (Hiển thị / Tạm ẩn) và input hidden page, size, keyword, statusFilter.
+   - Modal Chỉnh Sửa Danh Mục (Pure CSS/Thymeleaf Server-side State):
+     + Nút mở modal Sửa trên từng dòng bảng: <a th:href="@{/admin/categories(action='edit', id=${cat.id}, page=${currentPage}, size=${pageSize}, keyword=${keyword}, status=${status})}" class="btn-action-icon" title="Chỉnh sửa danh mục">
+     + Container Modal: <div class="modal-overlay" id="modal-edit-category" th:classappend="${action == 'edit' and editCategory != null} ? 'active' : ''">
+     + Tiêu đề modal hiển thị kèm mã danh mục: <h3 class="modal-title" th:text="'Chỉnh Sửa Danh Mục (' + ${editCategory.code} + ')'"> (không cần ô input mã danh mục).
+     + Trạng thái danh mục: <select class="table-select" name="status"> chọn "Hiển thị" (1) hoặc "Tạm ẩn" (0) -> Khi chọn "Tạm ẩn", danh mục chỉ chuyển trạng thái ẩn trong hệ thống và KHÔNG bị xóa khỏi cơ sở dữ liệu.
+     + Form POST sửa: <form th:action="@{/admin/categories/edit}" method="post"> kèm input hidden id="${editCategory.id}", page, size, keyword và statusFilter.
+   - Thao tác Xóa (Pure HTML Form POST):
+     + Form POST trên từng dòng bảng:
+       <form th:action="@{/admin/categories/delete/{id}(id=${cat.id})}" method="post" style="display:inline; margin:0;">
+         <input type="hidden" name="page" th:value="${currentPage}">
+         <input type="hidden" name="size" th:value="${pageSize}">
+         <input type="hidden" name="keyword" th:value="${keyword}">
+         <input type="hidden" name="statusFilter" th:value="${status}">
+         <button type="submit" class="btn-action-icon danger" title="Xóa danh mục">...</button>
+       </form>
+   - Banner thông báo (Alerts):
+     + Success: <span th:if="${param.success[0] == 'add'}">✓ Đã thêm danh mục mới thành công!</span>
+     + Success: <span th:if="${param.success[0] == 'edit'}">✓ Đã cập nhật thông tin danh mục thành công!</span>
+     + Success: <span th:if="${param.success[0] == 'delete'}">✓ Đã xóa danh mục khỏi hệ thống thành công!</span>
+     + Error: <div th:if="${param.error != null}"><span>✕ Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng kiểm tra lại dữ liệu nhập!</span></div>
+====================================================================================================
+
+4. size.html - GET render mã kích thước SIZ-ID, thêm (bỏ hệ đo lường và trạng thái, chỉ giữ name, ID tự sinh), sửa (chỉ giữ name), xóa, phân trang 1 trang 5 size, tìm kiếm kích thước (100% không dùng JavaScript)
+
+
+
+====================================================================================================
+CHỨC NĂNG: QUẢN LÝ KÍCH THƯỚC (SIZE) CHO SIZE.HTML Ở ADMIN (GET, THÊM, SỬA, XÓA, PHÂN TRANG 5 SIZE/TRANG, TÌM KIẾM - 100% KHÔNG DÙNG JS)
+====================================================================================================
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/SizeRequest.java
+   - Các trường dữ liệu: Long id, String name
+   - Constructors & Getters/Setters:
+     + public SizeRequest()
+     + public SizeRequest(String name)
+     + public SizeRequest(Long id, String name)
+     + getId(), setId(Long id), getName(), setName(String name)
+   - Mục đích: DTO nhận dữ liệu gửi lên từ Form Thêm mới và Form Chỉnh sửa kích thước. CHỈ lưu giữ trường name, loại bỏ hoàn toàn hệ đo lường / tiêu chuẩn và trạng thái sử dụng theo đúng yêu cầu nghiệp vụ.
+
+2. Tầng Entity:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/entity/Size.java
+   - Bổ sung trường Transient:
+     @jakarta.persistence.Transient
+     public String getCode() {
+         return id != null ? "SIZ-" + id : "";
+     }
+   - Tác dụng: Cột "ID" được đổi thành "Mã kích thước" và hiển thị dữ liệu dưới dạng "SIZ-ID" (ví dụ: SIZ-1, SIZ-2...). Tuyệt đối không tạo thêm cột code trong MySQL DB, ID sử dụng số tự sinh của MySQL auto-increment.
+   - Các trường dữ liệu gốc: Long id (@Id @GeneratedValue IDENTITY), String name (unique, nullable = false), List<ProductSize> productSizes.
+   - Toàn bộ Getter/Setter: getId(), setId(), getCode(), getName(), setName(), getProductSizes(), setProductSizes().
+
+3. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/SizeRepository.java
+   - Kế thừa: org.springframework.data.jpa.repository.JpaRepository<Size, Long>
+   - Các hàm tùy biến:
+     + public Optional<Size> findByName(String name) : Tìm kích thước theo tên chính xác.
+     + public boolean existsByNameIgnoreCase(String name) : Kiểm tra trùng lặp tên kích thước khi thêm mới (không phân biệt hoa thường).
+     + public boolean existsByNameIgnoreCaseAndIdNot(String name, Long id) : Kiểm tra trùng lặp tên kích thước với các bản ghi khác khi chỉnh sửa.
+     + @Query(value = "SELECT s FROM Size s WHERE " +
+              "(:keyword IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+              " OR CONCAT(s.id, '') LIKE CONCAT('%', :cleanKeyword, '%'))",
+              countQuery = "SELECT COUNT(s) FROM Size s WHERE " +
+              "(:keyword IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+              " OR CONCAT(s.id, '') LIKE CONCAT('%', :cleanKeyword, '%'))")
+       Page<Size> filterSizes(
+               @Param("keyword") String keyword,
+               @Param("cleanKeyword") String cleanKeyword,
+               Pageable pageable);
+       -> Chức năng: Tìm kiếm kích thước theo tên kích cỡ (ví dụ: "39", "40") hoặc theo mã số tự sinh / mã "SIZ-ID" (đã bóc tách tiền tố "SIZ-", "siz" và số 0 ở đầu), hỗ trợ phân trang Pageable (5 kích cỡ / trang) và sắp xếp ID giảm dần (mới nhất xếp trước, cũ nhất xếp sau).
+
+4. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/SizeService.java
+   - Các hàm nghiệp vụ:
+     + public Page<Size> getSizesForAdmin(int page, int size, String keyword) :
+       * Cấu hình phân trang chính xác: int pageSize = (size > 0) ? size : 5 (mặc định đúng 5 kích thước / trang theo yêu cầu).
+       * Sắp xếp: Sort.by(Sort.Direction.DESC, "id") giúp danh sách kích cỡ hiển thị theo thứ tự mới nhất xếp trước, cũ nhất xếp sau.
+       * Xử lý chuẩn hóa từ khóa: Bóc tách tiền tố "SIZ-", "siz", loại bỏ số 0 ở đầu (ví dụ: SIZ-001 -> 1) để tìm kiếm chính xác theo ID số trong cơ sở dữ liệu.
+       * Gọi sizeRepository.filterSizes(kw, cleanKw, pageable).
+     + public Page<Size> getSizesForAdmin(int page, int size) : Overload gọi hàm trên với keyword = null.
+     + public Size getSizeById(Long id) :
+       * Tìm kích thước theo ID qua sizeRepository.findById(id), ném ngoại lệ ResponseStatusException(HttpStatus.NOT_FOUND) nếu không tìm thấy.
+     + public Size createSize(SizeRequest request) :
+       * Kiểm tra tên kích thước không được để trống.
+       * Kiểm tra chống trùng lặp tên kích thước qua sizeRepository.existsByNameIgnoreCase(trimmedName).
+       * Khởi tạo entity Size và CHỈ gán trường name.
+       * MySQL tự sinh ID số tăng dần (không insert vào cột code nào).
+       * Gọi sizeRepository.save(size).
+     + public Size updateSize(SizeRequest request) :
+       * Kiểm tra ID và tên kích thước không được để trống.
+       * Kiểm tra chống trùng lặp tên với các kích thước khác qua sizeRepository.existsByNameIgnoreCaseAndIdNot(trimmedName, request.getId()).
+       * Tìm kích thước theo ID và CHỈ cập nhật trường name (loại bỏ hoàn toàn hệ đo lường và trạng thái theo đúng yêu cầu).
+       * Gọi sizeRepository.save(size).
+     + public void deleteSize(Long id) :
+       * Tìm kích thước theo ID.
+       * Xử lý an toàn ràng buộc khóa ngoại (Foreign Key Safety): Kiểm tra xem kích thước có đang được liên kết với sản phẩm nào trong bảng product_sizes qua size.getProductSizes() hay không.
+       * Nếu có sản phẩm liên kết: ném ngoại lệ ResponseStatusException(HttpStatus.BAD_REQUEST) báo rõ số lượng sản phẩm đang dùng kích thước này và ngăn chặn xóa gây lỗi DB.
+       * Nếu không có liên kết: thực hiện xóa an toàn qua sizeRepository.deleteById(id).
+     + public long getTotalSizes() : Đếm tổng số lượng kích thước qua sizeRepository.count().
+     + public List<Size> getAllSizes() : Lấy toàn bộ danh sách kích thước qua sizeRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).
+
+5. Tầng REST API Controller (Cung cấp API JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Các hàm endpoint:
+     + @GetMapping("/sizes") : GET /api/admin/sizes (trả về JSON danh sách phân trang 5 size/trang, tìm kiếm).
+     + @GetMapping("/sizes/{id}") : GET /api/admin/sizes/{id} (trả về JSON chi tiết 1 kích thước).
+     + @PostMapping("/sizes") : POST /api/admin/sizes (thêm mới kích thước với ID tự sinh, trả về mã HTTP 201 CREATED).
+     + @PutMapping("/sizes/{id}") : PUT /api/admin/sizes/{id} (cập nhật tên kích thước).
+     + @DeleteMapping("/sizes/{id}") : DELETE /api/admin/sizes/{id} (xóa kích thước an toàn).
+
+6. Tầng Spring MVC Controller (Render giao diện & Xử lý Form 100% không dùng JS):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Các hàm MVC:
+     + @GetMapping({ "/sizes", "/size.html" }) :
+       * Tham số: @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @RequestParam(name = "keyword", required = false) String keyword, @RequestParam(name = "action", required = false) String action, @RequestParam(name = "id", required = false) Long id, Model model.
+       * Gọi sizeService.getSizesForAdmin(page, size, keyword).
+       * Nạp vào Model: sizePage, sizes, currentPage, totalPages, totalElements, pageSize (5), keyword, action.
+       * Xử lý mở modal Sửa: Khi action == "edit" và có id, gọi sizeService.getSizeById(id) và nạp editSize vào Model để bind sẵn dữ liệu lên Form Sửa.
+       * Render view: "admin/size".
+     + @GetMapping("/sizes/add") : Chuyển hướng an toàn về /admin/sizes?action=add khi gọi bằng GET.
+     + @GetMapping("/sizes/edit") : Chuyển hướng an toàn về /admin/sizes khi gọi bằng GET hoặc F5 trình duyệt.
+     + @PostMapping("/sizes/add") :
+       * Nhận dữ liệu POST từ Form Thêm kích thước qua @ModelAttribute SizeRequest request.
+       * Nhận các tham số phân trang page, size (5), keyword.
+       * Bọc try-catch gọi sizeService.createSize(request) (chỉ lưu trường name và MySQL tự sinh ID số tăng dần).
+       * Redirect về danh sách qua buildSizeRedirectUrl(page, size, "add", keyword, null) hoặc redirect kèm error nếu có lỗi dữ liệu.
+     + @PostMapping("/sizes/edit") :
+       * Nhận dữ liệu POST từ Form Sửa kích thước qua @ModelAttribute SizeRequest request và dự phòng idParam.
+       * Bọc try-catch gọi sizeService.updateSize(request) (chỉ cập nhật name).
+       * Redirect về danh sách qua buildSizeRedirectUrl(page, size, "edit", keyword, null).
+     + @PostMapping("/sizes/delete/{id}") :
+       * Nhận yêu cầu xóa từ Form POST trên từng dòng bảng qua @PathVariable Long id.
+       * Bọc try-catch gọi sizeService.deleteSize(id).
+       * Redirect về danh sách qua buildSizeRedirectUrl(page, size, "delete", keyword, null).
+     + @GetMapping("/sizes/delete/{id}") : Dự phòng link GET xóa an toàn.
+     + private String buildSizeRedirectUrl(int page, int size, String success, String keyword, String error) :
+       * Helper build URL redirect mã hóa UTF-8 giữ nguyên trang, từ khóa tìm kiếm và thông báo kết quả sau thao tác.
+
+7. Tầng View (Thymeleaf - size.html - 100% Không dùng JavaScript):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/size.html
+   - Loại bỏ hoàn toàn toàn bộ các thẻ <script> và logic JavaScript.
+   - Cột "ID" đổi thành "Mã kích thước" và hiển thị dạng "SIZ-ID":
+     + Tiêu đề cột: <th style="width:160px;">Mã kích thước</th>
+     + Dữ liệu hiển thị: <strong th:text="${s.code != null ? s.code : ('SIZ-' + s.id)}">SIZ-1</strong>
+     + Cột Kích Cỡ: <td class="item-name-cell" style="font-weight:700; font-size:16px;" th:text="${s.name}">39</td>
+   - Thao tác Tìm kiếm kích thước (Toolbar GET Form thuần):
+     + Form GET: <form method="get" th:action="@{/admin/sizes}" class="table-toolbar-left">
+     + Ô tìm kiếm: <input type="text" name="keyword" class="table-search-input" placeholder="Tìm theo mã (SIZ-...) hoặc kích cỡ (39, 40...)..." th:value="${keyword}">
+     + Nút submit: <button type="submit" class="btn-primary">Tìm kiếm</button>
+     + Nút reset: <a th:if="${keyword != null and !keyword.isEmpty()}" th:href="@{/admin/sizes}" class="btn-secondary">Đặt lại</a>
+     + Thông tin tổng số: <span th:text="'Hiển thị ' + (${sizes != null ? #lists.size(sizes) : 0}) + ' / ' + (${totalElements != null ? totalElements : 0}) + ' kích cỡ'"></span>
+   - Phân trang động 1 trang có 5 kích cỡ (Thymeleaf Pagination Controls):
+     + Thông tin trang: <span th:if="${totalElements != null and totalElements > 0}" th:text="'Trang ' + (${currentPage + 1}) + ' / ' + (${totalPages > 0 ? totalPages : 1}) + ' (Tổng ' + ${totalElements} + ' kích cỡ)'"></span>
+     + Nút Trước: <a th:if="${currentPage > 0}" th:href="@{/admin/sizes(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}" class="page-chip">← Trước</a>
+     + Danh sách số trang: duyệt th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}", trang hiện tại hiển thị thẻ <span class="page-chip active">, các trang khác thẻ <a>.
+     + Nút Sau: <a th:if="${currentPage < totalPages - 1}" th:href="@{/admin/sizes(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}" class="page-chip">Sau →</a>
+   - Modal Thêm Kích Thước (Pure CSS/Thymeleaf Server-side State):
+     + Nút mở modal Thêm trên header: <a th:href="@{/admin/sizes(action='add', page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-primary">+ Thêm Kích Thước Mới</a>
+     + Container Modal: <div class="modal-overlay" id="modal-add-size" th:classappend="${action == 'add'} ? 'active' : ''">
+     + Nút đóng modal: <a th:href="@{/admin/sizes(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="modal-close-btn">&times;</a>
+     + Form POST thêm: <form th:action="@{/admin/sizes/add}" method="post">
+     + LOẠI BỎ HOÀN TOÀN HỆ ĐO LƯỜNG / TIÊU CHUẨN VÀ TRẠNG THÁI SỬ DỤNG: Form CHỈ CÒN DUY NHẤT 1 Ô NHẬP "name" (Tên kích thước / Giá trị kích cỡ (Size)):
+       <input type="text" class="form-control" name="name" placeholder="Ví dụ: 39, 40, 40.5, 41, 42..." required>
+     + Kèm input hidden page, size (5), keyword.
+     + ID sử dụng số tự sinh của MySQL auto-increment.
+   - Modal Chỉnh Sửa Kích Thước (Pure CSS/Thymeleaf Server-side State):
+     + Nút mở modal Sửa trên từng dòng bảng: <a th:href="@{/admin/sizes(action='edit', id=${s.id}, page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-action-icon" title="Sửa kích thước">...</a>
+     + Container Modal: <div class="modal-overlay" id="modal-edit-size" th:classappend="${action == 'edit' and editSize != null} ? 'active' : ''">
+     + Tiêu đề modal hiển thị kèm mã kích thước: <h3 class="modal-title" th:text="${editSize != null ? ('Chỉnh Sửa Kích Thước (' + (editSize.code != null ? editSize.code : ('SIZ-' + editSize.id)) + ')') : 'Chỉnh Sửa Kích Thước'}">
+     + Nút đóng modal: <a th:href="@{/admin/sizes(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="modal-close-btn">&times;</a>
+     + Form POST sửa: <form th:action="@{/admin/sizes/edit}" method="post">
+     + LOẠI BỎ HOÀN TOÀN HỆ ĐO LƯỜNG / TIÊU CHUẨN VÀ TRẠNG THÁI SỬ DỤNG: Form CHỈ CÒN DUY NHẤT 1 Ô NHẬP "name" (Tên kích thước / Giá trị kích cỡ (Size)):
+       <input type="text" class="form-control" name="name" th:value="${editSize != null ? editSize.name : ''}" placeholder="Ví dụ: 39, 40, 40.5..." required>
+     + Kèm input hidden id="${editSize.id}", page, size (5), keyword.
+   - Thao tác Xóa Kích Thước (Pure HTML Form POST):
+     + Form POST trên từng dòng bảng:
+       <form th:action="@{/admin/sizes/delete/{id}(id=${s.id})}" method="post" style="display:inline; margin:0;">
+         <input type="hidden" name="page" th:value="${currentPage}">
+         <input type="hidden" name="size" th:value="${pageSize}">
+         <input type="hidden" name="keyword" th:value="${keyword}">
+         <button type="submit" class="btn-action-icon danger" title="Xóa kích thước">...</button>
+       </form>
+   - Banner thông báo (Alerts):
+     + Success: <span th:if="${param.success[0] == 'add'}">✓ Đã thêm kích thước mới thành công!</span>
+     + Success: <span th:if="${param.success[0] == 'edit'}">✓ Đã cập nhật kích thước thành công!</span>
+     + Success: <span th:if="${param.success[0] == 'delete'}">✓ Đã xóa kích thước khỏi hệ thống thành công!</span>
+     + Error: <div th:if="${param.error != null}"><span th:text="${param.error[0]}">✕ Đã xảy ra lỗi khi thực hiện thao tác...</span></div>
+====================================================================================================

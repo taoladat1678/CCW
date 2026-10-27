@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Thương Hiệu | Nike Admin Portal</title>
+  <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
+</head>
+<body>
+
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="admin-logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
+        </svg>
+        <span>NIKE ADMIN</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-heading">Tổng Quan</div>
+      <a th:href="@{/admin/dashboard}" href="/admin/dashboard" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Bảng Điều Khiển</span>
+      </a>
+
+      <div class="sidebar-heading">Danh Mục Quản Lý</div>
+      <a th:href="@{/admin/products}" href="/admin/products" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <span>Sản Phẩm</span>
+      </a>
+
+      <a th:href="@{/admin/categories}" href="/admin/categories" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        <span>Danh Mục</span>
+      </a>
+
+      <a th:href="@{/admin/sizes}" href="/admin/sizes" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"></rect><line x1="6" y1="7" x2="6" y2="11"></line><line x1="10" y1="7" x2="10" y2="13"></line><line x1="14" y1="7" x2="14" y2="11"></line><line x1="18" y1="7" x2="18" y2="13"></line></svg>
+        <span>Quản Lý Size</span>
+      </a>
+
+      <a th:href="@{/admin/users}" href="/admin/users" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>Khách Hàng / User</span>
+      </a>
+
+      <a th:href="@{/admin/brands}" href="/admin/brands" class="nav-link-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <span>Thương Hiệu</span>
+      </a>
+
+      <a th:href="@{/admin/blogs}" href="/admin/blogs" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>Bài Viết / Blog</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a th:href="@{/}" href="/" class="store-preview-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        <span>Xem Cửa Hàng (Client)</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Admin Main -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="topbar-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" placeholder="Tìm thương hiệu...">
+      </div>
+      <div class="topbar-actions">
+        <div class="admin-profile-pill">
+          <div class="admin-avatar">AD</div>
+          <span class="admin-profile-name">Quản Trị Viên</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-body">
+      <div class="page-header-row">
+        <div class="page-title-box">
+          <h1>QUẢN LÝ THƯƠNG HIỆU ĐỐI TÁC & SUB-BRAND</h1>
+          <p>Hệ sinh thái các nhãn hiệu trực thuộc Nike Group và các đối tác độc quyền.</p>
+        </div>
+        <div>
+          <button type="button" class="btn-primary" id="btn-open-add">+ Thêm Thương Hiệu Mới</button>
+        </div>
+      </div>
+
+      <div class="admin-card-container">
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="table-toolbar-left">
+            <input type="text" class="table-search-input" placeholder="Tìm kiếm theo tên thương hiệu...">
+            <select class="table-select">
+              <option value="">Tất cả trạng thái</option>
+              <option value="active">Đang hoạt động</option>
+              <option value="inactive">Tạm ngưng</option>
+            </select>
+          </div>
+          <div>
+            <span class="caption-sm" style="color:var(--color-mute);">Tổng số 8 thương hiệu</span>
+          </div>
+        </div>
+
+        <!-- Brand Table -->
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Hình ảnh / Logo</th>
+                <th>Tên thương hiệu</th>
+                <th>Mã hiệu</th>
+                <th>Xuất xứ</th>
+                <th>Mô tả định vị</th>
+                <th>Số sản phẩm</th>
+                <th>Trạng thái</th>
+                <th style="text-align:right;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Brand 1 -->
+              <tr>
+                <td>
+                  <div class="item-thumb-box">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" alt="Nike Sportswear">
+                  </div>
+                </td>
+                <td>
+                  <div class="item-name-cell">Nike Sportswear</div>
+                  <span class="caption-sm" style="color:var(--color-mute);">Mainline Brand</span>
+                </td>
+                <td><code>BRD-NSW</code></td>
+                <td>Beaverton, Oregon, USA</td>
+                <td>Trọng tâm thương hiệu Nike với toàn bộ các sản phẩm thể thao và phong cách sống.</td>
+                <td><strong>280 sản phẩm</strong></td>
+                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem trên web">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Chỉnh sửa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Brand 2 -->
+              <tr>
+                <td>
+                  <div class="item-thumb-box">
+                    <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=150&q=80" alt="Jordan Brand">
+                  </div>
+                </td>
+                <td>
+                  <div class="item-name-cell">Jordan Brand</div>
+                  <span class="caption-sm" style="color:var(--color-mute);">Jumpman Flight</span>
+                </td>
+                <td><code>BRD-JOR</code></td>
+                <td>Chicago / Oregon, USA</td>
+                <td>Biểu tượng bóng rổ toàn cầu khởi xướng bởi Michael Jordan từ năm 1985.</td>
+                <td><strong>78 sản phẩm</strong></td>
+                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Sửa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Brand 3 -->
+              <tr>
+                <td>
+                  <div class="item-thumb-box">
+                    <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=150&q=80" alt="Nike ACG">
+                  </div>
+                </td>
+                <td>
+                  <div class="item-name-cell">Nike ACG</div>
+                  <span class="caption-sm" style="color:var(--color-mute);">All Conditions Gear</span>
+                </td>
+                <td><code>BRD-ACG</code></td>
+                <td>Oregon, USA</td>
+                <td>Dòng sản phẩm dã ngoại chuyên nghiệp chịu đựng mọi điều kiện thời tiết khắc nghiệt.</td>
+                <td><strong>28 sản phẩm</strong></td>
+                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Sửa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Brand 4 -->
+              <tr>
+                <td>
+                  <div class="item-thumb-box">
+                    <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=150&q=80" alt="Nike SB">
+                  </div>
+                </td>
+                <td>
+                  <div class="item-name-cell">Nike SB</div>
+                  <span class="caption-sm" style="color:var(--color-mute);">Skateboarding</span>
+                </td>
+                <td><code>BRD-NSB</code></td>
+                <td>California, USA</td>
+                <td>Dòng sản phẩm chuyên biệt dành cho văn hóa ván trượt đường phố.</td>
+                <td><strong>42 sản phẩm</strong></td>
+                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="text-align:right;">
+                  <div class="table-actions-cell" style="justify-content:flex-end;">
+                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </a>
+                    <button class="btn-action-icon" title="Sửa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="btn-action-icon danger" title="Xóa">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="table-footer-pagination">
+          <span>Trang 1 / 1</span>
+          <div class="pagination-controls">
+            <button class="page-chip active">1</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== MODAL THÊM THƯƠNG HIỆU ==================== -->
+  <div class="modal-overlay" id="modal-add-brand">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Thêm Thương Hiệu Mới</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-add-brand">&times;</button>
+      </div>
+      <form id="form-add-brand">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã hiệu thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" name="code" placeholder="Ví dụ: BRD-NSW, BRD-JRD..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tên thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" name="name" placeholder="Ví dụ: Nike Sportswear..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Xuất xứ / Trụ sở</label>
+            <input type="text" class="form-control" name="origin" placeholder="Ví dụ: Beaverton, Oregon, USA">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link Logo / Hình ảnh (URL)</label>
+            <input type="url" class="form-control" name="logo" placeholder="https://images.unsplash.com/...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả định vị thương hiệu</label>
+            <textarea class="form-control" name="description" rows="3" placeholder="Nhập định vị sản phẩm của thương hiệu..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái hoạt động</label>
+            <select class="form-control" name="status">
+              <option value="active" selected>Hoạt động</option>
+              <option value="inactive">Tạm ngưng</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-add-brand">Hủy</button>
+          <button type="submit" class="btn-primary">Lưu Thương Hiệu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SỬA THƯƠNG HIỆU ==================== -->
+  <div class="modal-overlay" id="modal-edit-brand">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Chỉnh Sửa Thương Hiệu</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-edit-brand">&times;</button>
+      </div>
+      <form id="form-edit-brand">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã hiệu thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-brand-code" name="code" readonly style="background-color:var(--color-soft-cloud);">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tên thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-brand-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Xuất xứ / Trụ sở</label>
+            <input type="text" class="form-control" id="edit-brand-origin" name="origin">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link Logo / Hình ảnh (URL)</label>
+            <input type="url" class="form-control" id="edit-brand-logo" name="logo">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả định vị thương hiệu</label>
+            <textarea class="form-control" id="edit-brand-desc" name="description" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái hoạt động</label>
+            <select class="form-control" id="edit-brand-status" name="status">
+              <option value="Hoạt động">Hoạt động</option>
+              <option value="Tạm ngưng">Tạm ngưng</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-edit-brand">Hủy</button>
+          <button type="submit" class="btn-primary">Cập Nhật Thương Hiệu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Mở modal Thêm
+    const btnOpenAdd = document.getElementById('btn-open-add');
+    if (btnOpenAdd) {
+      btnOpenAdd.addEventListener('click', () => {
+        document.getElementById('modal-add-brand').classList.add('active');
+      });
+    }
+
+    // Mở modal Sửa khi bấm nút Sửa
+    document.querySelectorAll('button[title*="Sửa"], button[title*="Chỉnh sửa"]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const logoSrc = row.querySelector('img')?.getAttribute('src') || '';
+        const name = row.querySelector('.item-name-cell')?.innerText.trim() || '';
+        const code = cells[3]?.innerText.trim() || '';
+        const origin = cells[4]?.innerText.trim() || '';
+        const desc = cells[5]?.innerText.trim() || '';
+        const statusText = cells[7]?.querySelector('.badge-status')?.innerText.trim() || '';
+
+        document.getElementById('edit-brand-code').value = code;
+        document.getElementById('edit-brand-name').value = name;
+        document.getElementById('edit-brand-origin').value = origin;
+        document.getElementById('edit-brand-logo').value = logoSrc;
+        document.getElementById('edit-brand-desc').value = desc;
+
+        const statusSelect = document.getElementById('edit-brand-status');
+        for (let i = 0; i < statusSelect.options.length; i++) {
+          if (statusText.includes(statusSelect.options[i].value)) {
+            statusSelect.selectedIndex = i;
+            break;
+          }
+        }
+
+        document.getElementById('modal-edit-brand').classList.add('active');
+      });
+    });
+
+    // Đóng modal
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-close');
+        const modal = document.getElementById(targetId);
+        if (modal) modal.classList.remove('active');
+      });
+    });
+
+    // Đóng khi click ngoài backdrop
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Đóng khi nhấn phím Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+      }
+    });
+  </script>
+</body>
+</html>
