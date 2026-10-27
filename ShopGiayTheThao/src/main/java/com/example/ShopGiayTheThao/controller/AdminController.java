@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.ShopGiayTheThao.dto.BrandDTO;
+import com.example.ShopGiayTheThao.dto.BrandRequest;
 import com.example.ShopGiayTheThao.dto.CategoryRequest;
 import com.example.ShopGiayTheThao.dto.CustomerStatsResponse;
 import com.example.ShopGiayTheThao.dto.ProductRequest;
 import com.example.ShopGiayTheThao.dto.ProductResponse;
 import com.example.ShopGiayTheThao.dto.SizeRequest;
+import com.example.ShopGiayTheThao.entity.Brand;
 import com.example.ShopGiayTheThao.entity.Category;
 import com.example.ShopGiayTheThao.entity.Size;
 import com.example.ShopGiayTheThao.service.BlogService;
+import com.example.ShopGiayTheThao.service.BrandService;
 import com.example.ShopGiayTheThao.service.CategoryService;
 import com.example.ShopGiayTheThao.service.ProductService;
 import com.example.ShopGiayTheThao.service.SizeService;
@@ -32,14 +36,16 @@ public class AdminController {
     private final BlogService blogService;
     private final CategoryService categoryService;
     private final SizeService sizeService;
+    private final BrandService brandService;
 
     public AdminController(UserService userService, ProductService productService, BlogService blogService,
-            CategoryService categoryService, SizeService sizeService) {
+            CategoryService categoryService, SizeService sizeService, BrandService brandService) {
         this.userService = userService;
         this.productService = productService;
         this.blogService = blogService;
         this.categoryService = categoryService;
         this.sizeService = sizeService;
+        this.brandService = brandService;
     }
 
     @GetMapping({ "", "/", "/dashboard", "/dashboard.html" })
@@ -148,10 +154,30 @@ public class AdminController {
             @RequestParam(name = "categoryIdFilter", required = false) Long categoryIdFilter,
             @RequestParam(name = "brandIdFilter", required = false) Long brandIdFilter,
             @RequestParam(name = "statusFilter", required = false) String statusFilter) {
+        String success = null;
         if (request.getId() != null) {
-            productService.updateProduct(request.getId(), request);
+            try {
+                com.example.ShopGiayTheThao.dto.ProductResponse existing = productService.getProductById(request.getId());
+                boolean hasChanged = false;
+                if (existing != null) {
+                    String newName = request.getName() != null ? request.getName().trim() : "";
+                    String oldName = existing.getName() != null ? existing.getName().trim() : "";
+                    if (!newName.equals(oldName)) hasChanged = true;
+
+                    String newThumb = request.getThumbnail() != null ? request.getThumbnail().trim() : "";
+                    String oldThumb = existing.getThumbnail() != null ? existing.getThumbnail().trim() : "";
+                    if (!newThumb.isEmpty() && !newThumb.equals(oldThumb)) hasChanged = true;
+
+                    if (request.getPrice() != null && !request.getPrice().equals(existing.getPrice())) hasChanged = true;
+                    if (request.getSalePrice() != null && !request.getSalePrice().equals(existing.getSalePrice())) hasChanged = true;
+                    if (request.getStatus() != null && !request.getStatus().equals(existing.getStatus())) hasChanged = true;
+                }
+                productService.updateProduct(request.getId(), request);
+                success = hasChanged ? "edit" : null;
+            } catch (Exception ignored) {
+            }
         }
-        return buildRedirectUrl(page, size, "edit", keyword, categoryIdFilter, brandIdFilter, statusFilter);
+        return buildRedirectUrl(page, size, success, keyword, categoryIdFilter, brandIdFilter, statusFilter);
     }
 
     @PostMapping("/products/delete/{id}")
@@ -258,8 +284,22 @@ public class AdminController {
         }
         String filter = (statusFilter != null && !statusFilter.isBlank()) ? statusFilter : statusFallback;
         try {
+            Category existing = categoryService.getCategoryById(request.getId());
+            boolean hasChanged = false;
+            if (existing != null) {
+                String newName = request.getName() != null ? request.getName().trim() : "";
+                String oldName = existing.getName() != null ? existing.getName().trim() : "";
+                if (!newName.equals(oldName)) hasChanged = true;
+
+                String newDesc = request.getDescription() != null ? request.getDescription().trim() : "";
+                String oldDesc = existing.getDescription() != null ? existing.getDescription().trim() : "";
+                if (!newDesc.equals(oldDesc)) hasChanged = true;
+
+                if (request.getStatus() != null && !request.getStatus().equals(existing.getStatus())) hasChanged = true;
+            }
             categoryService.updateCategory(request);
-            return buildCategoryRedirectUrl(page, size, "edit", keyword, filter);
+            String success = hasChanged ? "edit" : null;
+            return buildCategoryRedirectUrl(page, size, success, keyword, filter);
         } catch (Exception e) {
             return buildCategoryRedirectUrl(page, size, "error", keyword, filter);
         }
@@ -380,8 +420,16 @@ public class AdminController {
             request.setId(idParam);
         }
         try {
+            Size existing = sizeService.getSizeById(request.getId());
+            boolean hasChanged = false;
+            if (existing != null) {
+                String newName = request.getName() != null ? request.getName().trim() : "";
+                String oldName = existing.getName() != null ? existing.getName().trim() : "";
+                if (!newName.equals(oldName)) hasChanged = true;
+            }
             sizeService.updateSize(request);
-            return buildSizeRedirectUrl(page, size, "edit", keyword, null);
+            String success = hasChanged ? "edit" : null;
+            return buildSizeRedirectUrl(page, size, success, keyword, null);
         } catch (Exception e) {
             return buildSizeRedirectUrl(page, size, null, keyword, e.getMessage());
         }
@@ -435,8 +483,137 @@ public class AdminController {
     }
 
     @GetMapping({ "/brands", "/brand.html" })
-    public String brands() {
+    public String brands(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "4") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "action", required = false) String action,
+            @RequestParam(name = "id", required = false) Long id,
+            Model model) {
+        Page<BrandDTO> brandPage = brandService.getBrandsForAdmin(page, size, keyword);
+        model.addAttribute("brandPage", brandPage);
+        model.addAttribute("brands", brandPage.getContent());
+        model.addAttribute("currentPage", brandPage.getNumber());
+        model.addAttribute("totalPages", brandPage.getTotalPages());
+        model.addAttribute("totalElements", brandPage.getTotalElements());
+        model.addAttribute("pageSize", size);
+
+        model.addAttribute("keyword", (keyword != null && !keyword.isBlank()) ? keyword.trim() : "");
+        model.addAttribute("action", action);
+
+        if (action != null && id != null) {
+            try {
+                BrandDTO b = brandService.getBrandById(id);
+                if ("view".equalsIgnoreCase(action)) {
+                    model.addAttribute("viewBrand", b);
+                } else if ("edit".equalsIgnoreCase(action)) {
+                    model.addAttribute("editBrand", b);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
         return "admin/brand";
+    }
+
+    @GetMapping("/brands/add")
+    public String addBrandGet() {
+        return "redirect:/admin/brands?action=add";
+    }
+
+    @GetMapping("/brands/edit")
+    public String editBrandGet() {
+        return "redirect:/admin/brands";
+    }
+
+    @PostMapping("/brands/add")
+    public String addBrand(
+            @ModelAttribute BrandRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "4") int size,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        try {
+            brandService.createBrand(request);
+            return buildBrandRedirectUrl(page, size, "add", keyword, null);
+        } catch (Exception e) {
+            return buildBrandRedirectUrl(page, size, null, keyword, e.getMessage());
+        }
+    }
+
+    @PostMapping("/brands/edit")
+    public String editBrand(
+            @ModelAttribute BrandRequest request,
+            @RequestParam(name = "id", required = false) Long idParam,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "4") int size,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        if (request.getId() == null && idParam != null) {
+            request.setId(idParam);
+        }
+        try {
+            Brand existing = brandService.getBrandEntityById(request.getId());
+            boolean hasChanged = false;
+            if (existing != null) {
+                String newName = request.getName() != null ? request.getName().trim() : "";
+                String oldName = existing.getName() != null ? existing.getName().trim() : "";
+                if (!newName.equals(oldName)) hasChanged = true;
+
+                String newLogo = request.getLogo() != null ? request.getLogo().trim() : "";
+                String oldLogo = existing.getLogo() != null ? existing.getLogo().trim() : "";
+                if (!newLogo.isEmpty() && !newLogo.equals(oldLogo)) hasChanged = true;
+
+                String newDesc = request.getDescription() != null ? request.getDescription().trim() : "";
+                String oldDesc = existing.getDescription() != null ? existing.getDescription().trim() : "";
+                if (!newDesc.equals(oldDesc)) hasChanged = true;
+            }
+            brandService.updateBrand(request);
+            String success = hasChanged ? "edit" : null;
+            return buildBrandRedirectUrl(page, size, success, keyword, null);
+        } catch (Exception e) {
+            return buildBrandRedirectUrl(page, size, null, keyword, e.getMessage());
+        }
+    }
+
+    @PostMapping("/brands/delete/{id}")
+    public String deleteBrand(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "4") int size,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        try {
+            brandService.deleteBrand(id);
+            return buildBrandRedirectUrl(page, size, "delete", keyword, null);
+        } catch (Exception e) {
+            return buildBrandRedirectUrl(page, size, null, keyword, e.getMessage());
+        }
+    }
+
+    @GetMapping("/brands/delete/{id}")
+    public String deleteBrandGet(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "4") int size,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        try {
+            brandService.deleteBrand(id);
+            return buildBrandRedirectUrl(page, size, "delete", keyword, null);
+        } catch (Exception e) {
+            return buildBrandRedirectUrl(page, size, null, keyword, e.getMessage());
+        }
+    }
+
+    private String buildBrandRedirectUrl(int page, int size, String success, String keyword, String error) {
+        StringBuilder sb = new StringBuilder("/admin/brands?page=").append(page).append("&size=").append(size);
+        if (success != null && !success.isBlank()) {
+            sb.append("&success=").append(success);
+        }
+        if (error != null && !error.isBlank()) {
+            sb.append("&error=").append(java.net.URLEncoder.encode(error, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        if (keyword != null && !keyword.isBlank()) {
+            sb.append("&keyword=").append(java.net.URLEncoder.encode(keyword, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        return "redirect:" + sb.toString();
     }
 
     @GetMapping({ "/blogs", "/blog.html" })

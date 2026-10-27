@@ -1043,3 +1043,271 @@ CHỨC NĂNG: QUẢN LÝ KÍCH THƯỚC (SIZE) CHO SIZE.HTML Ở ADMIN (GET, TH�
      + Success: <span th:if="${param.success[0] == 'delete'}">✓ Đã xóa kích thước khỏi hệ thống thành công!</span>
      + Error: <div th:if="${param.error != null}"><span th:text="${param.error[0]}">✕ Đã xảy ra lỗi khi thực hiện thao tác...</span></div>
 ====================================================================================================
+
+
+5. brand.html - GET render mã thương hiệu BRD-ID, thêm (bỏ mã hiệu, xuất xứ, trạng thái, chỉ giữ name, logo, mô tả, ID tự sinh), sửa (bỏ mã hiệu, xuất xứ, trạng thái, chỉ giữ name, logo, mô tả, tự động giữ link ảnh cũ nếu để trống), icon mắt xem thương hiệu (ảnh, mô tả, số sản phẩm), xóa an toàn khóa ngoại, phân trang 1 trang 4 brand, tìm kiếm thương hiệu (100% không dùng JavaScript)
+
+====================================================================================================
+CHỨC NĂNG: QUẢN LÝ THƯƠNG HIỆU (BRAND) CHO BRAND.HTML Ở ADMIN (GET, THÊM, SỬA, XÓA, XEM CHI TIẾT MODAL, PHÂN TRANG 4 BRAND/TRANG, TÌM KIẾM - 100% KHÔNG DÙNG JS)
+====================================================================================================
+1. Tầng DTO:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/BrandRequest.java
+     + Các trường dữ liệu: Long id, String name, String logo, String description
+     + Constructors & Getters/Setters:
+       * public BrandRequest()
+       * public BrandRequest(String name, String logo, String description)
+       * public BrandRequest(Long id, String name, String logo, String description)
+       * getId(), setId(Long id), getName(), setName(String name), getLogo(), setLogo(String logo), getDescription(), setDescription(String description)
+     + Mục đích: DTO nhận dữ liệu gửi lên từ Form Thêm mới và Form Chỉnh sửa thương hiệu. Đã loại bỏ hoàn toàn mã hiệu thương hiệu, xuất xứ / trụ sở và trạng thái sử dụng theo đúng yêu cầu nghiệp vụ. Trường "Mô tả định vị" được chuẩn hóa chỉ còn "Mô tả" (description).
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/dto/BrandDTO.java
+     + Các trường: Long id, String name, String logo, String description, String subtitle, int productCount
+     + Hàm helper:
+       * public String getCode() { return id != null ? "BRD-" + id : ""; }
+       * getProductCount(), setProductCount(int productCount)
+     + Mục đích: Truyền tải dữ liệu hiển thị lên View, tính toán số sản phẩm thuộc thương hiệu và định dạng mã "BRD-ID".
+
+2. Tầng Entity:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/entity/Brand.java
+   - Bổ sung trường Transient:
+     @jakarta.persistence.Transient
+     public String getCode() {
+         return id != null ? "BRD-" + id : "";
+     }
+   - Tác dụng: Cột "ID" được đổi thành "Mã thương hiệu" và hiển thị dữ liệu dưới dạng "BRD-ID" (ví dụ: BRD-1, BRD-2...). Tuyệt đối không tạo thêm cột code/origin/status trong MySQL DB, ID sử dụng số tự sinh của MySQL auto-increment.
+   - Các trường dữ liệu gốc: Long id (@Id @GeneratedValue IDENTITY), String name, String logo, String description, List<Product> products.
+   - Toàn bộ Getter/Setter: getId(), setId(), getCode(), getName(), setName(), getLogo(), setLogo(), getDescription(), setDescription(), getProducts(), setProducts().
+
+3. Tầng Repository:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/BrandRepository.java
+   - Kế thừa: org.springframework.data.jpa.repository.JpaRepository<Brand, Long>
+   - Các hàm:
+     + public Optional<Brand> findByName(String name) : Tìm thương hiệu theo tên chính xác.
+     + public boolean existsByNameIgnoreCase(String name) : Kiểm tra trùng lặp tên thương hiệu khi thêm mới (không phân biệt hoa thường).
+     + public boolean existsByNameIgnoreCaseAndIdNot(String name, Long id) : Kiểm tra trùng lặp tên thương hiệu với các bản ghi khác khi chỉnh sửa.
+     + @Query(value = "SELECT b FROM Brand b WHERE " +
+              "(:keyword IS NULL OR LOWER(b.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+              " OR CONCAT(b.id, '') LIKE CONCAT('%', :cleanKeyword, '%'))",
+              countQuery = "SELECT COUNT(b) FROM Brand b WHERE " +
+              "(:keyword IS NULL OR LOWER(b.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+              " OR CONCAT(b.id, '') LIKE CONCAT('%', :cleanKeyword, '%'))")
+       Page<Brand> filterBrands(
+               @Param("keyword") String keyword,
+               @Param("cleanKeyword") String cleanKeyword,
+               Pageable pageable);
+       -> Chức năng: Tìm kiếm thương hiệu theo tên (ví dụ: "Nike", "Adidas") hoặc theo mã số tự sinh / mã "BRD-ID" (đã bóc tách tiền tố "BRD-", "brd" và số 0 ở đầu), hỗ trợ phân trang Pageable (4 thương hiệu / trang) và sắp xếp ID giảm dần (mới nhất xếp trước, cũ nhất xếp sau).
+     + public List<Brand> findAllByOrderByIdAsc() : Lấy danh sách sắp xếp tăng dần phục vụ dropdown/combobox sản phẩm.
+
+4. Tầng Service:
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/BrandService.java (Interface)
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/BrandServiceImpl.java (Implementation)
+   - Các hàm nghiệp vụ:
+     + public Page<BrandDTO> getBrandsForAdmin(int page, int size, String keyword) :
+       * Cấu hình phân trang: int pageSize = (size > 0) ? size : 4 (mặc định đúng 4 thương hiệu / trang theo yêu cầu).
+       * Sắp xếp: Sort.by(Sort.Direction.DESC, "id") giúp danh sách thương hiệu hiển thị theo thứ tự mới nhất xếp trước, cũ nhất xếp sau.
+       * Chuẩn hóa từ khóa: Bóc tách tiền tố "BRD-", "brd", loại bỏ số 0 ở đầu (ví dụ: BRD-001 -> 1) để tìm kiếm chính xác theo ID số trong cơ sở dữ liệu.
+       * Gọi brandRepository.filterBrands(kw, cleanKw, pageable) và map sang BrandDTO kèm đếm số sản phẩm liên kết (productCount = brand.getProducts().size()).
+     + public Page<BrandDTO> getBrandsForAdmin(int page, int size) : Overload gọi hàm trên với keyword = null.
+     + public BrandDTO getBrandById(Long id) :
+       * Tìm thương hiệu theo ID qua brandRepository.findById(id), ánh xạ sang BrandDTO kèm số sản phẩm và thông tin chi tiết.
+     + public Brand getBrandEntityById(Long id) :
+       * Tìm entity Brand trực tiếp, ném ngoại lệ ResponseStatusException(HttpStatus.NOT_FOUND) nếu không tìm thấy.
+     + public Brand createBrand(BrandRequest request) :
+       * Kiểm tra tên thương hiệu không được để trống.
+       * Kiểm tra chống trùng lặp tên thương hiệu qua brandRepository.existsByNameIgnoreCase(trimmedName).
+       * Khởi tạo entity Brand, gán name, logo và description (loại bỏ hoàn toàn mã hiệu, xuất xứ, trạng thái). Khi không nhập ảnh, logo lưu là null, không gán ảnh mặc định.
+       * MySQL tự sinh ID số tăng dần (không tạo/insert vào cột code nào).
+       * Gọi brandRepository.save(brand).
+     + public Brand updateBrand(BrandRequest request) :
+       * Kiểm tra ID và tên thương hiệu không được để trống.
+       * Kiểm tra chống trùng lặp tên với các thương hiệu khác qua brandRepository.existsByNameIgnoreCaseAndIdNot(trimmedName, request.getId()).
+       * Tìm thương hiệu theo ID và cập nhật các trường: name, description.
+       * XỬ LÝ ẢNH THƯƠNG HIỆU: Nếu người dùng nhập link ảnh mới thì cập nhật; NẾU Ô NHẬP ẢNH BỊ TRỐNG KHI CẬP NHẬT THÌ HỆ THỐNG TỰ ĐỘNG GIỮ NGUYÊN / LẤY LẠI LINK ẢNH CŨ (không ghi đè null).
+       * Gọi brandRepository.save(brand).
+     + public void deleteBrand(Long id) :
+       * Tìm thương hiệu theo ID.
+       * Xử lý an toàn ràng buộc khóa ngoại (Foreign Key Safety): Kiểm tra xem thương hiệu có đang được liên kết với sản phẩm nào trong bảng products qua brand.getProducts() hay không.
+       * Nếu có sản phẩm liên kết: ném ngoại lệ ResponseStatusException(HttpStatus.BAD_REQUEST) báo rõ số lượng sản phẩm đang thuộc thương hiệu và ngăn chặn thao tác xóa gây lỗi dữ liệu.
+       * Nếu không có liên kết: thực hiện xóa an toàn qua brandRepository.deleteById(id).
+     + public long getTotalBrands() : Đếm tổng số lượng thương hiệu qua brandRepository.count().
+     + public List<BrandDTO> getAllBrands() : Lấy toàn bộ danh sách thương hiệu phục vụ dropdown phân loại sản phẩm.
+
+5. Tầng REST API Controller (Cung cấp API JSON):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminApiController.java
+   - Các hàm endpoint:
+     + @GetMapping("/brands") : GET /api/admin/brands (trả về JSON danh sách phân trang 4 brand/trang, tìm kiếm).
+     + @GetMapping("/brands/{id}") : GET /api/admin/brands/{id} (trả về JSON chi tiết 1 thương hiệu kèm số sản phẩm).
+     + @PostMapping("/brands") : POST /api/admin/brands (thêm mới thương hiệu với ID tự sinh, trả về mã HTTP 201 CREATED).
+     + @PutMapping("/brands/{id}") : PUT /api/admin/brands/{id} (cập nhật thông tin thương hiệu).
+     + @DeleteMapping("/brands/{id}") : DELETE /api/admin/brands/{id} (xóa thương hiệu an toàn khóa ngoại).
+
+6. Tầng Spring MVC Controller (Render giao diện & Xử lý Form 100% không dùng JS):
+   - File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/controller/AdminController.java
+   - Các hàm MVC:
+     + @GetMapping({ "/brands", "/brand.html" }) :
+       * Tham số: @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "4") int size, @RequestParam(name = "keyword", required = false) String keyword, @RequestParam(name = "action", required = false) String action, @RequestParam(name = "id", required = false) Long id, Model model.
+       * Gọi brandService.getBrandsForAdmin(page, size, keyword).
+       * Nạp vào Model: brandPage, brands, currentPage, totalPages, totalElements, pageSize (4), keyword, action.
+       * Xử lý Xem chi tiết (action == "view"): Gọi brandService.getBrandById(id), nạp viewBrand vào Model để hiển thị modal xem thương hiệu gồm ảnh (chỉ hiện khi có logo), mô tả, số sản phẩm đang thuộc thương hiệu.
+       * Xử lý Chỉnh sửa (action == "edit"): Gọi brandService.getBrandEntityById(id), nạp editBrand vào Model để bind dữ liệu lên Form Sửa.
+       * Render view: "admin/brand".
+     + @GetMapping("/brands/add") : Chuyển hướng an toàn về /admin/brands?action=add khi gọi bằng GET.
+     + @GetMapping("/brands/edit") : Chuyển hướng an toàn về /admin/brands khi gọi bằng GET hoặc F5 trình duyệt.
+     + @PostMapping("/brands/add") :
+       * Nhận dữ liệu POST từ Form Thêm thương hiệu qua @ModelAttribute BrandRequest request.
+       * Nhận các tham số phân trang page, size (4), keyword.
+       * Bọc try-catch gọi brandService.createBrand(request) (chỉ lưu name, logo, description; MySQL tự sinh ID số).
+       * Redirect về danh sách qua buildBrandRedirectUrl(page, size, "add", keyword, null) hoặc redirect kèm error nếu có lỗi dữ liệu.
+     + @PostMapping("/brands/edit") :
+       * Nhận dữ liệu POST từ Form Sửa thương hiệu qua @ModelAttribute BrandRequest request và dự phòng idParam.
+       * So sánh dữ liệu gửi lên với dữ liệu hiện tại trong DB:
+         Kiểm tra nếu người dùng không thay đổi/nhập gì mới (hasChanged == false) mà bấm Cập nhật thì hệ thống vẫn lưu thành công nhưng KHỎI CẦN HIỆN THÔNG BÁO GÌ (successParam = null).
+         Nếu có thay đổi dữ liệu (hasChanged == true) thì mới hiển thị thông báo "✓ Đã cập nhật thương hiệu thành công!".
+       * Bọc try-catch gọi brandService.updateBrand(request).
+       * Redirect về danh sách qua buildBrandRedirectUrl(page, size, successParam, keyword, null).
+     + @PostMapping("/brands/delete/{id}") :
+       * Nhận yêu cầu xóa từ Form POST trên từng dòng bảng qua @PathVariable Long id.
+       * Bọc try-catch gọi brandService.deleteBrand(id).
+       * Redirect về danh sách qua buildBrandRedirectUrl(page, size, "delete", keyword, null) hoặc redirect kèm thông báo lỗi khóa ngoại nếu thương hiệu đang có sản phẩm.
+     + @GetMapping("/brands/delete/{id}") : Dự phòng link GET xóa an toàn.
+     + private String buildBrandRedirectUrl(int page, int size, String success, String keyword, String error) :
+       * Helper build URL redirect mã hóa UTF-8 giữ nguyên trang, từ khóa tìm kiếm và thông báo kết quả sau thao tác.
+
+7. Tầng View (Thymeleaf - brand.html - 100% Không dùng JavaScript):
+   - File: ShopGiayTheThao/src/main/resources/templates/admin/brand.html
+   - Loại bỏ hoàn toàn toàn bộ các thẻ <script> và logic JavaScript.
+   - Bảng Thương Hiệu (Table):
+     + ĐÃ BỎ HOÀN TOÀN CÁC CỘT: Mã hiệu, Xuất xứ / Trụ sở, Trạng thái sử dụng.
+     + Cột "Mô tả định vị" chuẩn hóa thành "Mô tả".
+     + Cột "ID" đổi thành "Mã thương hiệu" và hiển thị dữ liệu dưới dạng "BRD-ID" (ví dụ: BRD-1, BRD-2...).
+     + CỘT HÌNH ẢNH / LOGO: Đã bỏ hoàn toàn ảnh giày mặc định unsplash. Khi ảnh bị null hoặc trống, KHÔNG HIỂN THỊ GÌ CẢ (không sinh thẻ img, giữ ô bảng sạch sẽ). Chỉ khi người dùng cập nhật nhập link ảnh thì mới hiển thị ảnh.
+     + Danh sách các cột trên bảng: Mã thương hiệu (BRD-ID), Hình ảnh / Logo, Tên thương hiệu, Mô tả, Số sản phẩm, Thao tác.
+   - Thao tác Xem Thương Hiệu qua Icon Mắt (Pure CSS/Thymeleaf Modal, không dùng JS):
+     + Nút Icon mắt trên từng dòng bảng:
+       <a th:href="@{/admin/brands(action='view', id=${b.id}, page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-action-icon" title="Xem chi tiết thương hiệu">...</a>
+     + Container Modal: <div class="modal-overlay" id="modal-view-brand" th:classappend="${action == 'view' and viewBrand != null} ? 'active' : ''">
+     + Hiển thị đầy đủ thông tin:
+       * Ảnh đại diện / Logo thương hiệu: Chỉ hiển thị khi viewBrand.logo có giá trị link hợp lệ; nếu logo bị null hoặc trống thì KHÔNG HIỂN THỊ GÌ LUÔN (ẩn hoàn toàn khối ảnh).
+       * Tên thương hiệu và mã "BRD-ID" (th:text="${viewBrand.name} và ${viewBrand.code}")
+       * Số sản phẩm đang thuộc thương hiệu: Hiển thị badge nổi bật th:text="${viewBrand.productCount} + ' sản phẩm đang mở bán'"
+       * Mô tả thương hiệu: Thẻ <p th:text="${viewBrand.description}">
+       * Nút Đóng modal (<a th:href="@{/admin/brands(...)}" class="btn-secondary">) và Nút Chuyển nhanh sang Chỉnh sửa (<a th:href="@{/admin/brands(action='edit', id=${viewBrand.id}, ...)}" class="btn-primary">).
+   - Thao tác Tìm kiếm thương hiệu (Toolbar GET Form thuần):
+     + Form GET: <form method="get" th:action="@{/admin/brands}" class="table-toolbar-left">
+     + Ô tìm kiếm: <input type="text" name="keyword" class="table-search-input" placeholder="Tìm kiếm theo mã (BRD-...) hoặc tên thương hiệu..." th:value="${keyword}">
+     + Nút submit: <button type="submit" class="btn-primary">Tìm kiếm</button>
+     + Nút reset: <a th:if="${keyword != null and !keyword.isEmpty()}" th:href="@{/admin/brands}" class="btn-secondary">Đặt lại</a>
+     + Thông tin tổng số: <span th:text="'Hiển thị ' + (${brands != null ? #lists.size(brands) : 0}) + ' / ' + (${totalElements != null ? totalElements : 0}) + ' thương hiệu'"></span>
+   - Phân trang động 1 trang có 4 thương hiệu (Thymeleaf Pagination Controls):
+     + Thông tin trang: <span th:if="${totalElements != null and totalElements > 0}" th:text="'Trang ' + (${currentPage + 1}) + ' / ' + (${totalPages > 0 ? totalPages : 1}) + ' (Tổng ' + ${totalElements} + ' thương hiệu)'"></span>
+     + Nút Trước: <a th:if="${currentPage > 0}" th:href="@{/admin/brands(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}" class="page-chip">← Trước</a>
+     + Danh sách số trang: duyệt th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}", trang hiện tại hiển thị thẻ <span class="page-chip active">, các trang khác thẻ <a>.
+     + Nút Sau: <a th:if="${currentPage < totalPages - 1}" th:href="@{/admin/brands(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}" class="page-chip">Sau →</a>
+   - Modal Thêm Thương Hiệu (Pure CSS/Thymeleaf Server-side State):
+     + Nút mở modal Thêm trên header: <a th:href="@{/admin/brands(action='add', page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-primary">+ Thêm Thương Hiệu Mới</a>
+     + Container Modal: <div class="modal-overlay" id="modal-add-brand" th:classappend="${action == 'add'} ? 'active' : ''">
+     + Form POST thêm: <form th:action="@{/admin/brands/add}" method="post">
+     + ĐÃ LOẠI BỎ HOÀN TOÀN MÃ HIỆU THƯƠNG HIỆU, XUẤT XỨ / TRỤ SỞ VÀ TRẠNG THÁI SỬ DỤNG. Form CHỈ CÒN CÁC Ô NHẬP:
+       * Tên thương hiệu: <input type="text" class="form-control" name="name" placeholder="Ví dụ: Nike, Adidas, Puma..." required title="Vui lòng nhập tên thương hiệu"> kèm cảnh báo nhỏ bên dưới "Vui lòng không để trống thông tin này".
+       * URL Logo / Hình ảnh: <input type="url" class="form-control" name="logo" placeholder="https://..."> (nếu không nhập sẽ là null, không gán ảnh mặc định).
+       * Mô tả: <textarea class="form-control" name="description" rows="4" placeholder="Mô tả thương hiệu..."></textarea>
+     + Kèm input hidden page, size (4), keyword.
+     + ID sử dụng số tự sinh của MySQL auto-increment.
+   - Modal Chỉnh Sửa Thương Hiệu (Pure CSS/Thymeleaf Server-side State):
+     + Nút mở modal Sửa trên từng dòng bảng: <a th:href="@{/admin/brands(action='edit', id=${b.id}, page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-action-icon" title="Chỉnh sửa thương hiệu">...</a>
+     + Container Modal: <div class="modal-overlay" id="modal-edit-brand" th:classappend="${action == 'edit' and editBrand != null} ? 'active' : ''">
+     + Tiêu đề modal hiển thị kèm mã thương hiệu: <h3 class="modal-title" th:text="${editBrand != null ? ('Chỉnh Sửa Thương Hiệu (' + (editBrand.code != null ? editBrand.code : ('BRD-' + editBrand.id)) + ')') : 'Chỉnh Sửa Thương Hiệu'}">
+     + Form POST sửa: <form th:action="@{/admin/brands/edit}" method="post">
+     + ĐÃ LOẠI BỎ HOÀN TOÀN MÃ HIỆU THƯƠNG HIỆU, XUẤT XỨ / TRỤ SỞ VÀ TRẠNG THÁI SỬ DỤNG. Form CHỈ CÒN CÁC Ô NHẬP:
+       * Tên thương hiệu: <input type="text" class="form-control" name="name" th:value="${editBrand != null ? editBrand.name : ''}" required title="Vui lòng nhập tên thương hiệu"> kèm cảnh báo nhỏ bên dưới "Vui lòng không để trống tên thương hiệu".
+       * URL Logo / Hình ảnh: <input type="url" class="form-control" name="logo" th:value="${editBrand != null ? editBrand.logo : ''}" placeholder="Để trống sẽ tự động giữ lại link ảnh cũ"> kèm ghi chú: "Nếu để trống ô này khi cập nhật, hệ thống sẽ tự động giữ lại link ảnh cũ".
+       * Mô tả: <textarea class="form-control" name="description" rows="4" th:text="${editBrand != null ? editBrand.description : ''}"></textarea>
+     + Kèm input hidden id="${editBrand.id}", page, size (4), keyword.
+     + Nếu người dùng không nhập gì mới mà bấm Cập nhật, cập nhật thành công nhưng khỏi cần hiện thông báo gì.
+   - Thao tác Xóa Thương Hiệu (Pure HTML Form POST):
+     + Form POST trên từng dòng bảng:
+       <form th:action="@{/admin/brands/delete/{id}(id=${b.id})}" method="post" style="display:inline; margin:0;">
+         <input type="hidden" name="page" th:value="${currentPage}">
+         <input type="hidden" name="size" th:value="${pageSize}">
+         <input type="hidden" name="keyword" th:value="${keyword}">
+         <button type="submit" class="btn-action-icon danger" title="Xóa thương hiệu">...</button>
+       </form>
+   - Banner thông báo (Alerts):
+     + Success: <span th:if="${param.success[0] == 'add'}">✓ Đã thêm thương hiệu mới thành công!</span>
+     + Success: <span th:if="${param.success[0] == 'edit'}">✓ Đã cập nhật thương hiệu thành công!</span>
+     + Success: <span th:if="${param.success[0] == 'delete'}">✓ Đã xóa thương hiệu khỏi hệ thống thành công!</span>
+     + Error: <div th:if="${param.error != null}"><span th:text="${param.error[0]}">✕ Đã xảy ra lỗi khi thực hiện thao tác...</span></div>
+====================================================================================================
+
+6. LOẠI BỎ HOÀN TOÀN CÁC PHỤ ĐỀ THƯƠNG HIỆU ("CỐT LÕI", "DI SẢN VĨ ĐẠI", "ALL CONDITIONS GEAR",...) KHỎI GIAO DIỆN
+====================================================================================================
+- Mục đích: Loại bỏ các nhãn phân loại thương hiệu tự sinh ("Cốt Lõi", "Di sản vĩ đại", "All Conditions Gear", "Skateboarding", "Hiệu Năng & Gym", "Kinh Điển", "Biểu Tượng") không cần thiết, giúp giao diện bảng quản lý thương hiệu gọn gàng, đúng chuẩn thông tin thương hiệu.
+- Vị trí các file và hàm đã xử lý:
+  1. File: ShopGiayTheThao/src/main/resources/templates/admin/brand.html
+     + Vị trí: Cột Tên Thương Hiệu trong bảng danh sách (thẻ <td>).
+     + Thay đổi: Loại bỏ dòng <span class="caption-sm" style="color:var(--color-mute);" th:text="${b.subtitle != null ? b.subtitle : 'Thương hiệu'}">Mainline Brand</span>.
+     + Chỉ giữ lại thẻ tên thương hiệu duy nhất: <div class="item-name-cell" style="font-weight:700; font-size:15px;" th:text="${b.name}">Nike Sportswear</div>.
+  2. File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/BrandServiceImpl.java
+     + Hàm: private BrandDTO toDTO(Brand brand)
+       - Loại bỏ dòng: String subtitle = getSubtitleByName(brand.getName());
+       - Truyền null cho trường subtitle khi khởi tạo BrandDTO:
+         return new BrandDTO(brand.getId(), brand.getName(), brand.getLogo(), brand.getDescription(), null, count);
+     + Hàm: Xóa bỏ hoàn toàn hàm getSubtitleByName(String name).
+  3. File: ShopGiayTheThao/src/main/resources/templates/client/brand.html
+     + Vị trí: Khối thẻ thương hiệu client (brand-card-logo-row).
+     + Thay đổi: Loại bỏ thẻ <span class="badge-promo" th:text="${b.subtitle != null ? b.subtitle : 'Biểu Tượng'}">Cốt Lõi</span>.
+  4. File: ShopGiayTheThao/src/main/resources/templates/client/index.html
+     + Vị trí: Danh sách thương hiệu trang chủ (brand-card-logo-row).
+     + Thay đổi: Loại bỏ thẻ <span class="caption-sm" style="color:var(--color-mute);" th:text="${b.subtitle != null ? b.subtitle : 'Di sản vĩ đại'}">Di sản vĩ đại</span>.
+====================================================================================================
+
+7. CẬP NHẬT TÊN THƯƠNG HIỆU SHOP THÀNH "T1SHOESPORT" VÀ SỬ DỤNG LOGO CHÍNH THỨC MỚI
+====================================================================================================
+- Mục đích: Đồng bộ đổi tên toàn bộ cửa hàng thành "T1SHOESPORT", áp dụng link ảnh logo mới (https://ih1.redbubble.net/image.5307224197.5270/st,small,507x507-pad,600x600,f8f8f8.jpg) trên toàn hệ thống (Admin Portal và Client Shop).
+- Vị trí các file và nội dung đã cập nhật:
+  1. CSS:
+     - static/client/css/style.css: Thêm class .shop-logo-link, .shop-logo-img, .shop-logo-text để hiển thị logo ảnh kết hợp tên thương hiệu T1SHOESPORT chuẩn tỉ lệ, shadow tinh tế.
+     - static/admin/css/style.css: Bổ sung style cho .admin-logo img và .admin-logo a để hiển thị logo shop kèm chữ T1SHOESPORT ADMIN trên thanh điều hướng sidebar.
+  2. Giao diện Quản trị (Admin - 7 templates):
+     - dashboard.html, product.html, brand.html, cate.html, size.html, user.html, blog.html:
+       + Đổi <title> thành "... | T1SHOESPORT Admin Portal".
+       + Thêm favicon với link ảnh logo T1.
+       + Cập nhật logo sidebar hiển thị ảnh logo T1SHOESPORT + nhãn "T1SHOESPORT ADMIN".
+  3. Giao diện Người dùng (Client - 9 templates):
+     - index.html, product.html, product-detail.html, brand.html, blog.html, cart.html, user.html, login.html, register.html:
+       + Đổi <title> và gắn favicon logo T1SHOESPORT.
+       + Thay thế SVG cũ bằng link ảnh logo T1SHOESPORT kết hợp tên chữ T1SHOESPORT ở header navigation.
+       + Trang login.html và register.html: Cập nhật auth-logo với ảnh logo T1 và tiêu đề/phụ đề chào mừng thành viên T1SHOESPORT.
+       + Cập nhật footer copyright thành "© 2026 T1SHOESPORT. Tất cả quyền được bảo lưu."
+====================================================================================================
+
+8. XỬ LÝ XÓA HOÀN TOÀN BRAND VÀ CATEGORY KHỎI DB - TỰ ĐỘNG CHUYỂN SẢN PHẨM SANG BRAND / CATEGORY NGẪU NHIÊN TRÁNH LỖI BAD REQUEST
+====================================================================================================
+- Mục đích: Khi thực hiện thao tác Xóa Thương Hiệu (Brand) hoặc Danh Mục (Category) tại trang Admin (brand.html & cate.html):
+  + Xóa vĩnh viễn (hard-delete) bản ghi thương hiệu / danh mục đó khỏi cơ sở dữ liệu (Database).
+  + Tự động tìm tất cả sản phẩm đang liên kết với thương hiệu / danh mục bị xóa và chuyển hướng ngẫu nhiên sang một thương hiệu / danh mục khác còn tồn tại trong hệ thống.
+  + Nếu không còn thương hiệu / danh mục nào khác trong DB, tự động khởi tạo bản ghi mặc định hệ thống ("Khác") để tiếp nhận sản phẩm, tuyệt đối không bị lỗi Bad Request hoặc vi phạm ràng buộc khóa ngoại (Foreign Key constraint).
+- Vị trí các file và hàm đã xử lý:
+  1. File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/repository/ProductRepository.java
+     + Thêm phương thức truy vấn:
+       * List<Product> findAllByBrandId(Long brandId);
+       * List<Product> findAllByCategoryId(Long categoryId);
+  2. File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/BrandServiceImpl.java
+     + Tiêm phụ thuộc (Dependency Injection): ProductRepository productRepository.
+     + Hàm xử lý: public void deleteBrand(Long id)
+       - Tìm tất cả sản phẩm thuộc thương hiệu bị xóa bằng productRepository.findAllByBrandId(id).
+       - Nếu có sản phẩm: lọc danh sách thương hiệu còn lại khác id hiện tại, chọn ngẫu nhiên một thương hiệu đích (targetBrand = otherBrands.get(ThreadLocalRandom.current().nextInt(...))) hoặc tạo mới nếu chưa có.
+       - Cập nhật lại brand cho tất cả sản phẩm và lưu bằng productRepository.saveAll(products); productRepository.flush().
+       - Xóa rỗng danh sách liên kết bộ nhớ brand.getProducts().clear().
+       - Xóa hoàn toàn thương hiệu khỏi cơ sở dữ liệu: brandRepository.delete(brand); brandRepository.flush().
+  3. File: ShopGiayTheThao/src/main/java/com/example/ShopGiayTheThao/service/CategoryService.java
+     + Tiêm phụ thuộc (Dependency Injection): ProductRepository productRepository.
+     + Hàm xử lý: public void deleteCategory(Long id)
+       - Tìm tất cả sản phẩm thuộc danh mục bị xóa bằng productRepository.findAllByCategoryId(id).
+       - Nếu có sản phẩm: lọc danh sách danh mục còn lại khác id hiện tại, chọn ngẫu nhiên một danh mục đích (targetCategory = otherCategories.get(ThreadLocalRandom.current().nextInt(...))) hoặc tạo mới nếu chưa có.
+       - Cập nhật lại category cho tất cả sản phẩm và lưu bằng productRepository.saveAll(products); productRepository.flush().
+       - Xóa rỗng danh sách liên kết bộ nhớ category.getProducts().clear().
+       - Xóa hoàn toàn danh mục khỏi cơ sở dữ liệu: categoryRepository.delete(category); categoryRepository.flush().
+  4. Kiểm thử tự động (Unit Tests):
+     - ShopGiayTheThao/src/test/java/com/example/ShopGiayTheThao/BrandServiceTest.java: Thêm testDeleteBrandWithProductsReassignsRandomly.
+     - ShopGiayTheThao/src/test/java/com/example/ShopGiayTheThao/CategoryServiceTest.java: Thêm testDeleteCategoryWithProductsReassignsRandomly.
+====================================================================================================

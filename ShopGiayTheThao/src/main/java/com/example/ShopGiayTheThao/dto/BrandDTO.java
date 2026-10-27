@@ -28,6 +28,9 @@ public class BrandDTO {
         this.id = id;
     }
 
+    public String getCode() {
+        return id != null ? "BRD-" + id : "";
+    }
     public String getName() {
         return name;
     }

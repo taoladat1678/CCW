@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản Lý Sản Phẩm | Nike Admin Portal</title>
+  <title>Quản Lý Sản Phẩm | T1SHOESPORT Admin Portal</title>
+  <link rel="icon" type="image/jpeg" href="https://ih1.redbubble.net/image.5307224197.5270/st,small,507x507-pad,600x600,f8f8f8.jpg">
   <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
   <style>
     /* Kích thước & Số lượng từng size */
@@ -136,10 +137,10 @@
   <aside class="admin-sidebar">
     <div class="sidebar-header">
       <div class="admin-logo">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
-        </svg>
-        <span>NIKE ADMIN</span>
+        <a th:href="@{/admin/dashboard}" href="/admin/dashboard" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+          <img src="https://ih1.redbubble.net/image.5307224197.5270/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="T1SHOESPORT Logo">
+          <span>T1SHOESPORT ADMIN</span>
+        </a>
       </div>
     </div>
 
@@ -282,8 +283,8 @@
               </tr>
               <tr th:each="product : ${products}">
                 <td>
-                  <div class="item-thumb-box">
-                    <img th:src="${product.thumbnail != null and !product.thumbnail.isEmpty() ? product.thumbnail : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80'}" th:alt="${product.name}" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" alt="Product">
+                  <div class="item-thumb-box" th:if="${product.thumbnail != null and !product.thumbnail.isEmpty()}">
+                    <img th:src="${product.thumbnail}" th:alt="${product.name}">
                   </div>
                 </td>
                 <td>
@@ -546,7 +547,8 @@
             </div>
             <div class="form-group">
               <label class="form-label">Link hình ảnh (URL)</label>
-              <input type="url" class="form-control" name="thumbnail" th:value="${editProduct.thumbnail}">
+              <input type="url" class="form-control" name="thumbnail" th:value="${editProduct.thumbnail}" placeholder="Để trống nếu muốn giữ nguyên link ảnh cũ">
+              <small class="form-help" style="color:var(--color-mute); font-size:12px;">Nếu để trống ô này khi cập nhật, hệ thống sẽ tự động giữ lại link ảnh cũ.</small>
             </div>
           </div>
 
@@ -572,8 +574,8 @@
       </div>
       <div class="modal-body">
         <div style="display:flex; gap:20px; margin-bottom:20px; align-items:flex-start;">
-          <div style="width:130px; height:130px; border-radius:10px; overflow:hidden; border:1px solid var(--color-hairline); flex-shrink:0; background:#f9f9f9; display:flex; align-items:center; justify-content:center;">
-            <img th:src="${viewProduct.thumbnail != null and !viewProduct.thumbnail.isEmpty() ? viewProduct.thumbnail : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80'}" th:alt="${viewProduct.name}" style="width:100%; height:100%; object-fit:cover;">
+          <div th:if="${viewProduct.thumbnail != null and !viewProduct.thumbnail.isEmpty()}" style="width:130px; height:130px; border-radius:10px; overflow:hidden; border:1px solid var(--color-hairline); flex-shrink:0; background:#f9f9f9; display:flex; align-items:center; justify-content:center;">
+            <img th:src="${viewProduct.thumbnail}" th:alt="${viewProduct.name}" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div style="flex:1;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">

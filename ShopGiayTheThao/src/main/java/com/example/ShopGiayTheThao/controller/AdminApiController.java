@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ShopGiayTheThao.dto.BlogStatsResponse;
+import com.example.ShopGiayTheThao.dto.BrandDTO;
+import com.example.ShopGiayTheThao.dto.BrandRequest;
 import com.example.ShopGiayTheThao.dto.BrandStatsResponse;
 import com.example.ShopGiayTheThao.dto.CategoryRequest;
 import com.example.ShopGiayTheThao.dto.CategoryStatsResponse;
@@ -27,10 +29,12 @@ import com.example.ShopGiayTheThao.dto.ProductResponse;
 import com.example.ShopGiayTheThao.dto.ProductStatsResponse;
 import com.example.ShopGiayTheThao.dto.SizeRequest;
 import com.example.ShopGiayTheThao.dto.UserRequest;
+import com.example.ShopGiayTheThao.entity.Brand;
 import com.example.ShopGiayTheThao.entity.Category;
 import com.example.ShopGiayTheThao.entity.Size;
 import com.example.ShopGiayTheThao.entity.User;
 import com.example.ShopGiayTheThao.service.BlogService;
+import com.example.ShopGiayTheThao.service.BrandService;
 import com.example.ShopGiayTheThao.service.CategoryService;
 import com.example.ShopGiayTheThao.service.ProductService;
 import com.example.ShopGiayTheThao.service.SizeService;
@@ -45,14 +49,16 @@ public class AdminApiController {
     private final BlogService blogService;
     private final CategoryService categoryService;
     private final SizeService sizeService;
+    private final BrandService brandService;
 
     public AdminApiController(UserService userService, ProductService productService, BlogService blogService,
-            CategoryService categoryService, SizeService sizeService) {
+            CategoryService categoryService, SizeService sizeService, BrandService brandService) {
         this.userService = userService;
         this.productService = productService;
         this.blogService = blogService;
         this.categoryService = categoryService;
         this.sizeService = sizeService;
+        this.brandService = brandService;
     }
 
     @GetMapping({ "/stats/customers/count", "/customers/count" })
@@ -298,6 +304,61 @@ public class AdminApiController {
         Map<String, Object> res = new HashMap<>();
         res.put("success", true);
         res.put("message", "Đã xóa kích thước thành công với ID: " + id);
+        return ResponseEntity.ok(res);
+    }
+
+    /**
+     * Lấy danh sách thương hiệu (phân trang 4/trang, tìm kiếm)
+     * URL: GET /api/admin/brands
+     */
+    @GetMapping("/brands")
+    public ResponseEntity<Page<BrandDTO>> getAdminBrands(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "4") int size,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        return ResponseEntity.ok(brandService.getBrandsForAdmin(page, size, keyword));
+    }
+
+    /**
+     * Lấy chi tiết 1 thương hiệu theo ID
+     * URL: GET /api/admin/brands/{id}
+     */
+    @GetMapping("/brands/{id}")
+    public ResponseEntity<BrandDTO> getBrandById(@PathVariable Long id) {
+        return ResponseEntity.ok(brandService.getBrandById(id));
+    }
+
+    /**
+     * Thêm mới thương hiệu
+     * URL: POST /api/admin/brands
+     */
+    @PostMapping("/brands")
+    public ResponseEntity<Brand> createBrand(@RequestBody BrandRequest request) {
+        Brand created = brandService.createBrand(request);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    /**
+     * Cập nhật thông tin thương hiệu
+     * URL: PUT /api/admin/brands/{id}
+     */
+    @PutMapping("/brands/{id}")
+    public ResponseEntity<Brand> updateBrand(@PathVariable Long id, @RequestBody BrandRequest request) {
+        request.setId(id);
+        Brand updated = brandService.updateBrand(request);
+        return ResponseEntity.ok(updated);
+    }
+
+    /**
+     * Xóa thương hiệu
+     * URL: DELETE /api/admin/brands/{id}
+     */
+    @DeleteMapping("/brands/{id}")
+    public ResponseEntity<Map<String, Object>> deleteBrandApi(@PathVariable Long id) {
+        brandService.deleteBrand(id);
+        Map<String, Object> res = new HashMap<>();
+        res.put("success", true);
+        res.put("message", "Đã xóa thương hiệu thành công với ID: " + id);
         return ResponseEntity.ok(res);
     }
 }

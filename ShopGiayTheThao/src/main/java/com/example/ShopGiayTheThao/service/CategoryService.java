@@ -11,17 +11,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
 import com.example.ShopGiayTheThao.dto.CategoryRequest;
 import com.example.ShopGiayTheThao.entity.Category;
+import com.example.ShopGiayTheThao.entity.Product;
 import com.example.ShopGiayTheThao.repository.CategoryRepository;
+import com.example.ShopGiayTheThao.repository.ProductRepository;
 
 @Service
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     /**
@@ -122,18 +129,37 @@ public class CategoryService {
     }
 
     /**
-     * Xóa danh mục (xử lý an toàn ràng buộc khóa ngoại)
+     * Xóa danh mục khỏi database: chuyển các sản phẩm liên kết sang danh mục khác ngẫu nhiên
      */
     @Transactional
     public void deleteCategory(Long id) {
         Category category = getCategoryById(id);
-        if (category.getProducts() != null && !category.getProducts().isEmpty()) {
-            // Danh mục đang có sản phẩm liên kết: Chuyển sang tạm ẩn (soft-delete) để không vi phạm ràng buộc FK
-            category.setStatus(0);
-            categoryRepository.save(category);
-        } else {
-            categoryRepository.deleteById(id);
+
+        List<Product> products = productRepository.findAllByCategoryId(id);
+        if (!products.isEmpty()) {
+            List<Category> otherCategories = categoryRepository.findAll().stream()
+                    .filter(c -> !c.getId().equals(id))
+                    .collect(Collectors.toList());
+
+            Category targetCategory;
+            if (!otherCategories.isEmpty()) {
+                targetCategory = otherCategories.get(ThreadLocalRandom.current().nextInt(otherCategories.size()));
+            } else {
+                targetCategory = categoryRepository.save(new Category("Khác", "Danh mục mặc định hệ thống", 1));
+            }
+
+            for (Product p : products) {
+                p.setCategory(targetCategory);
+            }
+            productRepository.saveAll(products);
+            productRepository.flush();
         }
+
+        if (category.getProducts() != null) {
+            category.getProducts().clear();
+        }
+        categoryRepository.delete(category);
+        categoryRepository.flush();
     }
 
     /**

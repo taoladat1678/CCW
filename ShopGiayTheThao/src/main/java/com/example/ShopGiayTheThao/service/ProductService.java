@@ -296,7 +296,7 @@ public class ProductService {
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
         product.setSalePrice(request.getSalePrice());
-        product.setThumbnail((request.getThumbnail() != null && !request.getThumbnail().isBlank()) ? request.getThumbnail().trim() : "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80");
+        product.setThumbnail((request.getThumbnail() != null && !request.getThumbnail().isBlank()) ? request.getThumbnail().trim() : null);
         product.setStatus(request.getStatus() != null ? request.getStatus() : 1);
         product.setCreatedAt(java.time.LocalDateTime.now());
 

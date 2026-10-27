@@ -103,4 +103,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.status = 1 AND p.brand.id = :brandId ORDER BY p.createdAt DESC")
     List<Product> findByBrandId(Long brandId);
 
+    List<Product> findAllByBrandId(Long brandId);
+
+    List<Product> findAllByCategoryId(Long categoryId);
 }
