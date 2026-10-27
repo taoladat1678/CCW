@@ -47,33 +47,11 @@ public class ClientApiController {
     }
 
     // ==========================================
-    // API SẢN PHẨM, DANH MỤC, THƯƠNG HIỆU, SIZE
+    // API DANH MỤC, KÍCH THƯỚC (CATEGORIES, SIZES)
     // ==========================================
 
     /**
-     * 1. Lấy danh sách sản phẩm có phân trang, lọc và sắp xếp
-     * URL: GET /api/products?page=0&size=9&categoryId=1&brandId=2&sizeId=3&minPrice=1000000&maxPrice=5000000&keyword=nike&sort=price-low
-     */
-    @GetMapping("/products")
-    public ResponseEntity<Page<ProductResponse>> getProducts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "9") int size,
-            @RequestParam(value = "categoryId", required = false) Long categoryId,
-            @RequestParam(value = "brandId", required = false) Long brandId,
-            @RequestParam(value = "sizeId", required = false) Long sizeId,
-            @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
-            @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice,
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "sort", defaultValue = "featured") String sort) {
-
-        Page<ProductResponse> products = productService.getProducts(
-                page, size, categoryId, brandId, sizeId, minPrice, maxPrice, keyword, sort
-        );
-        return ResponseEntity.ok(products);
-    }
-
-    /**
-     * 2. Lấy danh sách danh mục (Categories)
+     * Lấy danh sách danh mục (Categories)
      * URL: GET /api/categories
      */
     @GetMapping("/categories")
@@ -82,16 +60,7 @@ public class ClientApiController {
     }
 
     /**
-     * 3. Lấy danh sách thương hiệu (Brands)
-     * URL: GET /api/brands
-     */
-    @GetMapping("/brands")
-    public ResponseEntity<List<Brand>> getBrands() {
-        return ResponseEntity.ok(productService.getAllBrands());
-    }
-
-    /**
-     * 4. Lấy danh sách kích thước (Sizes)
+     * Lấy danh sách kích thước (Sizes)
      * URL: GET /api/sizes
      */
     @GetMapping("/sizes")

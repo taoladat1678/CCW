@@ -11,7 +11,6 @@ import com.example.ShopGiayTheThao.entity.CartItem;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
-
     // Lấy giỏ hàng theo user ID
     List<CartItem> findByUserId(Long userId);
 
@@ -23,13 +22,11 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     // Đếm tổng số lượng món trong giỏ của user
     long countByUserId(Long userId);
+
     // Xóa tất cả món hàng liên quan đến sản phẩm
     void deleteByProductId(Long productId);
 
     List<CartItem> findByUserIdOrderByIdAsc(Long userId);
-    
-    Optional<CartItem> findByUserIdAndProductIdAndSizeId(Long userId, Long productId, Long sizeId);
 
     void deleteByIdAndUserId(Long id, Long userId);
-
 }

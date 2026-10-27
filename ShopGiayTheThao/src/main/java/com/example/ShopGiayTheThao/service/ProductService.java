@@ -2,7 +2,9 @@ package com.example.ShopGiayTheThao.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.example.ShopGiayTheThao.dto.ProductDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -420,5 +422,57 @@ public class ProductService {
         }
         cartItemRepository.deleteByProductId(id);
         productRepository.deleteById(id);
+    }
+
+    /**
+     * Lấy danh sách 6 sản phẩm nổi bật mới nhất cho trang chủ (Client)
+     */
+    public List<ProductDTO> getFeaturedProducts() {
+        return productRepository.findTop6ByStatusOrderByCreatedAtDesc(1).stream()
+                .map(this::toProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Lấy toàn bộ sản phẩm dạng DTO cho Client
+     */
+    public List<ProductDTO> getAllProductsDTO() {
+        return productRepository.findByStatusOrderByCreatedAtDesc(1).stream()
+                .map(this::toProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Lấy sản phẩm theo Brand cho Client
+     */
+    public List<ProductDTO> getProductsByBrand(Long brandId) {
+        return productRepository.findByBrandId(brandId).stream()
+                .map(this::toProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    public ProductDTO toProductDTO(Product p) {
+        String categoryName = (p.getCategory() != null) ? p.getCategory().getName() : "Giày Thể Thao";
+        String brandName = (p.getBrand() != null) ? p.getBrand().getName() : "Nike";
+        Long brandId = (p.getBrand() != null) ? p.getBrand().getId() : null;
+
+        String badge = "Mới Ra Mắt";
+        if (p.getSalePrice() != null && p.getPrice() != null && p.getSalePrice().compareTo(p.getPrice()) < 0) {
+            long discountPercent = Math.round((1.0 - p.getSalePrice().doubleValue() / p.getPrice().doubleValue()) * 100);
+            badge = "Giảm " + discountPercent + "%";
+        }
+
+        return new ProductDTO(
+                p.getId(),
+                p.getName(),
+                p.getDescription(),
+                p.getPrice(),
+                p.getSalePrice(),
+                p.getThumbnail(),
+                categoryName,
+                brandName,
+                brandId,
+                badge
+        );
     }
 }

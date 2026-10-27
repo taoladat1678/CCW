@@ -3,10 +3,14 @@ package com.example.ShopGiayTheThao.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.example.ShopGiayTheThao.dto.AddToCartRequest;
 import com.example.ShopGiayTheThao.dto.CartItemDTO;
 import com.example.ShopGiayTheThao.dto.CartResponseDTO;
 import com.example.ShopGiayTheThao.entity.CartItem;
@@ -35,6 +39,59 @@ public class CartServiceImpl implements CartService {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.sizeRepository = sizeRepository;
+    }
+
+    @Override
+    public CartItem addToCart(AddToCartRequest request) {
+        if (request.getProductId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID sản phẩm không được để trống!");
+        }
+
+        if (request.getUserId() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+        }
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!"));
+
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm!"));
+
+        Size size = null;
+        if (request.getSizeId() != null) {
+            size = sizeRepository.findById(request.getSizeId()).orElse(null);
+        }
+        if (size == null && product.getProductSizes() != null && !product.getProductSizes().isEmpty()) {
+            size = product.getProductSizes().get(0).getSize();
+        }
+        if (size == null) {
+            size = sizeRepository.findAll().stream().findFirst().orElse(null);
+        }
+
+        int addQty = (request.getQuantity() != null && request.getQuantity() > 0) ? request.getQuantity() : 1;
+
+        Optional<CartItem> existingItem = cartItemRepository.findByUserIdAndProductId(user.getId(), product.getId());
+        CartItem cartItem;
+        if (existingItem.isPresent()) {
+            cartItem = existingItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + addQty);
+            if (size != null) {
+                cartItem.setSize(size);
+            }
+        } else {
+            cartItem = new CartItem(user, product, size, addQty);
+        }
+
+        return cartItemRepository.save(cartItem);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getCartCount(Long userId) {
+        if (userId == null) {
+            return 0;
+        }
+        return cartItemRepository.countByUserId(userId);
     }
 
     @Override
@@ -76,9 +133,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new IllegalArgumentException("Cart item not found: " + cartItemId));
 
         if (!item.getUser().getId().equals(targetUserId)) {
-            // For single-user dev environments, allow if valid
             if (targetUserId != null) {
-                // Check if user exists
                 userRepository.findById(targetUserId).ifPresent(item::setUser);
             }
         }

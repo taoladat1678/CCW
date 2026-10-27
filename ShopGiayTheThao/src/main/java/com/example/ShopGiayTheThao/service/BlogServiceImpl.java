@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.ShopGiayTheThao.dto.BlogDTO;
+import com.example.ShopGiayTheThao.dto.BlogStatsResponse;
 import com.example.ShopGiayTheThao.entity.Blog;
 import com.example.ShopGiayTheThao.repository.BlogRepository;
 
@@ -21,6 +22,22 @@ public class BlogServiceImpl implements BlogService {
 
     public BlogServiceImpl(BlogRepository blogRepository) {
         this.blogRepository = blogRepository;
+    }
+
+    @Override
+    public long getTotalBlogs() {
+        return blogRepository.count();
+    }
+
+    @Override
+    public BlogStatsResponse getBlogStats() {
+        long total = getTotalBlogs();
+        return new BlogStatsResponse(total, true);
+    }
+
+    @Override
+    public List<Blog> getAllBlogs() {
+        return blogRepository.findAll();
     }
 
     @Override
