@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nike. Just Do It. Nike VN</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" th:href="@{/client/css/style.css}" href="/client/css/style.css">
 </head>
 
 <body>
@@ -15,18 +15,18 @@
     <div class="container utility-content">
       <div class="jordan-swoosh">
         <!-- Jordan Jumpman Minimal Silhouette -->
-        <a href="brand.html" title="Jordan">
+        <a th:href="@{/brand}" href="/brand" title="Jordan">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
           </svg>
         </a>
-        <a href="brand.html" title="Converse" style="font-weight:700; font-size:11px; letter-spacing:1px;">CONVERSE</a>
+        <a th:href="@{/brand}" href="/brand" title="Converse" style="font-weight:700; font-size:11px; letter-spacing:1px;">CONVERSE</a>
       </div>
       <div class="utility-links">
-        <a href="product.html">Tìm cửa hàng</a>
+        <a th:href="@{/products}" href="/products">Tìm cửa hàng</a>
         <span>|</span>
-        <a href="blog.html">Trợ giúp</a>
+        <a th:href="@{/blog}" href="/blog">Trợ giúp</a>
       </div>
     </div>
   </header>
@@ -35,7 +35,7 @@
   <nav class="primary-nav">
     <div class="container nav-container">
       <div class="nav-logo">
-        <a href="index.html" aria-label="Nike Trang Chủ">
+        <a th:href="@{/}" href="/" aria-label="Nike Trang Chủ">
           <!-- Official Nike Swoosh SVG -->
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -45,10 +45,10 @@
       </div>
 
       <div class="nav-menu">
-        <a href="index.html" class="active">Mới & Nổi Bật</a>
-        <a href="product.html">Sản Phẩm</a>
-        <a href="brand.html">Thương Hiệu</a>
-        <a href="blog.html">Tin Tức / Blog</a>
+        <a th:href="@{/}" href="/" class="active">Mới & Nổi Bật</a>
+        <a th:href="@{/products}" href="/products">Sản Phẩm</a>
+        <a th:href="@{/brand}" href="/brand">Thương Hiệu</a>
+        <a th:href="@{/blog}" href="/blog">Tin Tức / Blog</a>
       </div>
 
       <div class="nav-actions">
@@ -62,13 +62,13 @@
         </div>
 
         <!-- Cart Bag -->
-        <a href="cart.html" class="nav-action-icon" aria-label="Giỏ hàng">
+        <a th:href="@{/cart}" href="/cart" class="nav-action-icon" aria-label="Giỏ hàng">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <span class="cart-count-badge">3</span>
+          <span class="cart-count-badge" th:text="${cart != null ? cart.totalQuantity : 0}">0</span>
         </a>
 
         <!-- User Account Dropdown -->
@@ -81,7 +81,7 @@
           </button>
           <div class="user-dropdown-menu">
             <div class="user-dropdown-header">Tài Khoản</div>
-            <a href="login.html" class="user-dropdown-item">
+            <a th:href="@{/login}" href="/login" class="user-dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                 <polyline points="10 17 15 12 10 7"></polyline>
@@ -89,7 +89,7 @@
               </svg>
               <span>Đăng nhập</span>
             </a>
-            <a href="register.html" class="user-dropdown-item">
+            <a th:href="@{/register}" href="/register" class="user-dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="8.5" cy="7" r="4"></circle>
@@ -98,7 +98,7 @@
               </svg>
               <span>Đăng ký</span>
             </a>
-            <a href="user.html" class="user-dropdown-item">
+            <a th:href="@{/user}" href="/user" class="user-dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
@@ -106,7 +106,7 @@
               <span>Thông tin tài khoản</span>
             </a>
             <div class="user-dropdown-divider"></div>
-            <a href="../admin/dashboard.html" class="user-dropdown-item user-dropdown-admin">
+            <a th:href="@{/admin/dashboard}" href="/admin/dashboard" class="user-dropdown-item user-dropdown-admin">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
@@ -132,8 +132,8 @@
       <p class="campaign-subhead">Trải nghiệm bộ đệm Dynamic Air thế hệ mới mang lại năng lượng vô tận cho từng sải
         bước. Thiết kế đột phá dẫn đầu mọi giới hạn.</p>
       <div class="campaign-cta-group">
-        <a href="product.html" class="btn-outline-image">Khám Phá Ngay</a>
-        <a href="product-detail.html" class="btn-primary">Xem Chi Tiết</a>
+        <a th:href="@{/products}" href="/products" class="btn-outline-image">Khám Phá Ngay</a>
+        <a th:href="@{/product-detail}" href="/product-detail" class="btn-primary">Xem Chi Tiết</a>
       </div>
     </div>
   </section>
@@ -146,86 +146,40 @@
         <h2 class="section-header-title">SẢN PHẨM NỔI BẬT</h2>
       </div>
       <div class="campaign-cta-group">
-        <a href="product.html" class="btn-secondary" style="height:40px; padding:0 20px; font-size:14px;">Xem Tất Cả
+        <a th:href="@{/products}" href="/products" class="btn-secondary" style="height:40px; padding:0 20px; font-size:14px;">Xem Tất Cả
           (428)</a>
       </div>
     </div>
 
-    <div class="product-grid">
-      <!-- Card 1 -->
-      <article class="product-card">
-        <div class="product-card-image-wrap">
-          <span class="product-card-badge badge-promo">Mới Ra Mắt</span>
-          <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path
-                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-              </path>
-            </svg>
-          </button>
-          <a href="product-detail.html">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
-              alt="Nike Air Max Pulse Roam">
-          </a>
-        </div>
-        <div class="product-card-info">
-          <a href="product-detail.html" class="product-name">Nike Air Max Pulse Roam</a>
-          <span class="product-category">Giày Nam Thể Thao & Phong Cách</span>
-          <div class="product-price-row">
-            <span class="price-regular">4.499.000₫</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 2 (Sale Item) -->
-      <article class="product-card">
+    <div class="product-grid" id="featured-products-grid">
+      <article class="product-card" th:each="p : ${featuredProducts}" th:attr="data-product-id=${p.id}">
         <div class="product-card-image-wrap">
           <span class="product-card-badge badge-promo"
-            style="border-color: var(--color-sale); color: var(--color-sale);">Giảm 25%</span>
-          <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
+                th:style="${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price} ? 'border-color: var(--color-sale); color: var(--color-sale);' : ''"
+                th:text="${p.badge != null and !p.badge.isEmpty()} ? ${p.badge} : (${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price} ? 'Giảm giá' : 'Mới Ra Mắt')">Mới Ra Mắt</span>
+          <button class="product-card-favorite" aria-label="Thêm vào yêu thích" type="button">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path
                 d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
               </path>
             </svg>
           </button>
-          <a href="product-detail.html">
-            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80"
-              alt="Nike Dunk Low Retro">
+          <a th:href="@{/product-detail(id=${p.id})}">
+            <img th:src="${p.thumbnail}" th:alt="${p.name}" loading="lazy">
           </a>
         </div>
         <div class="product-card-info">
-          <a href="product-detail.html" class="product-name">Nike Dunk Low Retro</a>
-          <span class="product-category">Giày Nam Cổ Thấp</span>
+          <a th:href="@{/product-detail(id=${p.id})}" class="product-name" th:text="${p.name}">Nike Air Max Pulse Roam</a>
+          <span class="product-category" th:text="${p.categoryName != null ? p.categoryName : 'Giày Nam Thể Thao'}">Giày Nam Thể Thao & Phong Cách</span>
           <div class="product-price-row">
-            <span class="price-sale">2.699.000₫</span>
-            <span class="price-original">3.599.000₫</span>
-            <span class="price-discount">25% off</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="product-card">
-        <div class="product-card-image-wrap">
-          <span class="product-card-badge badge-promo">Bền Vững</span>
-          <button class="product-card-favorite" aria-label="Thêm vào yêu thích">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path
-                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-              </path>
-            </svg>
-          </button>
-          <a href="product-detail.html">
-            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=700&q=80"
-              alt="Nike Pegasus 41 GORE-TEX">
-          </a>
-        </div>
-        <div class="product-card-info">
-          <a href="product-detail.html" class="product-name">Nike Pegasus 41 GORE-TEX</a>
-          <span class="product-category">Giày Chạy Bộ Chống Nước</span>
-          <div class="product-price-row">
-            <span class="price-regular">3.829.000₫</span>
+            <th:block th:if="${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price}">
+              <span class="price-sale" th:text="${#numbers.formatDecimal(p.salePrice, 0, 'POINT', 0, 'POINT')} + '₫'">2.699.000₫</span>
+              <span class="price-original" th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'POINT')} + '₫'">3.599.000₫</span>
+              <span class="price-discount" th:text="${p.badge != null ? p.badge : '25% off'}">25% off</span>
+            </th:block>
+            <th:block th:unless="${p.salePrice != null and p.salePrice > 0 and p.salePrice < p.price}">
+              <span class="price-regular" th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'POINT')} + '₫'">4.499.000₫</span>
+            </th:block>
           </div>
         </div>
       </article>
@@ -239,58 +193,21 @@
         <span class="caption-md" style="text-transform:uppercase; letter-spacing:1px;">Gia Đình Nike</span>
         <h2 class="section-header-title">HỆ SINH THÁI THƯƠNG HIỆU</h2>
       </div>
-      <a href="brand.html" class="link-md">Xem tất cả thương hiệu</a>
+      <a th:href="@{/brand}" href="/brand" class="link-md">Xem tất cả thương hiệu</a>
     </div>
 
-    <div class="brand-grid">
-      <!-- Brand 1: Jordan -->
-      <div class="brand-card">
+    <div class="brand-grid" id="home-brands-grid">
+      <div class="brand-card" th:each="b : ${brands}" th:attr="data-brand-id=${b.id}">
         <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=700&q=80"
-            alt="Jordan Brand">
+          <img th:src="${b.logo}" th:alt="${b.name}" loading="lazy">
         </div>
         <div class="brand-card-body">
           <div class="brand-card-logo-row">
-            <h3 class="brand-card-title">JORDAN</h3>
-            <span class="caption-sm" style="color:var(--color-mute);">Di sản vĩ đại</span>
+            <h3 class="brand-card-title" th:text="${b.name}">JORDAN</h3>
+            <span class="caption-sm" style="color:var(--color-mute);" th:text="${b.subtitle != null ? b.subtitle : 'Di sản vĩ đại'}">Di sản vĩ đại</span>
           </div>
-          <p class="brand-card-desc">Cảm hứng từ huyền thoại Michael Jordan. Định hình văn hóa bóng rổ và phong cách
-            đường phố toàn cầu.</p>
-          <a href="product.html" class="btn-secondary" style="height:44px;">Khám Phá Jordan</a>
-        </div>
-      </div>
-
-      <!-- Brand 2: Nike ACG -->
-      <div class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=700&q=80"
-            alt="Nike ACG">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h3 class="brand-card-title">NIKE ACG</h3>
-            <span class="caption-sm" style="color:var(--color-mute);">All Conditions Gear</span>
-          </div>
-          <p class="brand-card-desc">Thiết bị dã ngoại tối ưu được kiểm nghiệm tại bang Oregon. Sẵn sàng chinh phục mọi
-            địa hình hiểm trở.</p>
-          <a href="product.html" class="btn-secondary" style="height:44px;">Khám Phá ACG</a>
-        </div>
-      </div>
-
-      <!-- Brand 3: Nike SB -->
-      <div class="brand-card">
-        <div class="brand-card-banner">
-          <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=700&q=80"
-            alt="Nike SB">
-        </div>
-        <div class="brand-card-body">
-          <div class="brand-card-logo-row">
-            <h3 class="brand-card-title">NIKE SB</h3>
-            <span class="caption-sm" style="color:var(--color-mute);">Skateboarding</span>
-          </div>
-          <p class="brand-card-desc">Dòng giày trượt ván hiệu năng cao, linh hồn của văn hóa ván trượt và phong cách
-            thời trang bụi bặm.</p>
-          <a href="product.html" class="btn-secondary" style="height:44px;">Khám Phá SB</a>
+          <p class="brand-card-desc" th:text="${b.description}">Mô tả thương hiệu</p>
+          <a th:href="@{/products(brand=${b.id})}" class="btn-secondary" style="height:44px;" th:text="'Khám Phá ' + ${b.name}">Khám Phá</a>
         </div>
       </div>
     </div>
@@ -303,56 +220,24 @@
         <span class="caption-md" style="text-transform:uppercase; letter-spacing:1px;">Editorial & Stories</span>
         <h2 class="section-header-title">CÂU CHUYỆN & ĐỔI MỚI</h2>
       </div>
-      <a href="blog.html" class="link-md">Xem tất cả bài viết</a>
+      <a th:href="@{/blog}" href="/blog" class="link-md">Xem tất cả bài viết</a>
     </div>
 
-    <div class="blog-grid">
-      <!-- Article 1 -->
-      <article class="blog-card">
+    <div class="blog-grid" id="home-blogs-grid">
+      <article class="blog-card" th:each="b : ${latestBlogs}" th:attr="data-blog-id=${b.id}">
         <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=700&q=80"
-            alt="Nike Air Technology">
+          <img th:src="${b.thumbnail}" th:alt="${b.title}" loading="lazy"
+               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=700&q=80';">
         </div>
         <div class="blog-meta-row">
-          <span class="blog-category-tag">Công Nghệ</span>
+          <span class="blog-category-tag" th:text="${b.categoryTag != null ? b.categoryTag : 'Tin Tức'}">Công Nghệ</span>
           <span>•</span>
-          <span>18 Tháng 10, 2026</span>
+          <span th:text="${b.createdAt != null ? #temporals.format(b.createdAt, 'dd/MM/yyyy') : 'Mới nhất'}">18 Tháng 10, 2026</span>
         </div>
-        <h3 class="blog-title"><a href="blog.html">Kỷ Nguyên Mới Của Bộ Đệm Dynamic Air: Đột Phá Tại Đỉnh Cao</a></h3>
-        <p class="blog-summary">Tìm hiểu cách các kỹ sư tại phòng thí nghiệm thể thao Nike NSRL tạo ra dòng chảy áp suất
-          kép hoàn hảo.</p>
-      </article>
-
-      <!-- Article 2 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=700&q=80"
-            alt="Nike Athletes Running">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Vận Động Viên</span>
-          <span>•</span>
-          <span>15 Tháng 10, 2026</span>
-        </div>
-        <h3 class="blog-title"><a href="blog.html">Eliud Kipchoge Và Hành Trình Bứt Phá Giới Hạn Marathon</a></h3>
-        <p class="blog-summary">Câu chuyện đằng sau công nghệ sợi Carbon Flyplate và bài học về tinh thần không bao giờ
-          bỏ cuộc.</p>
-      </article>
-
-      <!-- Article 3 -->
-      <article class="blog-card">
-        <div class="blog-card-image">
-          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=700&q=80"
-            alt="Nike Sneakers Style">
-        </div>
-        <div class="blog-meta-row">
-          <span class="blog-category-tag">Phong Cách</span>
-          <span>•</span>
-          <span>10 Tháng 10, 2026</span>
-        </div>
-        <h3 class="blog-title"><a href="blog.html">Hướng Dẫn Phối Đồ Streetwear Cùng Dòng Giày Dunk Cổ Thấp</a></h3>
-        <p class="blog-summary">Bí quyết phối hợp sắc sảo giữa quần ống thụng, tất cổ cao và đôi giày kinh điển mang dấu
-          ấn thời gian.</p>
+        <h3 class="blog-title">
+          <a th:href="@{/blog(id=${b.id})}" th:text="${b.title}">Tiêu đề bài viết</a>
+        </h3>
+        <p class="blog-summary" th:text="${b.content}">Tóm tắt nội dung bài viết...</p>
       </article>
     </div>
   </section>
@@ -369,8 +254,8 @@
         Đăng ký miễn phí để nhận quyền tiếp cận độc quyền các dòng sản phẩm giới hạn, miễn phí vận chuyển cho mọi đơn
         hàng và tham gia cộng đồng vận động viên toàn cầu.</p>
       <div style="display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
-        <a href="register.html" class="btn-outline-image">Đăng Ký Thành Viên</a>
-        <a href="login.html" class="btn-secondary"
+        <a th:href="@{/register}" href="/register" class="btn-outline-image">Đăng Ký Thành Viên</a>
+        <a th:href="@{/login}" href="/login" class="btn-secondary"
           style="background-color: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);">Đăng
           Nhập</a>
       </div>
@@ -385,10 +270,10 @@
         <div>
           <h4 class="footer-col-title">TÀI NGUYÊN</h4>
           <ul class="footer-links-list">
-            <li><a href="product.html">Tìm cửa hàng</a></li>
-            <li><a href="register.html">Trở thành thành viên</a></li>
-            <li><a href="blog.html">Gửi phản hồi</a></li>
-            <li><a href="product.html">Khuyến mãi & Ưu đãi</a></li>
+            <li><a th:href="@{/products}" href="/products">Tìm cửa hàng</a></li>
+            <li><a th:href="@{/register}" href="/register">Trở thành thành viên</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Gửi phản hồi</a></li>
+            <li><a th:href="@{/products}" href="/products">Khuyến mãi & Ưu đãi</a></li>
           </ul>
         </div>
 
@@ -396,11 +281,11 @@
         <div>
           <h4 class="footer-col-title">TRỢ GIÚP</h4>
           <ul class="footer-links-list">
-            <li><a href="cart.html">Tình trạng đơn hàng</a></li>
-            <li><a href="product.html">Giao hàng & Vận chuyển</a></li>
-            <li><a href="product-detail.html">Đổi trả hàng</a></li>
-            <li><a href="user.html">Tùy chọn thanh toán</a></li>
-            <li><a href="blog.html">Liên hệ chúng tôi</a></li>
+            <li><a th:href="@{/cart}" href="/cart">Tình trạng đơn hàng</a></li>
+            <li><a th:href="@{/products}" href="/products">Giao hàng & Vận chuyển</a></li>
+            <li><a th:href="@{/product-detail}" href="/product-detail">Đổi trả hàng</a></li>
+            <li><a th:href="@{/user}" href="/user">Tùy chọn thanh toán</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Liên hệ chúng tôi</a></li>
           </ul>
         </div>
 
@@ -408,10 +293,10 @@
         <div>
           <h4 class="footer-col-title">VỀ NIKE</h4>
           <ul class="footer-links-list">
-            <li><a href="blog.html">Tin tức công ty</a></li>
-            <li><a href="blog.html">Cơ hội nghề nghiệp</a></li>
-            <li><a href="blog.html">Nhà đầu tư</a></li>
-            <li><a href="blog.html">Bền vững môi trường</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Tin tức công ty</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Cơ hội nghề nghiệp</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Nhà đầu tư</a></li>
+            <li><a th:href="@{/blog}" href="/blog">Bền vững môi trường</a></li>
           </ul>
         </div>
 
@@ -419,10 +304,10 @@
         <div>
           <h4 class="footer-col-title">HỆ THỐNG</h4>
           <ul class="footer-links-list">
-            <li><a href="../admin/dashboard.html">Bảng điều khiển Admin</a></li>
-            <li><a href="../admin/product.html">Quản lý sản phẩm</a></li>
-            <li><a href="../admin/cate.html">Quản lý danh mục</a></li>
-            <li><a href="../admin/user.html">Quản lý người dùng</a></li>
+            <li><a th:href="@{/admin/dashboard}" href="/admin/dashboard">Bảng điều khiển Admin</a></li>
+            <li><a th:href="@{/admin/products}" href="/admin/products">Quản lý sản phẩm</a></li>
+            <li><a th:href="@{/admin/categories}" href="/admin/categories">Quản lý danh mục</a></li>
+            <li><a th:href="@{/admin/users}" href="/admin/users">Quản lý người dùng</a></li>
           </ul>
         </div>
 
@@ -469,7 +354,8 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js"></script>
+  <script th:src="@{/client/js/main.js}" src="/client/js/main.js"></script>
+  <script th:src="@{/client/js/client-api.js}" src="/client/js/client-api.js"></script>
 </body>
 
 </html>

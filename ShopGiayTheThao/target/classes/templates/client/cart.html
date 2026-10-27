@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -110,7 +110,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zm13 5H5l1.5-3h11L19 7z"/>
           </svg>
-          <span class="cart-count-badge">3</span>
+          <span class="cart-count-badge" th:text="${cart != null ? cart.totalQuantity : 0}">0</span>
         </a>
 
         <!-- User Account Dropdown -->
@@ -146,112 +146,64 @@
     </div>
   </nav>
 
-  <!-- Cart Main Page Layout -->
-  <main class="container">
-    <div class="cart-layout">
-      <!-- Cart Items Section -->
-      <section class="cart-items-section">
+  <!-- Cart Main Page Layout -->      <!-- Cart Items Section -->
+      <section class="cart-items-section" id="cart-items-section">
         <div class="cart-title-row">
-          <h1 style="font-size:26px; font-weight:700; text-transform:uppercase;">TÚI HÀNG CỦA BẠN (3 SẢN PHẨM)</h1>
+          <h1 style="font-size:26px; font-weight:700; text-transform:uppercase;">
+            TÚI HÀNG CỦA BẠN (<span id="cart-total-count" th:text="${cart != null and cart.items != null ? cart.items.size() : 0}">0</span> SẢN PHẨM)
+          </h1>
         </div>
 
         <!-- Free Shipping Member Banner -->
         <div class="cart-promo-banner">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
           <span><strong>Giao hàng miễn phí</strong> cho Thành viên Nike. Đăng nhập hoặc tạo tài khoản để nhận ưu đãi vận chuyển trên toàn quốc.</span>
         </div>
 
-        <!-- Cart Item 1 -->
-        <article class="cart-item">
-          <div class="cart-item-image">
-            <a th:href="@{/product-detail}" href="/product-detail">
-              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" alt="Nike Air Max Pulse Roam">
-            </a>
-          </div>
-          <div class="cart-item-details">
-            <h2 class="cart-item-name"><a th:href="@{/product-detail}" href="/product-detail">Nike Air Max Pulse Roam</a></h2>
-            <div class="cart-item-meta">Giày Nam Thể Thao & Đời Sống</div>
-            <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
-              <span>Cỡ giày: <strong>EU 40.5</strong></span>
-              <div class="cart-qty-control">
-                <label>Số lượng:</label>
-                <div class="qty-stepper">
-                  <button type="button" class="qty-btn btn-minus" aria-label="Giảm số lượng">−</button>
-                  <input type="text" class="qty-input" value="1" readonly>
-                  <button type="button" class="qty-btn btn-plus" aria-label="Tăng số lượng">+</button>
-                </div>
-              </div>
-            </div>
-            <div class="cart-item-actions">
-              <button class="cart-action-btn">Lưu vào yêu thích</button>
-              <button class="cart-action-btn" style="color:var(--color-sale);">Xóa khỏi giỏ</button>
-            </div>
-          </div>
-          <div class="cart-item-price">
-            4.499.000₫
-          </div>
-        </article>
+        <!-- Empty Cart Notice -->
+        <div class="cart-empty-state" id="cart-empty-message" th:if="${cart == null or cart.items == null or cart.items.isEmpty()}">
+          <div class="cart-empty-title">Giỏ hàng của bạn đang trống</div>
+          <p class="cart-empty-desc">Hãy khám phá bộ sưu tập mới nhất từ Nike và chọn cho mình sản phẩm ưng ý.</p>
+          <a th:href="@{/products}" class="btn-primary" style="display:inline-flex; align-items:center; height:44px; padding:0 24px;">Khám Phá Sản Phẩm</a>
+        </div>
 
-        <!-- Cart Item 2 (Sale Item) -->
-        <article class="cart-item">
+        <!-- Cart Items List -->
+        <article class="cart-item" th:each="item : ${cart.items}" th:id="'cart-item-' + ${item.id}" th:attr="data-id=${item.id}">
           <div class="cart-item-image">
-            <a th:href="@{/product-detail}" href="/product-detail">
-              <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=400&q=80" alt="Nike Dunk Low Retro">
+            <a th:href="@{/product-detail(id=${item.productId})}">
+              <img th:src="${item.productThumbnail}" th:alt="${item.productName}" loading="lazy">
             </a>
           </div>
           <div class="cart-item-details">
-            <h2 class="cart-item-name"><a th:href="@{/product-detail}" href="/product-detail">Nike Dunk Low Retro</a></h2>
-            <div class="cart-item-meta">Giày Nam Cổ Thấp Thời Trang</div>
-            <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
-              <span>Cỡ giày: <strong>EU 41</strong></span>
+            <h2 class="cart-item-name">
+              <a th:href="@{/product-detail(id=${item.productId})}" th:text="${item.productName}">Nike Air Max</a>
+            </h2>
+            <div class="cart-item-meta" th:text="${item.categoryName != null ? item.categoryName : 'Giày Nam Thể Thao'}">Giày Nam Thể Thao</div>
+            <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px; align-items:center; flex-wrap:wrap;">
+              <span>Cỡ giày: <strong th:text="${item.sizeName != null ? item.sizeName : 'EU 40.5'}">EU 40.5</strong></span>
               <div class="cart-qty-control">
                 <label>Số lượng:</label>
                 <div class="qty-stepper">
-                  <button type="button" class="qty-btn btn-minus" aria-label="Giảm số lượng">−</button>
-                  <input type="text" class="qty-input" value="1" readonly>
-                  <button type="button" class="qty-btn btn-plus" aria-label="Tăng số lượng">+</button>
+                  <button type="button" class="qty-btn btn-minus" th:attr="data-id=${item.id}" aria-label="Giảm số lượng">−</button>
+                  <input type="text" class="qty-input" th:attr="data-id=${item.id}" th:value="${item.quantity}" readonly>
+                  <button type="button" class="qty-btn btn-plus" th:attr="data-id=${item.id}" aria-label="Tăng số lượng">+</button>
                 </div>
               </div>
             </div>
             <div class="cart-item-actions">
-              <button class="cart-action-btn">Lưu vào yêu thích</button>
-              <button class="cart-action-btn" style="color:var(--color-sale);">Xóa khỏi giỏ</button>
+              <button type="button" class="cart-action-btn btn-save-favorite">Lưu vào yêu thích</button>
+              <button type="button" class="cart-action-btn btn-remove-item" th:attr="data-id=${item.id}" style="color:var(--color-sale); font-weight:600;">Xóa khỏi giỏ</button>
             </div>
           </div>
-          <div class="cart-item-price">
-            <div style="color:var(--color-sale);">2.699.000₫</div>
-            <div class="price-original" style="font-size:14px; color:var(--color-mute); text-decoration:line-through;">3.599.000₫</div>
-          </div>
-        </article>
-
-        <!-- Cart Item 3 -->
-        <article class="cart-item">
-          <div class="cart-item-image">
-            <a th:href="@{/product-detail}" href="/product-detail">
-              <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80" alt="Nike Pegasus 41 GORE-TEX">
-            </a>
-          </div>
-          <div class="cart-item-details">
-            <h2 class="cart-item-name"><a th:href="@{/product-detail}" href="/product-detail">Nike Pegasus 41 GORE-TEX</a></h2>
-            <div class="cart-item-meta">Giày Chạy Bộ Chống Nước</div>
-            <div class="cart-item-meta" style="display:flex; gap:var(--space-xl); margin-top:4px;">
-              <span>Cỡ giày: <strong>EU 40.5</strong></span>
-              <div class="cart-qty-control">
-                <label>Số lượng:</label>
-                <div class="qty-stepper">
-                  <button type="button" class="qty-btn btn-minus" aria-label="Giảm số lượng">−</button>
-                  <input type="text" class="qty-input" value="1" readonly>
-                  <button type="button" class="qty-btn btn-plus" aria-label="Tăng số lượng">+</button>
-                </div>
-              </div>
-            </div>
-            <div class="cart-item-actions">
-              <button class="cart-action-btn">Lưu vào yêu thích</button>
-              <button class="cart-action-btn" style="color:var(--color-sale);">Xóa khỏi giỏ</button>
-            </div>
-          </div>
-          <div class="cart-item-price">
-            3.829.000₫
+          <div class="cart-item-price" th:id="'cart-item-price-' + ${item.id}">
+            <th:block th:if="${item.salePrice != null and item.salePrice > 0 and item.salePrice < item.price}">
+              <div style="color:var(--color-sale);" th:text="${#numbers.formatDecimal(item.itemTotal, 0, 'POINT', 0, 'POINT')} + '₫'">2.699.000₫</div>
+              <div class="price-original" style="font-size:14px; color:var(--color-mute); text-decoration:line-through;"
+                   th:text="${#numbers.formatDecimal(item.originalTotal, 0, 'POINT', 0, 'POINT')} + '₫'">3.599.000₫</div>
+            </th:block>
+            <th:block th:unless="${item.salePrice != null and item.salePrice > 0 and item.salePrice < item.price}">
+              <div th:text="${#numbers.formatDecimal(item.itemTotal, 0, 'POINT', 0, 'POINT')} + '₫'">4.499.000₫</div>
+            </th:block>
           </div>
         </article>
       </section>
@@ -261,8 +213,8 @@
         <h2 class="summary-title">TÓM TẮT ĐƠN HÀNG</h2>
 
         <div class="summary-row">
-          <span>Tạm tính (3 sản phẩm)</span>
-          <span>11.027.000₫</span>
+          <span id="summary-count-label" th:text="'Tạm tính (' + (${cart != null and cart.items != null ? cart.items.size() : 0}) + ' sản phẩm)'">Tạm tính (0 sản phẩm)</span>
+          <span id="summary-subtotal" th:text="${cart != null ? #numbers.formatDecimal(cart.subtotal, 0, 'POINT', 0, 'POINT') : 0} + '₫'">0₫</span>
         </div>
 
         <div class="summary-row">
@@ -272,7 +224,7 @@
 
         <div class="summary-row">
           <span>Giảm giá khuyến mãi</span>
-          <span style="color:var(--color-sale); font-weight:600;">-900.000₫</span>
+          <span id="summary-discount" style="color:var(--color-sale); font-weight:600;" th:text="${cart != null and cart.discount > 0 ? ('-' + #numbers.formatDecimal(cart.discount, 0, 'POINT', 0, 'POINT') + '₫') : '0₫'}">0₫</span>
         </div>
 
         <!-- Promo Code Input -->
@@ -287,7 +239,7 @@
         <!-- Total Row -->
         <div class="summary-row total-row">
           <span>TỔNG CỘNG</span>
-          <span>10.127.000₫</span>
+          <span id="summary-total" th:text="${cart != null ? #numbers.formatDecimal(cart.total, 0, 'POINT', 0, 'POINT') : 0} + '₫'">0₫</span>
         </div>
         <p class="caption-sm" style="color:var(--color-mute); margin-top:-10px; margin-bottom:var(--space-lg);">
           (Đã bao gồm thuế giá trị gia tăng VAT theo quy định)
@@ -393,27 +345,7 @@
     </div>
   </footer>
 
-  <script>
-    document.querySelectorAll('.qty-stepper').forEach(stepper => {
-      const minusBtn = stepper.querySelector('.btn-minus');
-      const plusBtn = stepper.querySelector('.btn-plus');
-      const input = stepper.querySelector('.qty-input');
-
-      minusBtn.addEventListener('click', () => {
-        let val = parseInt(input.value) || 1;
-        if (val > 1) {
-          input.value = val - 1;
-        }
-      });
-
-      plusBtn.addEventListener('click', () => {
-        let val = parseInt(input.value) || 1;
-        if (val < 99) {
-          input.value = val + 1;
-        }
-      });
-    });
-  </script>
   <script th:src="@{/client/js/main.js}" src="/client/js/main.js"></script>
+  <script th:src="@{/client/js/client-api.js}" src="/client/js/client-api.js"></script>
 </body>
 </html>

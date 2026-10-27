@@ -2559,3 +2559,88 @@ button, input, select, textarea {
   margin: 0 !important;
   box-shadow: none !important;
 }
+
+/* ==========================================================================
+   TOAST NOTIFICATION COMPONENT
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.nike-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 280px;
+  max-width: 420px;
+  padding: 14px 20px;
+  background-color: #111111;
+  color: #ffffff;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nike-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nike-toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #111111;
+  flex-shrink: 0;
+}
+
+.nike-toast-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.5;
+}
+
+.nike-toast-msg {
+  flex: 1;
+  line-height: 1.35;
+}
+
+.cart-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--color-pure-white);
+  border-radius: 12px;
+  border: 1px dashed var(--color-hairline);
+  margin-top: var(--space-md);
+}
+
+.cart-empty-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.cart-empty-desc {
+  color: var(--color-mute);
+  font-size: 15px;
+  margin-bottom: 24px;
+}
