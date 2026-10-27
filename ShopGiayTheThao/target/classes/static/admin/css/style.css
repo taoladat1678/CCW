@@ -100,6 +100,22 @@ a {
   gap: var(--space-sm);
 }
 
+.admin-logo a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+}
+
+.admin-logo img {
+  height: 30px;
+  width: 30px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
+  padding: 2px;
+}
+
 .admin-logo svg {
   height: 24px;
   fill: var(--color-on-primary);

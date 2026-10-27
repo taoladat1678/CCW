@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản Lý Thương Hiệu | Nike Admin Portal</title>
+  <title>Quản Lý Thương Hiệu | T1SHOESPORT Admin Portal</title>
+  <link rel="icon" type="image/jpeg" href="https://ih1.redbubble.net/image.5307224197.5270/st,small,507x507-pad,600x600,f8f8f8.jpg">
   <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
 </head>
 <body>
@@ -12,10 +13,10 @@
   <aside class="admin-sidebar">
     <div class="sidebar-header">
       <div class="admin-logo">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21.707 5.293c-3.793 2.946-8.544 5.234-13.044 6.744-1.293.433-2.673.743-4.043.905-.62.073-1.27.098-1.89-.044-.54-.124-.95-.457-1.12-.99-.18-.557-.04-1.168.32-1.61.64-.783 1.63-1.282 2.61-1.674 3.09-1.233 6.39-2.035 9.71-2.54 2.52-.383 5.07-.464 7.457-.78z"/>
-        </svg>
-        <span>NIKE ADMIN</span>
+        <a th:href="@{/admin/dashboard}" href="/admin/dashboard" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+          <img src="https://ih1.redbubble.net/image.5307224197.5270/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="T1SHOESPORT Logo">
+          <span>T1SHOESPORT ADMIN</span>
+        </a>
       </div>
     </div>
 
@@ -88,162 +89,97 @@
           <p>Hệ sinh thái các nhãn hiệu trực thuộc Nike Group và các đối tác độc quyền.</p>
         </div>
         <div>
-          <button type="button" class="btn-primary" id="btn-open-add">+ Thêm Thương Hiệu Mới</button>
+          <!-- Nút mở modal Thêm Thương Hiệu (Pure CSS / Thymeleaf - Không dùng JS) -->
+          <a th:href="@{/admin/brands(action='add', page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-primary" style="text-decoration:none; display:inline-flex; align-items:center;">+ Thêm Thương Hiệu Mới</a>
         </div>
       </div>
 
+      <!-- Success Notification Banner -->
+      <div th:if="${param.success != null}" style="margin-bottom: 20px; padding: 12px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; background: #e6f9ed; color: #1b7a43; border: 1px solid #c2eed1; display: flex; align-items: center; justify-content: space-between;">
+        <span th:if="${param.success[0] == 'add'}">✓ Đã thêm thương hiệu mới thành công!</span>
+        <span th:if="${param.success[0] == 'edit'}">✓ Đã cập nhật thương hiệu thành công!</span>
+        <span th:if="${param.success[0] == 'delete'}">✓ Đã xóa thương hiệu khỏi hệ thống thành công!</span>
+        <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" style="color: inherit; text-decoration: none; font-weight: bold; cursor: pointer;">&times;</a>
+      </div>
+
+      <!-- Error Notification Banner -->
+      <div th:if="${param.error != null}" style="margin-bottom: 20px; padding: 12px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; background: #fdf2f2; color: #dc2626; border: 1px solid #fecaca; display: flex; align-items: center; justify-content: space-between;">
+        <span th:text="${param.error[0] != null and !param.error[0].isEmpty() ? param.error[0] : '✕ Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng kiểm tra lại dữ liệu nhập!'}">✕ Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng kiểm tra lại dữ liệu nhập!</span>
+        <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" style="color: inherit; text-decoration: none; font-weight: bold; cursor: pointer;">&times;</a>
+      </div>
+
       <div class="admin-card-container">
-        <!-- Toolbar -->
+        <!-- Toolbar with Search (Pure HTML Form GET - Không dùng JS) -->
         <div class="table-toolbar">
-          <div class="table-toolbar-left">
-            <input type="text" class="table-search-input" placeholder="Tìm kiếm theo tên thương hiệu...">
-            <select class="table-select">
-              <option value="">Tất cả trạng thái</option>
-              <option value="active">Đang hoạt động</option>
-              <option value="inactive">Tạm ngưng</option>
-            </select>
-          </div>
+          <form method="get" th:action="@{/admin/brands}" class="table-toolbar-left" style="margin: 0; display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap;">
+            <input type="text" name="keyword" class="table-search-input" placeholder="Tìm theo mã (BRD-...) hoặc tên thương hiệu..." th:value="${keyword}">
+            <button type="submit" class="btn-primary" style="height: 40px; padding: 0 16px; border-radius: var(--rounded-md); font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <span>Tìm kiếm</span>
+            </button>
+            <a th:if="${keyword != null and !keyword.isEmpty()}"
+               th:href="@{/admin/brands}"
+               class="btn-secondary"
+               style="height: 40px; padding: 0 14px; border-radius: var(--rounded-md); font-size: 13px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center;">
+              Đặt lại
+            </a>
+          </form>
           <div>
-            <span class="caption-sm" style="color:var(--color-mute);">Tổng số 8 thương hiệu</span>
+            <span class="caption-sm" style="color:var(--color-mute);" th:text="'Hiển thị ' + (${brands != null ? #lists.size(brands) : 0}) + ' / ' + (${totalElements != null ? totalElements : 0}) + ' thương hiệu'">Hiển thị 4 / 8 thương hiệu</span>
           </div>
         </div>
 
-        <!-- Brand Table -->
+        <!-- Brand Table (Đã bỏ Mã hiệu, Xuất xứ, Trạng thái; Mô tả định vị đổi thành Mô tả) -->
         <div class="table-responsive">
           <table class="admin-table">
             <thead>
               <tr>
-                <th>Hình ảnh / Logo</th>
+                <th style="width:140px;">Mã thương hiệu</th>
+                <th style="width:100px;">Hình ảnh / Logo</th>
                 <th>Tên thương hiệu</th>
-                <th>Mã hiệu</th>
-                <th>Xuất xứ</th>
-                <th>Mô tả định vị</th>
-                <th>Số sản phẩm</th>
-                <th>Trạng thái</th>
-                <th style="text-align:right;">Thao tác</th>
+                <th>Mô tả</th>
+                <th style="width:140px;">Số sản phẩm</th>
+                <th style="text-align:right; width:140px;">Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Brand 1 -->
-              <tr>
-                <td>
-                  <div class="item-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" alt="Nike Sportswear">
-                  </div>
-                </td>
-                <td>
-                  <div class="item-name-cell">Nike Sportswear</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">Mainline Brand</span>
-                </td>
-                <td><code>BRD-NSW</code></td>
-                <td>Beaverton, Oregon, USA</td>
-                <td>Trọng tâm thương hiệu Nike với toàn bộ các sản phẩm thể thao và phong cách sống.</td>
-                <td><strong>280 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hoạt động</span></td>
-                <td style="text-align:right;">
-                  <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem trên web">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </a>
-                    <button class="btn-action-icon" title="Chỉnh sửa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                  </div>
-                </td>
+              <!-- Thông báo khi chưa có thương hiệu nào -->
+              <tr th:if="${brands == null or #lists.isEmpty(brands)}">
+                <td colspan="6" style="text-align: center; color: var(--color-mute); padding: 32px;">Hiện tại chưa có thương hiệu nào trong hệ thống.</td>
               </tr>
 
-              <!-- Brand 2 -->
-              <tr>
+              <!-- Duyệt danh sách thương hiệu (4 thương hiệu / trang) -->
+              <tr th:each="b : ${brands}">
+                <td><strong th:text="${b.code != null ? b.code : ('BRD-' + b.id)}">BRD-1</strong></td>
                 <td>
-                  <div class="item-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?auto=format&fit=crop&w=150&q=80" alt="Jordan Brand">
+                  <div class="item-thumb-box" th:if="${b.logo != null and !b.logo.isBlank()}">
+                    <img th:src="${b.logo}" th:alt="${b.name}">
                   </div>
                 </td>
                 <td>
-                  <div class="item-name-cell">Jordan Brand</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">Jumpman Flight</span>
+                  <div class="item-name-cell" style="font-weight:700; font-size:15px;" th:text="${b.name}">Nike Sportswear</div>
                 </td>
-                <td><code>BRD-JOR</code></td>
-                <td>Chicago / Oregon, USA</td>
-                <td>Biểu tượng bóng rổ toàn cầu khởi xướng bởi Michael Jordan từ năm 1985.</td>
-                <td><strong>78 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hoạt động</span></td>
+                <td style="max-width: 320px; line-height: 1.5; color: var(--color-text-secondary, #555);" th:text="${b.description != null and !b.description.isBlank() ? b.description : 'Chưa có mô tả'}">Mô tả thương hiệu</td>
+                <td><strong th:text="${b.productCount + ' sản phẩm'}">0 sản phẩm</strong></td>
                 <td style="text-align:right;">
                   <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem">
+                    <!-- Icon mắt: Xem chi tiết thương hiệu (Pure HTML Link - Không dùng JS) -->
+                    <a th:href="@{/admin/brands(action='view', id=${b.id}, page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-action-icon" title="Xem chi tiết thương hiệu">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </a>
-                    <button class="btn-action-icon" title="Sửa">
+                    <!-- Sửa thương hiệu (Pure HTML Link - Không dùng JS) -->
+                    <a th:href="@{/admin/brands(action='edit', id=${b.id}, page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-action-icon" title="Chỉnh sửa thương hiệu">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Brand 3 -->
-              <tr>
-                <td>
-                  <div class="item-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=150&q=80" alt="Nike ACG">
-                  </div>
-                </td>
-                <td>
-                  <div class="item-name-cell">Nike ACG</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">All Conditions Gear</span>
-                </td>
-                <td><code>BRD-ACG</code></td>
-                <td>Oregon, USA</td>
-                <td>Dòng sản phẩm dã ngoại chuyên nghiệp chịu đựng mọi điều kiện thời tiết khắc nghiệt.</td>
-                <td><strong>28 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hoạt động</span></td>
-                <td style="text-align:right;">
-                  <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </a>
-                    <button class="btn-action-icon" title="Sửa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Brand 4 -->
-              <tr>
-                <td>
-                  <div class="item-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=150&q=80" alt="Nike SB">
-                  </div>
-                </td>
-                <td>
-                  <div class="item-name-cell">Nike SB</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">Skateboarding</span>
-                </td>
-                <td><code>BRD-NSB</code></td>
-                <td>California, USA</td>
-                <td>Dòng sản phẩm chuyên biệt dành cho văn hóa ván trượt đường phố.</td>
-                <td><strong>42 sản phẩm</strong></td>
-                <td><span class="badge-status active">Hoạt động</span></td>
-                <td style="text-align:right;">
-                  <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/brand.html" target="_blank" class="btn-action-icon" title="Xem">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </a>
-                    <button class="btn-action-icon" title="Sửa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
+                    <!-- Xóa thương hiệu (Pure HTML Form POST - Không dùng JS) -->
+                    <form th:action="@{/admin/brands/delete/{id}(id=${b.id})}" method="post" style="display:inline; margin:0;">
+                      <input type="hidden" name="page" th:value="${currentPage}">
+                      <input type="hidden" name="size" th:value="${pageSize}">
+                      <input type="hidden" name="keyword" th:value="${keyword}">
+                      <button type="submit" class="btn-action-icon danger" title="Xóa thương hiệu">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
@@ -251,56 +187,115 @@
           </table>
         </div>
 
-        <!-- Pagination -->
+        <!-- Pagination (Phân trang 4 thương hiệu / trang) -->
         <div class="table-footer-pagination">
-          <span>Trang 1 / 1</span>
-          <div class="pagination-controls">
-            <button class="page-chip active">1</button>
+          <span th:if="${totalElements != null and totalElements > 0}" th:text="'Trang ' + (${currentPage + 1}) + ' / ' + (${totalPages > 0 ? totalPages : 1}) + ' (Tổng ' + ${totalElements} + ' thương hiệu)'">Trang 1 / 1</span>
+          <span th:unless="${totalElements != null and totalElements > 0}">Không có thương hiệu nào</span>
+          <div class="pagination-controls" th:if="${totalPages != null and totalPages > 1}">
+            <!-- Nút Trước -->
+            <a th:if="${currentPage > 0}"
+               th:href="@{/admin/brands(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}"
+               class="page-chip" style="text-decoration:none;">← Trước</a>
+            <span th:unless="${currentPage > 0}"
+                  class="page-chip" style="opacity:0.4; cursor:not-allowed;">← Trước</span>
+
+            <!-- Danh sách số trang -->
+            <th:block th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+              <a th:if="${pageNum != currentPage}"
+                 th:href="@{/admin/brands(page=${pageNum}, size=${pageSize}, keyword=${keyword})}"
+                 class="page-chip" style="text-decoration:none;"
+                 th:text="${pageNum + 1}">1</a>
+              <span th:if="${pageNum == currentPage}"
+                    class="page-chip active"
+                    th:text="${pageNum + 1}">1</span>
+            </th:block>
+
+            <!-- Nút Sau -->
+            <a th:if="${currentPage < totalPages - 1}"
+               th:href="@{/admin/brands(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}"
+               class="page-chip" style="text-decoration:none;">Sau →</a>
+            <span th:unless="${currentPage < totalPages - 1}"
+                  class="page-chip" style="opacity:0.4; cursor:not-allowed;">Sau →</span>
           </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- ==================== MODAL XEM CHI TIẾT THƯƠNG HIỆU (ICON MẮT) ==================== -->
+  <div class="modal-overlay" id="modal-view-brand" th:classappend="${action == 'view' and viewBrand != null} ? 'active' : ''">
+    <div class="admin-modal" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 class="modal-title" th:text="${viewBrand != null ? ('Chi Tiết Thương Hiệu (' + (viewBrand.code != null ? viewBrand.code : ('BRD-' + viewBrand.id)) + ')') : 'Chi Tiết Thương Hiệu'}">Chi Tiết Thương Hiệu</h3>
+        <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="modal-close-btn" style="text-decoration:none;">&times;</a>
+      </div>
+      <div class="modal-body" th:if="${viewBrand != null}">
+        <!-- Ảnh / Logo thương hiệu (chỉ hiển thị khi có link ảnh) -->
+        <div th:if="${viewBrand.logo != null and !viewBrand.logo.isBlank()}" style="text-align: center; margin-bottom: 20px; padding: 16px; background: var(--color-soft-cloud, #f8f9fa); border-radius: 8px;">
+          <img th:src="${viewBrand.logo}"
+               alt="Brand Logo"
+               style="max-width: 220px; max-height: 140px; object-fit: contain; border-radius: 8px; border: 1px solid var(--color-border, #eee); padding: 8px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+        </div>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h2 style="font-size: 20px; font-weight: 800;" th:text="${viewBrand.name}">Tên thương hiệu</h2>
+          <span style="display: inline-block; padding: 4px 10px; background: #e9ecef; border-radius: 12px; font-size: 12px; font-weight: 600; color: #495057; margin-top: 6px;" th:text="${viewBrand.code != null ? viewBrand.code : ('BRD-' + viewBrand.id)}">BRD-1</span>
+        </div>
+
+        <!-- Số sản phẩm đang thuộc thương hiệu -->
+        <div class="form-group" style="background: #eef2ff; padding: 14px 18px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #c7d2fe;">
+          <div style="font-size: 13px; font-weight: 600; color: #3730a3; margin-bottom: 4px;">SỐ SẢN PHẨM ĐANG THUỘC THƯƠNG HIỆU:</div>
+          <div style="font-size: 20px; font-weight: 800; color: #1e1b4b;">
+            <span th:text="${viewBrand.productCount}">0</span> sản phẩm
+          </div>
+        </div>
+
+        <!-- Mô tả thương hiệu -->
+        <div class="form-group">
+          <label class="form-label" style="font-size: 13px; font-weight: 600; color: var(--color-mute, #666);">Mô tả:</label>
+          <div style="font-size: 14px; line-height: 1.6; color: var(--color-text, #333); background: #fff; padding: 14px; border-radius: 8px; border: 1px solid var(--color-border, #eee); min-height: 80px;"
+               th:text="${viewBrand.description != null and !viewBrand.description.isBlank() ? viewBrand.description : 'Chưa có mô tả cho thương hiệu này.'}">
+            Nội dung mô tả thương hiệu...
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" th:if="${viewBrand != null}">
+        <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center;">Đóng</a>
+        <a th:href="@{/admin/brands(action='edit', id=${viewBrand.id}, page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-primary" style="text-decoration:none; display:inline-flex; align-items:center;">Chỉnh Sửa Thương Hiệu</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== MODAL THÊM THƯƠNG HIỆU ==================== -->
-  <div class="modal-overlay" id="modal-add-brand">
+  <div class="modal-overlay" id="modal-add-brand" th:classappend="${action == 'add'} ? 'active' : ''">
     <div class="admin-modal">
       <div class="modal-header">
         <h3 class="modal-title">Thêm Thương Hiệu Mới</h3>
-        <button type="button" class="modal-close-btn" data-close="modal-add-brand">&times;</button>
+        <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="modal-close-btn" style="text-decoration:none;">&times;</a>
       </div>
-      <form id="form-add-brand">
+      <form th:action="@{/admin/brands/add}" method="post">
+        <input type="hidden" name="page" th:value="${currentPage}">
+        <input type="hidden" name="size" th:value="${pageSize}">
+        <input type="hidden" name="keyword" th:value="${keyword}">
         <div class="modal-body">
           <div class="form-group">
-            <label class="form-label">Mã hiệu thương hiệu <span class="req">*</span></label>
-            <input type="text" class="form-control" name="code" placeholder="Ví dụ: BRD-NSW, BRD-JRD..." required>
-          </div>
-          <div class="form-group">
             <label class="form-label">Tên thương hiệu <span class="req">*</span></label>
-            <input type="text" class="form-control" name="name" placeholder="Ví dụ: Nike Sportswear..." required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Xuất xứ / Trụ sở</label>
-            <input type="text" class="form-control" name="origin" placeholder="Ví dụ: Beaverton, Oregon, USA">
+            <input type="text" class="form-control" name="name" placeholder="Ví dụ: Nike Sportswear, Jordan, Nike ACG..." required title="Vui lòng nhập tên thương hiệu">
+            <small class="form-help" style="color:#dc2626; font-size:12px; display:flex; align-items:center; gap:4px; margin-top:4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Vui lòng không để trống thông tin này</span>
+            </small>
           </div>
           <div class="form-group">
             <label class="form-label">Link Logo / Hình ảnh (URL)</label>
             <input type="url" class="form-control" name="logo" placeholder="https://images.unsplash.com/...">
           </div>
           <div class="form-group">
-            <label class="form-label">Mô tả định vị thương hiệu</label>
-            <textarea class="form-control" name="description" rows="3" placeholder="Nhập định vị sản phẩm của thương hiệu..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Trạng thái hoạt động</label>
-            <select class="form-control" name="status">
-              <option value="active" selected>Hoạt động</option>
-              <option value="inactive">Tạm ngưng</option>
-            </select>
+            <label class="form-label">Mô tả</label>
+            <textarea class="form-control" name="description" rows="3" placeholder="Nhập mô tả về thương hiệu..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn-secondary" data-close="modal-add-brand">Hủy</button>
+          <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center;">Hủy</a>
           <button type="submit" class="btn-primary">Lưu Thương Hiệu</button>
         </div>
       </form>
@@ -308,113 +303,43 @@
   </div>
 
   <!-- ==================== MODAL SỬA THƯƠNG HIỆU ==================== -->
-  <div class="modal-overlay" id="modal-edit-brand">
+  <div class="modal-overlay" id="modal-edit-brand" th:classappend="${action == 'edit' and editBrand != null} ? 'active' : ''">
     <div class="admin-modal">
       <div class="modal-header">
-        <h3 class="modal-title">Chỉnh Sửa Thương Hiệu</h3>
-        <button type="button" class="modal-close-btn" data-close="modal-edit-brand">&times;</button>
+        <h3 class="modal-title" th:text="${editBrand != null ? ('Chỉnh Sửa Thương Hiệu (' + (editBrand.code != null ? editBrand.code : ('BRD-' + editBrand.id)) + ')') : 'Chỉnh Sửa Thương Hiệu'}">Chỉnh Sửa Thương Hiệu</h3>
+        <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="modal-close-btn" style="text-decoration:none;">&times;</a>
       </div>
-      <form id="form-edit-brand">
+      <form th:action="@{/admin/brands/edit}" method="post">
+        <input type="hidden" name="id" th:value="${editBrand != null ? editBrand.id : ''}">
+        <input type="hidden" name="page" th:value="${currentPage}">
+        <input type="hidden" name="size" th:value="${pageSize}">
+        <input type="hidden" name="keyword" th:value="${keyword}">
         <div class="modal-body">
           <div class="form-group">
-            <label class="form-label">Mã hiệu thương hiệu <span class="req">*</span></label>
-            <input type="text" class="form-control" id="edit-brand-code" name="code" readonly style="background-color:var(--color-soft-cloud);">
-          </div>
-          <div class="form-group">
             <label class="form-label">Tên thương hiệu <span class="req">*</span></label>
-            <input type="text" class="form-control" id="edit-brand-name" name="name" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Xuất xứ / Trụ sở</label>
-            <input type="text" class="form-control" id="edit-brand-origin" name="origin">
+            <input type="text" class="form-control" name="name" th:value="${editBrand != null ? editBrand.name : ''}" placeholder="Ví dụ: Nike Sportswear..." required title="Vui lòng nhập tên thương hiệu">
+            <small class="form-help" style="color:#dc2626; font-size:12px; display:flex; align-items:center; gap:4px; margin-top:4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Vui lòng không để trống tên thương hiệu</span>
+            </small>
           </div>
           <div class="form-group">
             <label class="form-label">Link Logo / Hình ảnh (URL)</label>
-            <input type="url" class="form-control" id="edit-brand-logo" name="logo">
+            <input type="url" class="form-control" name="logo" th:value="${editBrand != null ? editBrand.logo : ''}" placeholder="Để trống sẽ tự động giữ lại link ảnh cũ">
+            <small class="form-help" style="color:var(--color-mute); font-size:12px;">Nếu để trống ô này khi cập nhật, hệ thống sẽ tự động giữ lại link ảnh cũ.</small>
           </div>
           <div class="form-group">
-            <label class="form-label">Mô tả định vị thương hiệu</label>
-            <textarea class="form-control" id="edit-brand-desc" name="description" rows="3"></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Trạng thái hoạt động</label>
-            <select class="form-control" id="edit-brand-status" name="status">
-              <option value="Hoạt động">Hoạt động</option>
-              <option value="Tạm ngưng">Tạm ngưng</option>
-            </select>
+            <label class="form-label">Mô tả</label>
+            <textarea class="form-control" name="description" rows="3" th:text="${editBrand != null ? editBrand.description : ''}" placeholder="Nhập mô tả về thương hiệu..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn-secondary" data-close="modal-edit-brand">Hủy</button>
+          <a th:href="@{/admin/brands(page=${currentPage}, size=${pageSize}, keyword=${keyword})}" class="btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center;">Hủy</a>
           <button type="submit" class="btn-primary">Cập Nhật Thương Hiệu</button>
         </div>
       </form>
     </div>
   </div>
 
-  <script>
-    // Mở modal Thêm
-    const btnOpenAdd = document.getElementById('btn-open-add');
-    if (btnOpenAdd) {
-      btnOpenAdd.addEventListener('click', () => {
-        document.getElementById('modal-add-brand').classList.add('active');
-      });
-    }
-
-    // Mở modal Sửa khi bấm nút Sửa
-    document.querySelectorAll('button[title*="Sửa"], button[title*="Chỉnh sửa"]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const row = this.closest('tr');
-        const cells = row.querySelectorAll('td');
-        const logoSrc = row.querySelector('img')?.getAttribute('src') || '';
-        const name = row.querySelector('.item-name-cell')?.innerText.trim() || '';
-        const code = cells[3]?.innerText.trim() || '';
-        const origin = cells[4]?.innerText.trim() || '';
-        const desc = cells[5]?.innerText.trim() || '';
-        const statusText = cells[7]?.querySelector('.badge-status')?.innerText.trim() || '';
-
-        document.getElementById('edit-brand-code').value = code;
-        document.getElementById('edit-brand-name').value = name;
-        document.getElementById('edit-brand-origin').value = origin;
-        document.getElementById('edit-brand-logo').value = logoSrc;
-        document.getElementById('edit-brand-desc').value = desc;
-
-        const statusSelect = document.getElementById('edit-brand-status');
-        for (let i = 0; i < statusSelect.options.length; i++) {
-          if (statusText.includes(statusSelect.options[i].value)) {
-            statusSelect.selectedIndex = i;
-            break;
-          }
-        }
-
-        document.getElementById('modal-edit-brand').classList.add('active');
-      });
-    });
-
-    // Đóng modal
-    document.querySelectorAll('[data-close]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-close');
-        const modal = document.getElementById(targetId);
-        if (modal) modal.classList.remove('active');
-      });
-    });
-
-    // Đóng khi click ngoài backdrop
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-      modal.addEventListener('click', function(e) {
-        if (e.target === this) {
-          this.classList.remove('active');
-        }
-      });
-    });
-
-    // Đóng khi nhấn phím Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-      }
-    });
-  </script>
 </body>
 </html>

@@ -30,4 +30,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Fallback theo ID giảm dần
     List<User> findTop5ByOrderByIdDesc();
+<<<<<<< Updated upstream
+=======
+
+    Optional<User> findFirstByOrderByIdAsc();
+>>>>>>> Stashed changes
 }

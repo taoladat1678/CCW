@@ -53,6 +53,11 @@ public class Brand {
         this.id = id;
     }
 
+    @jakarta.persistence.Transient
+    public String getCode() {
+        return id != null ? "BRD-" + id : "";
+    }
+
     public String getName() {
         return name;
     }

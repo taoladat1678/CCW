@@ -419,9 +419,30 @@ button, input, select, textarea {
   height: 100%;
 }
 
-.nav-logo a {
-  display: flex;
+.nav-logo a,
+.shop-logo-link {
+  display: inline-flex;
   align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.shop-logo-img {
+  height: 38px;
+  width: 38px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  display: block;
+}
+
+.shop-logo-text {
+  font-weight: 900;
+  font-size: 19px;
+  letter-spacing: 0.5px;
+  color: var(--color-ink);
+  text-transform: uppercase;
 }
 
 .nav-logo svg {

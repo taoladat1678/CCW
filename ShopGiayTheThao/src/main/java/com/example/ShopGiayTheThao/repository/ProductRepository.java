@@ -86,4 +86,21 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         @Param("statusFilter") String statusFilter,
         Pageable pageable
     );
+<<<<<<< Updated upstream
+=======
+
+    List<Product> findByStatusOrderByCreatedAtDesc(Integer status);
+    
+    List<Product> findTop6ByStatusOrderByCreatedAtDesc(Integer status);
+    
+    Page<Product> findByStatus(Integer status, Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.status = 1 AND p.brand.id = :brandId ORDER BY p.createdAt DESC")
+    List<Product> findByBrandId(Long brandId);
+
+    List<Product> findAllByBrandId(Long brandId);
+
+    List<Product> findAllByCategoryId(Long categoryId);
+
+>>>>>>> Stashed changes
 }
