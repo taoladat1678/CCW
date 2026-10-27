@@ -16,7 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     // Lấy danh sách danh mục theo trạng thái (status = 1: đang hoạt động)
     List<Category> findByStatus(Integer status);
-
     // Lọc và tìm kiếm danh mục có phân trang cho Admin theo tên hoặc ID số
     @Query("SELECT c FROM Category c WHERE " +
            "(:keyword IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +

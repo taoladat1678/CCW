@@ -25,7 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Kiểm tra trùng email
     boolean existsByEmail(String email);
-
     // Lấy 5 người dùng mới nhất theo ngày tạo
     List<User> findTop5ByOrderByCreatedAtDesc();
 

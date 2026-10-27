@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản Lý Thương Hiệu | Nike Admin Portal</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
 </head>
 <body>
 
@@ -21,40 +21,45 @@
 
     <nav class="sidebar-nav">
       <div class="sidebar-heading">Tổng Quan</div>
-      <a href="dashboard.html" class="nav-link-item">
+      <a th:href="@{/admin/dashboard}" href="/admin/dashboard" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
         <span>Bảng Điều Khiển</span>
       </a>
 
       <div class="sidebar-heading">Danh Mục Quản Lý</div>
-      <a href="product.html" class="nav-link-item">
+      <a th:href="@{/admin/products}" href="/admin/products" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
         <span>Sản Phẩm</span>
       </a>
 
-      <a href="cate.html" class="nav-link-item">
+      <a th:href="@{/admin/categories}" href="/admin/categories" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
         <span>Danh Mục</span>
       </a>
 
-      <a href="user.html" class="nav-link-item">
+      <a th:href="@{/admin/sizes}" href="/admin/sizes" class="nav-link-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"></rect><line x1="6" y1="7" x2="6" y2="11"></line><line x1="10" y1="7" x2="10" y2="13"></line><line x1="14" y1="7" x2="14" y2="11"></line><line x1="18" y1="7" x2="18" y2="13"></line></svg>
+        <span>Quản Lý Size</span>
+      </a>
+
+      <a th:href="@{/admin/users}" href="/admin/users" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         <span>Khách Hàng / User</span>
       </a>
 
-      <a href="brand.html" class="nav-link-item active">
+      <a th:href="@{/admin/brands}" href="/admin/brands" class="nav-link-item active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
         <span>Thương Hiệu</span>
       </a>
 
-      <a href="blog.html" class="nav-link-item">
+      <a th:href="@{/admin/blogs}" href="/admin/blogs" class="nav-link-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
         <span>Bài Viết / Blog</span>
       </a>
     </nav>
 
     <div class="sidebar-footer">
-      <a href="../client/index.html" class="store-preview-btn">
+      <a th:href="@{/}" href="/" class="store-preview-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         <span>Xem Cửa Hàng (Client)</span>
       </a>
@@ -83,7 +88,7 @@
           <p>Hệ sinh thái các nhãn hiệu trực thuộc Nike Group và các đối tác độc quyền.</p>
         </div>
         <div>
-          <button type="button" class="btn-primary">+ Thêm Thương Hiệu Mới</button>
+          <button type="button" class="btn-primary" id="btn-open-add">+ Thêm Thương Hiệu Mới</button>
         </div>
       </div>
 
@@ -257,5 +262,159 @@
     </main>
   </div>
 
+  <!-- ==================== MODAL THÊM THƯƠNG HIỆU ==================== -->
+  <div class="modal-overlay" id="modal-add-brand">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Thêm Thương Hiệu Mới</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-add-brand">&times;</button>
+      </div>
+      <form id="form-add-brand">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã hiệu thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" name="code" placeholder="Ví dụ: BRD-NSW, BRD-JRD..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tên thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" name="name" placeholder="Ví dụ: Nike Sportswear..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Xuất xứ / Trụ sở</label>
+            <input type="text" class="form-control" name="origin" placeholder="Ví dụ: Beaverton, Oregon, USA">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link Logo / Hình ảnh (URL)</label>
+            <input type="url" class="form-control" name="logo" placeholder="https://images.unsplash.com/...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả định vị thương hiệu</label>
+            <textarea class="form-control" name="description" rows="3" placeholder="Nhập định vị sản phẩm của thương hiệu..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái hoạt động</label>
+            <select class="form-control" name="status">
+              <option value="active" selected>Hoạt động</option>
+              <option value="inactive">Tạm ngưng</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-add-brand">Hủy</button>
+          <button type="submit" class="btn-primary">Lưu Thương Hiệu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SỬA THƯƠNG HIỆU ==================== -->
+  <div class="modal-overlay" id="modal-edit-brand">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Chỉnh Sửa Thương Hiệu</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-edit-brand">&times;</button>
+      </div>
+      <form id="form-edit-brand">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Mã hiệu thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-brand-code" name="code" readonly style="background-color:var(--color-soft-cloud);">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tên thương hiệu <span class="req">*</span></label>
+            <input type="text" class="form-control" id="edit-brand-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Xuất xứ / Trụ sở</label>
+            <input type="text" class="form-control" id="edit-brand-origin" name="origin">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link Logo / Hình ảnh (URL)</label>
+            <input type="url" class="form-control" id="edit-brand-logo" name="logo">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả định vị thương hiệu</label>
+            <textarea class="form-control" id="edit-brand-desc" name="description" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trạng thái hoạt động</label>
+            <select class="form-control" id="edit-brand-status" name="status">
+              <option value="Hoạt động">Hoạt động</option>
+              <option value="Tạm ngưng">Tạm ngưng</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modal-edit-brand">Hủy</button>
+          <button type="submit" class="btn-primary">Cập Nhật Thương Hiệu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Mở modal Thêm
+    const btnOpenAdd = document.getElementById('btn-open-add');
+    if (btnOpenAdd) {
+      btnOpenAdd.addEventListener('click', () => {
+        document.getElementById('modal-add-brand').classList.add('active');
+      });
+    }
+
+    // Mở modal Sửa khi bấm nút Sửa
+    document.querySelectorAll('button[title*="Sửa"], button[title*="Chỉnh sửa"]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const logoSrc = row.querySelector('img')?.getAttribute('src') || '';
+        const name = row.querySelector('.item-name-cell')?.innerText.trim() || '';
+        const code = cells[3]?.innerText.trim() || '';
+        const origin = cells[4]?.innerText.trim() || '';
+        const desc = cells[5]?.innerText.trim() || '';
+        const statusText = cells[7]?.querySelector('.badge-status')?.innerText.trim() || '';
+
+        document.getElementById('edit-brand-code').value = code;
+        document.getElementById('edit-brand-name').value = name;
+        document.getElementById('edit-brand-origin').value = origin;
+        document.getElementById('edit-brand-logo').value = logoSrc;
+        document.getElementById('edit-brand-desc').value = desc;
+
+        const statusSelect = document.getElementById('edit-brand-status');
+        for (let i = 0; i < statusSelect.options.length; i++) {
+          if (statusText.includes(statusSelect.options[i].value)) {
+            statusSelect.selectedIndex = i;
+            break;
+          }
+        }
+
+        document.getElementById('modal-edit-brand').classList.add('active');
+      });
+    });
+
+    // Đóng modal
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-close');
+        const modal = document.getElementById(targetId);
+        if (modal) modal.classList.remove('active');
+      });
+    });
+
+    // Đóng khi click ngoài backdrop
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Đóng khi nhấn phím Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+      }
+    });
+  </script>
 </body>
 </html>

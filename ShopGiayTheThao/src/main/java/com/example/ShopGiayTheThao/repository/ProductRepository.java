@@ -47,7 +47,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * Fallback lấy các sản phẩm khác (loại trừ sản phẩm hiện tại)
      */
     java.util.List<Product> findTop4ByIdNotAndStatus(Long id, Integer status);
-
     java.util.List<Product> findTop5ByOrderByCreatedAtDesc();
 
     java.util.List<Product> findTop5ByOrderByIdDesc();

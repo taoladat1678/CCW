@@ -20,7 +20,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Lấy tổng số lượng khách hàng.
+     * Ưu tiên đếm theo role "CUSTOMER". Nếu không có bản ghi nào thì đếm toàn bộ users.
+     */
     public long getTotalCustomers() {
+        long customerCount = userRepository.countByRoleIgnoreCase("CUSTOMER");
+        if (customerCount > 0) {
+            return customerCount;
+        }
         return userRepository.count();
     }
 
@@ -28,7 +36,6 @@ public class UserService {
         long totalCustomers = getTotalCustomers();
         return new CustomerStatsResponse(totalCustomers, true);
     }
-
     /**
      * Lấy danh sách toàn bộ người dùng.
      */
@@ -153,7 +160,6 @@ public class UserService {
         }
         return userRepository.existsByEmail(email.trim());
     }
-
     public List<User> getRecentUsers() {
         return userRepository.findTop5ByOrderByIdDesc();
     }

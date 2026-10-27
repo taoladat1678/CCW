@@ -57,7 +57,6 @@ public class AdminController {
         model.addAttribute("totalBrands", totalBrands);
         model.addAttribute("recentProducts", productService.getRecentProducts());
         model.addAttribute("recentUsers", userService.getRecentUsers());
-
         return "admin/dashboard";
     }
 

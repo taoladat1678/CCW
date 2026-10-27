@@ -120,7 +120,6 @@ public class ProductResponse {
     public void setSizes(List<SizeDto> sizes) {
         this.sizes = sizes;
     }
-
     public Integer getStatus() {
         return status;
     }

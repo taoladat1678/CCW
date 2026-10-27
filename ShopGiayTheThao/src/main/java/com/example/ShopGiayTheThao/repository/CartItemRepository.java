@@ -22,7 +22,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     // Đếm tổng số lượng món trong giỏ của user
     long countByUserId(Long userId);
-
     // Xóa tất cả món hàng liên quan đến sản phẩm
     void deleteByProductId(Long productId);
 }

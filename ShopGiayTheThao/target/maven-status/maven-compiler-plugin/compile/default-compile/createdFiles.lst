@@ -1,0 +1,12 @@
+com\example\ShopGiayTheThao\dto\ProductRequest.class
+com\example\ShopGiayTheThao\dto\SizeRequest.class
+com\example\ShopGiayTheThao\dto\CategoryRequest.class
+com\example\ShopGiayTheThao\service\BlogService.class
+com\example\ShopGiayTheThao\dto\ProductStatsResponse.class
+com\example\ShopGiayTheThao\dto\BlogStatsResponse.class
+com\example\ShopGiayTheThao\dto\CustomerStatsResponse.class
+com\example\ShopGiayTheThao\service\CategoryService.class
+com\example\ShopGiayTheThao\dto\BrandStatsResponse.class
+com\example\ShopGiayTheThao\service\SizeService.class
+com\example\ShopGiayTheThao\repository\BlogRepository.class
+com\example\ShopGiayTheThao\dto\CategoryStatsResponse.class

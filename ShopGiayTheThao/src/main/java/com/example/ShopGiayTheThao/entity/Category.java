@@ -70,7 +70,6 @@ public class Category {
     public String getCode() {
         return (id != null) ? String.format("CAT-%03d", id) : "";
     }
-
     public String getName() {
         return name;
     }

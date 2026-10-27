@@ -13,7 +13,6 @@ import com.example.ShopGiayTheThao.entity.Size;
 
 @Repository
 public interface SizeRepository extends JpaRepository<Size, Long> {
-
     Optional<Size> findByName(String name);
 
     boolean existsByNameIgnoreCase(String name);

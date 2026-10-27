@@ -49,7 +49,6 @@ public class Size {
     public String getCode() {
         return id != null ? "SIZ-" + id : "";
     }
-
     public String getName() {
         return name;
     }
