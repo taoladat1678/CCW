@@ -10,12 +10,18 @@ public class BlogDTO {
     private String authorName;
     private LocalDateTime createdAt;
     private String categoryTag;
+    private Integer status = 1;
 
     public BlogDTO() {
     }
 
     public BlogDTO(Long id, String title, String content, String thumbnail, String authorName,
                    LocalDateTime createdAt, String categoryTag) {
+        this(id, title, content, thumbnail, authorName, createdAt, categoryTag, 1);
+    }
+
+    public BlogDTO(Long id, String title, String content, String thumbnail, String authorName,
+                   LocalDateTime createdAt, String categoryTag, Integer status) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -23,6 +29,7 @@ public class BlogDTO {
         this.authorName = authorName;
         this.createdAt = createdAt;
         this.categoryTag = categoryTag;
+        this.status = (status != null) ? status : 1;
     }
 
     public Long getId() {
@@ -79,5 +86,13 @@ public class BlogDTO {
 
     public void setCategoryTag(String categoryTag) {
         this.categoryTag = categoryTag;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

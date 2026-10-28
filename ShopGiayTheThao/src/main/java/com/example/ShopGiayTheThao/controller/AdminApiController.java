@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ShopGiayTheThao.dto.BlogDTO;
+import com.example.ShopGiayTheThao.dto.BlogRequest;
 import com.example.ShopGiayTheThao.dto.BlogStatsResponse;
 import com.example.ShopGiayTheThao.dto.BrandDTO;
 import com.example.ShopGiayTheThao.dto.BrandRequest;
@@ -253,6 +255,81 @@ public class AdminApiController {
         Map<String, Object> res = new HashMap<>();
         res.put("success", true);
         res.put("message", "Đã xóa người dùng thành công!");
+        return ResponseEntity.ok(res);
+    }
+
+    /**
+     * Lấy danh sách bài viết / tin tức phân trang, tìm kiếm và lọc trạng thái cho Admin
+     * URL: GET /api/admin/blogs
+     */
+    @GetMapping("/blogs")
+    public ResponseEntity<Page<BlogDTO>> getAdminBlogs(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "status", required = false) Integer status,
+            @RequestParam(name = "category", required = false) String category) {
+        return ResponseEntity.ok(blogService.getBlogsForAdmin(page, size, keyword, status, category));
+    }
+
+    /**
+     * Lấy chi tiết 1 bài viết theo ID
+     * URL: GET /api/admin/blogs/{id}
+     */
+    @GetMapping("/blogs/{id}")
+    public ResponseEntity<BlogDTO> getBlogById(@PathVariable Long id) {
+        BlogDTO blog = blogService.getBlogById(id);
+        if (blog == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(blog);
+    }
+
+    /**
+     * Thêm mới bài viết
+     * URL: POST /api/admin/blogs
+     */
+    @PostMapping("/blogs")
+    public ResponseEntity<BlogDTO> createBlog(@RequestBody BlogRequest request) {
+        BlogDTO created = blogService.createBlog(request);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    /**
+     * Cập nhật bài viết
+     * URL: PUT /api/admin/blogs/{id}
+     */
+    @PutMapping("/blogs/{id}")
+    public ResponseEntity<BlogDTO> updateBlog(@PathVariable Long id, @RequestBody BlogRequest request) {
+        BlogDTO updated = blogService.updateBlog(id, request);
+        return ResponseEntity.ok(updated);
+    }
+
+    /**
+     * Đổi trạng thái bài viết nhanh (Xuất bản / Bản nháp)
+     * URL: PUT /api/admin/blogs/{id}/toggle-status
+     */
+    @PutMapping("/blogs/{id}/toggle-status")
+    public ResponseEntity<Map<String, Object>> toggleBlogStatus(@PathVariable Long id) {
+        BlogDTO updated = blogService.toggleBlogStatus(id);
+        Map<String, Object> res = new HashMap<>();
+        res.put("success", true);
+        res.put("status", updated.getStatus());
+        res.put("message", updated.getStatus() == 1 ? "Đã xuất bản bài viết thành công!" : "Đã chuyển bài viết về bản nháp!");
+        res.put("blog", updated);
+        return ResponseEntity.ok(res);
+    }
+
+    /**
+     * Xóa bài viết
+     * URL: DELETE /api/admin/blogs/{id}
+     */
+    @DeleteMapping("/blogs/{id}")
+    public ResponseEntity<Map<String, Object>> deleteBlog(@PathVariable Long id) {
+        blogService.deleteBlog(id);
+        Map<String, Object> res = new HashMap<>();
+        res.put("success", true);
+        res.put("message", "Đã xóa bài viết thành công!");
         return ResponseEntity.ok(res);
     }
 
