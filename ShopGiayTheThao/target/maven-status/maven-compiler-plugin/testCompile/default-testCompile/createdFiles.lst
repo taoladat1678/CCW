@@ -1,2 +1,4 @@
 com\example\ShopGiayTheThao\CategoryServiceTest.class
+com\example\ShopGiayTheThao\BrandServiceTest.class
 com\example\ShopGiayTheThao\SizeServiceTest.class
+com\example\ShopGiayTheThao\ShopGiayTheThaoApplicationTests.class

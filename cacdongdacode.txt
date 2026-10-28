@@ -1262,7 +1262,7 @@ CHỨC NĂNG: QUẢN LÝ THƯƠNG HIỆU (BRAND) CHO BRAND.HTML Ở ADMIN (GET, 
 
 7. CẬP NHẬT TÊN THƯƠNG HIỆU SHOP THÀNH "T1SHOESPORT" VÀ SỬ DỤNG LOGO CHÍNH THỨC MỚI
 ====================================================================================================
-- Mục đích: Đồng bộ đổi tên toàn bộ cửa hàng thành "T1SHOESPORT", áp dụng link ảnh logo mới (https://ih1.redbubble.net/image.5307224197.5270/st,small,507x507-pad,600x600,f8f8f8.jpg) trên toàn hệ thống (Admin Portal và Client Shop).
+- Mục đích: Đồng bộ đổi tên toàn bộ cửa hàng thành "T1SHOESPORT", áp dụng link ảnh logo mới chính thức (https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/T1_esports_logo.svg/3840px-T1_esports_logo.svg.png) và lưu trữ local tại static/images/logo.png trên toàn hệ thống (Admin Portal và Client Shop).
 - Vị trí các file và nội dung đã cập nhật:
   1. CSS:
      - static/client/css/style.css: Thêm class .shop-logo-link, .shop-logo-img, .shop-logo-text để hiển thị logo ảnh kết hợp tên thương hiệu T1SHOESPORT chuẩn tỉ lệ, shadow tinh tế.
