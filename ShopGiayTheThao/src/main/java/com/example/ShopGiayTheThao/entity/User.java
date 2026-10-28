@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -52,11 +53,11 @@ public class User {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Blog> blogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<CartItem> cartItems = new ArrayList<>();
 
     @PrePersist

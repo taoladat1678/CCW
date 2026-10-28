@@ -151,12 +151,17 @@ public class AdminApiController {
 
 
     /**
-     * Lấy danh sách toàn bộ khách hàng / người dùng
+     * Lấy danh sách người dùng có phân trang, tìm kiếm, lọc theo vai trò và trạng thái
      * URL: GET /api/admin/users
      */
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<Page<User>> getAdminUsers(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "role", required = false) String role,
+            @RequestParam(name = "status", required = false) Integer status) {
+        return ResponseEntity.ok(userService.getUsersForAdmin(page, size, keyword, role, status));
     }
 
     /**
@@ -178,12 +183,64 @@ public class AdminApiController {
     }
 
     /**
-     * Cập nhật thông tin khách hàng
+     * Cập nhật thông tin khách hàng ("sửa thì chỉ sửa ở trạng thái" - hỗ trợ cả cập nhật trạng thái qua body)
      * URL: PUT /api/admin/users/{id}
      */
     @PutMapping("/users/{id}")
     public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserRequest request) {
+        if (request.getStatus() != null) {
+            return ResponseEntity.ok(userService.updateUserStatus(id, request.getStatus()));
+        }
         return ResponseEntity.ok(userService.updateUser(id, request));
+    }
+
+    /**
+     * Cập nhật riêng trạng thái người dùng (Chỉ sửa trạng thái: Hoạt động / Khóa)
+     * URL: PUT /api/admin/users/{id}/status
+     */
+    @PutMapping("/users/{id}/status")
+    public ResponseEntity<Map<String, Object>> updateUserStatus(
+            @PathVariable Long id,
+            @RequestParam(name = "status", required = false) Integer statusParam,
+            @RequestBody(required = false) Map<String, Object> body) {
+        Integer newStatus = statusParam;
+        if (newStatus == null && body != null && body.containsKey("status")) {
+            Object s = body.get("status");
+            if (s instanceof Number) {
+                newStatus = ((Number) s).intValue();
+            } else if (s != null) {
+                try {
+                    newStatus = Integer.parseInt(s.toString());
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+        if (newStatus == null) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Vui lòng cung cấp trạng thái hợp lệ (1: Hoạt động, 0: Tạm khóa)!");
+        }
+        User updated = userService.updateUserStatus(id, newStatus);
+        Map<String, Object> res = new HashMap<>();
+        res.put("success", true);
+        res.put("status", updated.getStatus());
+        res.put("message", updated.getStatus() == 1 ? "Đã kích hoạt tài khoản thành công!" : "Đã khóa tài khoản thành công!");
+        res.put("user", updated);
+        return ResponseEntity.ok(res);
+    }
+
+    /**
+     * Khóa / Mở khóa người dùng nhanh (1-click toggle lock)
+     * URL: PUT /api/admin/users/{id}/toggle-lock
+     */
+    @PutMapping("/users/{id}/toggle-lock")
+    public ResponseEntity<Map<String, Object>> toggleLockUser(@PathVariable Long id) {
+        User updated = userService.toggleLockUser(id);
+        Map<String, Object> res = new HashMap<>();
+        res.put("success", true);
+        res.put("status", updated.getStatus());
+        res.put("message", updated.getStatus() == 1 ? "Đã mở khóa tài khoản thành công!" : "Đã khóa tài khoản thành công!");
+        res.put("user", updated);
+        return ResponseEntity.ok(res);
     }
 
     /**
@@ -191,9 +248,12 @@ public class AdminApiController {
      * URL: DELETE /api/admin/users/{id}
      */
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        Map<String, Object> res = new HashMap<>();
+        res.put("success", true);
+        res.put("message", "Đã xóa người dùng thành công!");
+        return ResponseEntity.ok(res);
     }
 
     /**
