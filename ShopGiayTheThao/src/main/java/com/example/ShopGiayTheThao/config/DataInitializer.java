@@ -113,10 +113,21 @@ public class DataInitializer implements CommandLineRunner {
                 new BigDecimal("2779000"), null, "https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=700&q=80",
                 catLife, sb, 1));
 
-        // 5. Default User
+        // 5. Default Users
         User user = userRepository.findByEmail("customer@nike.vn").orElseGet(() ->
                 userRepository.save(new User("Nguyễn Văn A", "customer@nike.vn", "123456", "0901234567", "Hà Nội", "CUSTOMER", 1))
         );
+
+        if (userRepository.count() <= 1) {
+            userRepository.save(new User("Alex Nguyễn", "alex.nike@example.com", "123456", "0987654321", "TP. Hồ Chí Minh", "ADMIN", 1));
+            userRepository.save(new User("Trần Minh Hoàng", "hoang.tran@gmail.com", "123456", "0912345678", "Hà Nội", "CUSTOMER", 1));
+            userRepository.save(new User("Lê Thuỳ Linh", "linh.le@outlook.com", "123456", "0903888999", "Đà Nẵng", "CUSTOMER", 1));
+            userRepository.save(new User("Phạm Quốc Bảo", "bao.pham@gmail.com", "123456", "0977123456", "Hải Phòng", "CUSTOMER", 0));
+            userRepository.save(new User("Hoàng Thị Mai", "mai.hoang@gmail.com", "123456", "0934567890", "Cần Thơ", "CUSTOMER", 1));
+            userRepository.save(new User("Vũ Đức Thắng", "thang.vu@nike.vn", "123456", "0945678901", "Hà Nội", "ADMIN", 1));
+            userRepository.save(new User("Đặng Quỳnh Nga", "nga.dang@gmail.com", "123456", "0923456789", "Nha Trang", "CUSTOMER", 0));
+            userRepository.save(new User("Bùi Quang Huy", "huy.bui@gmail.com", "123456", "0967890123", "TP. Hồ Chí Minh", "CUSTOMER", 1));
+        }
 
         // 6. Blogs
         blogRepository.save(new Blog("Kỷ Nguyên Mới Của Bộ Đệm Dynamic Air: Đột Phá Tại Đỉnh Cao",

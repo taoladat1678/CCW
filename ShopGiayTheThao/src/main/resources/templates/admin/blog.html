@@ -6,8 +6,126 @@
   <title>Quản Lý Bài Viết & Blog | T1SHOESPORT Admin Portal</title>
   <link rel="icon" type="image/png" href="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/T1_esports_logo.svg/3840px-T1_esports_logo.svg.png">
   <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
+  <style>
+    /* Custom enhancements for Blog management */
+    .badge-status.active {
+      background-color: #e6f4ea;
+      color: var(--color-success);
+    }
+    .badge-status.inactive {
+      background-color: #f1f3f4;
+      color: var(--color-charcoal);
+    }
+    .badge-category {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--rounded-full);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background-color: var(--color-soft-cloud);
+      color: var(--color-charcoal);
+      border: 1px solid var(--color-light-gray);
+    }
+    .blog-thumb-box {
+      width: 76px;
+      height: 48px;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: var(--color-soft-cloud);
+      border: 1px solid var(--color-light-gray);
+      flex-shrink: 0;
+    }
+    .blog-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+    .blog-thumb-box:hover img {
+      transform: scale(1.06);
+    }
+    .btn-action-icon:hover {
+      transform: translateY(-1px);
+    }
+    .table-loading-overlay {
+      padding: 48px;
+      text-align: center;
+      color: var(--color-mute);
+      font-size: 14px;
+    }
+    .empty-state-row {
+      padding: 50px 16px;
+      text-align: center;
+      color: var(--color-mute);
+    }
+    .page-chip.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    /* Toast styles */
+    #toast-container {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .admin-toast {
+      pointer-events: auto;
+      min-width: 300px;
+      max-width: 420px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateX(120%);
+      opacity: 0;
+      background: var(--color-ink);
+      color: #ffffff;
+    }
+    .admin-toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .admin-toast.toast-success {
+      border-left: 5px solid #1eaa52;
+    }
+    .admin-toast.toast-error {
+      background: #780700;
+      border-left: 5px solid #d30005;
+    }
+    .admin-toast.toast-info {
+      border-left: 5px solid #1151ff;
+    }
+    .modal-article-preview {
+      max-height: 400px;
+      overflow-y: auto;
+      line-height: 1.7;
+      color: var(--color-charcoal);
+      font-size: 14px;
+      white-space: pre-wrap;
+      padding: 12px 16px;
+      background: var(--color-soft-cloud);
+      border-radius: var(--rounded-md);
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
 
   <!-- Admin Sidebar -->
   <aside class="admin-sidebar">
@@ -72,7 +190,7 @@
     <header class="admin-topbar">
       <div class="topbar-search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" placeholder="Tìm kiếm bài viết...">
+        <input type="text" id="topbar-search-input" placeholder="Tìm kiếm nhanh bài viết...">
       </div>
       <div class="topbar-actions">
         <div class="admin-profile-pill">
@@ -94,164 +212,63 @@
       </div>
 
       <div class="admin-card-container">
-        <!-- Toolbar -->
+        <!-- Toolbar with Search, Category & Status Filter -->
         <div class="table-toolbar">
-          <div class="table-toolbar-left">
-            <input type="text" class="table-search-input" placeholder="Tìm theo tiêu đề bài viết...">
-            <select class="table-select">
+          <div class="table-toolbar-left" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div style="position:relative;">
+              <input type="text" id="blog-search-input" class="table-search-input" placeholder="Tìm theo tiêu đề, tác giả..." style="padding-right:32px;">
+              <span id="search-clear-btn" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--color-mute); display:none; font-weight:bold;">&times;</span>
+            </div>
+
+            <!-- Lọc theo chuyên mục (Category Filter) -->
+            <select id="blog-category-filter" class="table-select">
               <option value="">Tất cả chuyên mục</option>
-              <option value="tech">Công nghệ & Đổi mới</option>
-              <option value="athletes">Vận động viên</option>
-              <option value="style">Phong cách Streetwear</option>
-              <option value="guide">Cẩm nang chọn giày</option>
+              <option value="Công Nghệ & Đổi Mới">Công nghệ & Đổi mới</option>
+              <option value="Vận Động Viên">Vận động viên</option>
+              <option value="Phong Cách Streetwear">Phong cách Streetwear</option>
+              <option value="Cẩm Nang Chọn Giày">Cẩm nang chọn giày</option>
+              <option value="Dã Ngoại & ACG">Dã ngoại & ACG</option>
+              <option value="Di Sản & Retro">Di sản & Retro</option>
             </select>
-            <select class="table-select">
+
+            <!-- Lọc theo trạng thái (Status Filter) -->
+            <select id="blog-status-filter" class="table-select">
               <option value="">Tất cả trạng thái</option>
-              <option value="published">Đã xuất bản</option>
-              <option value="draft">Bản nháp</option>
+              <option value="1">Đã xuất bản</option>
+              <option value="0">Bản nháp</option>
             </select>
+
+            <!-- Đặt lại bộ lọc -->
+            <button type="button" id="btn-reset-filters" class="btn-secondary" style="height:40px; padding:0 14px; border-radius:var(--rounded-md); font-size:13px; font-weight:500;">
+              Đặt lại
+            </button>
           </div>
+
           <div>
-            <span class="caption-sm" style="color:var(--color-mute);">Tổng số 56 bài viết</span>
+            <span id="blog-total-count" class="caption-sm" style="color:var(--color-mute); font-weight:600;">Đang tải dữ liệu...</span>
           </div>
         </div>
 
-        <!-- Table -->
+        <!-- Table with Dynamic Fetch Body -->
         <div class="table-responsive">
           <table class="admin-table">
             <thead>
               <tr>
-                <th>Ảnh bài viết</th>
-                <th>Tiêu đề bài viết</th>
+                <th style="width: 90px;">Ảnh bài viết</th>
+                <th style="min-width: 250px;">Tiêu đề bài viết</th>
                 <th>Chuyên mục</th>
                 <th>Tác giả</th>
                 <th>Ngày xuất bản</th>
-                <th>Lượt đọc</th>
                 <th>Trạng thái</th>
-                <th style="text-align:right;">Thao tác</th>
+                <th style="text-align:right; min-width: 170px;">Thao tác</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Post 1 -->
+            <tbody id="blog-table-body">
               <tr>
-                <td>
-                  <div class="item-thumb-box" style="width:70px; height:45px;">
-                    <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=150&q=80" alt="Tech">
-                  </div>
-                </td>
-                <td>
-                  <div class="item-name-cell">Kỷ Nguyên Mới Của Bộ Đệm Dynamic Air: Đột Phá Tại Đỉnh Cao</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">/air-max-dn-innovation-lab</span>
-                </td>
-                <td>Công Nghệ & Đổi Mới</td>
-                <td>Nike Newsroom</td>
-                <td>18/10/2026</td>
-                <td><strong>4,520</strong></td>
-                <td><span class="badge-status active">Đã xuất bản</span></td>
-                <td style="text-align:right;">
-                  <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/blog.html" target="_blank" class="btn-action-icon" title="Xem trên web">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </a>
-                    <button class="btn-action-icon" title="Sửa bài">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa bài">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Post 2 -->
-              <tr>
-                <td>
-                  <div class="item-thumb-box" style="width:70px; height:45px;">
-                    <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=150&q=80" alt="Marathon">
-                  </div>
-                </td>
-                <td>
-                  <div class="item-name-cell">Eliud Kipchoge Và Hành Trình Bứt Phá Giới Hạn Marathon</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">/eliud-kipchoge-marathon-legend</span>
-                </td>
-                <td>Vận Động Viên</td>
-                <td>Editorial Team</td>
-                <td>15/10/2026</td>
-                <td><strong>8,910</strong></td>
-                <td><span class="badge-status active">Đã xuất bản</span></td>
-                <td style="text-align:right;">
-                  <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/blog.html" target="_blank" class="btn-action-icon" title="Xem">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </a>
-                    <button class="btn-action-icon" title="Sửa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Post 3 -->
-              <tr>
-                <td>
-                  <div class="item-thumb-box" style="width:70px; height:45px;">
-                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=150&q=80" alt="Style">
-                  </div>
-                </td>
-                <td>
-                  <div class="item-name-cell">Hướng Dẫn Phối Đồ Streetwear Cùng Dòng Giày Dunk Cổ Thấp</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">/how-to-style-dunk-low</span>
-                </td>
-                <td>Phong Cách</td>
-                <td>Minh Thư (Stylist)</td>
-                <td>10/10/2026</td>
-                <td><strong>6,340</strong></td>
-                <td><span class="badge-status active">Đã xuất bản</span></td>
-                <td style="text-align:right;">
-                  <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/blog.html" target="_blank" class="btn-action-icon" title="Xem">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </a>
-                    <button class="btn-action-icon" title="Sửa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Post 4 -->
-              <tr>
-                <td>
-                  <div class="item-thumb-box" style="width:70px; height:45px;">
-                    <img src="https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=150&q=80" alt="Guide">
-                  </div>
-                </td>
-                <td>
-                  <div class="item-name-cell">Bảo Vệ Đôi Giày Trắng Air Force 1 Của Bạn Luôn Sáng Bóng</div>
-                  <span class="caption-sm" style="color:var(--color-mute);">/air-force-1-care-maintenance</span>
-                </td>
-                <td>Cẩm Nang</td>
-                <td>Bảo Quân</td>
-                <td>28/09/2026</td>
-                <td><strong>3,120</strong></td>
-                <td><span class="badge-status inactive">Bản nháp</span></td>
-                <td style="text-align:right;">
-                  <div class="table-actions-cell" style="justify-content:flex-end;">
-                    <a href="../client/blog.html" target="_blank" class="btn-action-icon" title="Xem">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </a>
-                    <button class="btn-action-icon" title="Sửa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action-icon danger" title="Xóa">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
+                <td colspan="7" class="table-loading-overlay">
+                  <div style="display:inline-flex; align-items:center; gap:8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+                    <span>Đang tải danh sách bài viết...</span>
                   </div>
                 </td>
               </tr>
@@ -259,13 +276,11 @@
           </table>
         </div>
 
-        <!-- Pagination -->
+        <!-- Pagination Controls -->
         <div class="table-footer-pagination">
-          <span>Trang 1 / 14</span>
-          <div class="pagination-controls">
-            <button class="page-chip active">1</button>
-            <button class="page-chip">2</button>
-            <button class="page-chip">Sau →</button>
+          <span id="pagination-info">Trang 0 / 0</span>
+          <div class="pagination-controls" id="pagination-buttons">
+            <!-- Dynamic page chips -->
           </div>
         </div>
       </div>
@@ -283,48 +298,46 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Tiêu đề bài viết <span class="req">*</span></label>
-            <input type="text" class="form-control" name="title" placeholder="Nhập tiêu đề bài viết..." required>
+            <input type="text" class="form-control" id="add-blog-title" name="title" placeholder="Nhập tiêu đề bài viết..." required>
           </div>
           <div class="form-row-2">
             <div class="form-group">
               <label class="form-label">Chuyên mục <span class="req">*</span></label>
-              <select class="form-control" name="category" required>
+              <select class="form-control" id="add-blog-category" name="category" required>
                 <option value="Công Nghệ & Đổi Mới">Công Nghệ & Đổi Mới</option>
                 <option value="Vận Động Viên">Vận Động Viên</option>
                 <option value="Phong Cách Streetwear">Phong Cách Streetwear</option>
-                <option value="Cẩm Nang">Cẩm Nang Chọn Giày</option>
+                <option value="Cẩm Nang Chọn Giày">Cẩm Nang Chọn Giày</option>
+                <option value="Dã Ngoại & ACG">Dã Ngoại & ACG</option>
+                <option value="Di Sản & Retro">Di Sản & Retro</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Tác giả <span class="req">*</span></label>
-              <input type="text" class="form-control" name="author" placeholder="Ví dụ: Nike Newsroom..." required>
+              <label class="form-label">Tác giả bài viết</label>
+              <input type="text" class="form-control" id="add-blog-author" name="author" placeholder="Ví dụ: Nike Newsroom, Admin...">
             </div>
           </div>
           <div class="form-row-2">
             <div class="form-group">
               <label class="form-label">Link ảnh bài viết (URL)</label>
-              <input type="url" class="form-control" name="thumbnail" placeholder="https://images.unsplash.com/...">
+              <input type="url" class="form-control" id="add-blog-thumb" name="thumbnail" placeholder="https://images.unsplash.com/photo-...">
             </div>
             <div class="form-group">
-              <label class="form-label">Trạng thái xuất bản</label>
-              <select class="form-control" name="status">
-                <option value="active" selected>Đã xuất bản</option>
-                <option value="inactive">Bản nháp</option>
+              <label class="form-label">Trạng thái xuất bản <span class="req">*</span></label>
+              <select class="form-control" id="add-blog-status" name="status">
+                <option value="1" selected>🟢 Đã xuất bản (Công khai)</option>
+                <option value="0">⚪ Bản nháp (Lưu trữ nội bộ)</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Tóm tắt ngắn (Excerpt)</label>
-            <textarea class="form-control" name="summary" rows="2" placeholder="Tóm tắt ngắn gọn nội dung bài viết hiển thị ở danh sách tin tức..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nội dung chi tiết bài viết</label>
-            <textarea class="form-control" name="content" rows="5" placeholder="Nhập toàn bộ nội dung bài viết..."></textarea>
+            <label class="form-label">Nội dung chi tiết bài viết <span class="req">*</span></label>
+            <textarea class="form-control" id="add-blog-content" name="content" rows="7" placeholder="Nhập toàn bộ nội dung chi tiết bài viết..." required></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn-secondary" data-close="modal-add-blog">Hủy</button>
-          <button type="submit" class="btn-primary">Xuất Bản Bài Viết</button>
+          <button type="submit" class="btn-primary" id="btn-submit-add">Xuất Bản Bài Viết</button>
         </div>
       </form>
     </div>
@@ -338,6 +351,7 @@
         <button type="button" class="modal-close-btn" data-close="modal-edit-blog">&times;</button>
       </div>
       <form id="form-edit-blog">
+        <input type="hidden" id="edit-blog-id" name="id">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Tiêu đề bài viết <span class="req">*</span></label>
@@ -350,12 +364,14 @@
                 <option value="Công Nghệ & Đổi Mới">Công Nghệ & Đổi Mới</option>
                 <option value="Vận Động Viên">Vận Động Viên</option>
                 <option value="Phong Cách Streetwear">Phong Cách Streetwear</option>
-                <option value="Cẩm Nang">Cẩm Nang</option>
+                <option value="Cẩm Nang Chọn Giày">Cẩm Nang Chọn Giày</option>
+                <option value="Dã Ngoại & ACG">Dã Ngoại & ACG</option>
+                <option value="Di Sản & Retro">Di Sản & Retro</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Tác giả <span class="req">*</span></label>
-              <input type="text" class="form-control" id="edit-blog-author" name="author" required>
+              <label class="form-label">Tác giả</label>
+              <input type="text" class="form-control" id="edit-blog-author" name="author" placeholder="Ví dụ: Nike Newsroom...">
             </div>
           </div>
           <div class="form-row-2">
@@ -364,84 +380,660 @@
               <input type="url" class="form-control" id="edit-blog-thumb" name="thumbnail">
             </div>
             <div class="form-group">
-              <label class="form-label">Trạng thái xuất bản</label>
+              <label class="form-label">Trạng thái xuất bản <span class="req">*</span></label>
               <select class="form-control" id="edit-blog-status" name="status">
-                <option value="Đã xuất bản">Đã xuất bản</option>
-                <option value="Bản nháp">Bản nháp</option>
+                <option value="1">🟢 Đã xuất bản (Công khai)</option>
+                <option value="0">⚪ Bản nháp (Lưu trữ nội bộ)</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Tóm tắt ngắn (Excerpt)</label>
-            <textarea class="form-control" id="edit-blog-summary" name="summary" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nội dung chi tiết bài viết</label>
-            <textarea class="form-control" id="edit-blog-content" name="content" rows="5"></textarea>
+            <label class="form-label">Nội dung chi tiết bài viết <span class="req">*</span></label>
+            <textarea class="form-control" id="edit-blog-content" name="content" rows="7" required></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn-secondary" data-close="modal-edit-blog">Hủy</button>
-          <button type="submit" class="btn-primary">Cập Nhật Bài Viết</button>
+          <button type="submit" class="btn-primary" id="btn-submit-edit">Lưu Thay Đổi</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- ==================== MODAL XEM CHI TIẾT BÀI VIẾT ==================== -->
+  <div class="modal-overlay" id="modal-view-blog">
+    <div class="admin-modal modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Xem Trước Bài Viết</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-view-blog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; align-items:flex-start; gap:var(--space-lg); margin-bottom:var(--space-lg); flex-wrap:wrap;">
+          <div style="width:160px; height:105px; border-radius:8px; overflow:hidden; flex-shrink:0; background:var(--color-soft-cloud); border:1px solid var(--color-light-gray);">
+            <img id="view-blog-thumb" src="" alt="Thumbnail" style="width:100%; height:100%; object-fit:cover;">
+          </div>
+          <div style="flex:1; min-width:240px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <span id="view-blog-category" class="badge-category">Chuyên mục</span>
+              <span id="view-blog-status" class="badge-status active">Đã xuất bản</span>
+            </div>
+            <h2 id="view-blog-title" style="font-family:var(--font-display); font-size:20px; line-height:1.3; margin-bottom:8px; color:var(--color-ink);"></h2>
+            <div style="font-size:13px; color:var(--color-mute); display:flex; gap:16px; flex-wrap:wrap;">
+              <span>Tác giả: <strong id="view-blog-author" style="color:var(--color-charcoal);">Nike Newsroom</strong></span>
+              <span>Ngày đăng: <strong id="view-blog-created" style="color:var(--color-charcoal);">-</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nội dung bài viết</label>
+          <div id="view-blog-content" class="modal-article-preview"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" data-close="modal-view-blog">Đóng</button>
+        <button type="button" class="btn-primary" id="btn-switch-to-edit-blog">Chỉnh Sửa Bài Này</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL XÁC NHẬN THAO TÁC ==================== -->
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="admin-modal" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="confirm-modal-title">Xác nhận thao tác</h3>
+        <button type="button" class="modal-close-btn" data-close="modal-confirm">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: var(--space-xl);">
+        <p id="confirm-modal-message" style="font-size: 14px; line-height: 1.6; color: var(--color-charcoal);"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" data-close="modal-confirm">Hủy bỏ</button>
+        <button type="button" class="btn-primary" id="confirm-modal-btn">Xác Nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LOGIC FETCH, CRUD, LỌC TRẠNG THÁI, PHÂN TRANG ==================== -->
   <script>
-    // Mở modal Thêm
+    // App State
+    let currentPage = 0;
+    const pageSize = 5;
+    let currentKeyword = '';
+    let currentCategory = '';
+    let currentStatus = '';
+    let totalPages = 0;
+    let totalElements = 0;
+    let currentLoadedBlogs = [];
+    let pendingConfirmAction = null;
+
+    const DEFAULT_THUMB = 'https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=300&q=80';
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '—';
+      try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Toast Notification System
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `admin-toast toast-${type}`;
+
+      let iconHtml = '✓';
+      if (type === 'error') iconHtml = '✕';
+      if (type === 'info') iconHtml = 'ℹ';
+
+      toast.innerHTML = `
+        <span style="font-weight:bold; font-size:16px; flex-shrink:0;">${iconHtml}</span>
+        <span>${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Open/Close Modal Utilities
+    function openModal(modalId) {
+      const m = document.getElementById(modalId);
+      if (m) m.classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      const m = document.getElementById(modalId);
+      if (m) m.classList.remove('active');
+    }
+
+    // Modal Confirmation Dialog
+    function showConfirmModal(title, message, confirmBtnText, isDanger, onConfirm) {
+      document.getElementById('confirm-modal-title').innerText = title;
+      document.getElementById('confirm-modal-message').innerHTML = message;
+      const btn = document.getElementById('confirm-modal-btn');
+      btn.innerText = confirmBtnText || 'Xác Nhận';
+      if (isDanger) {
+        btn.style.backgroundColor = 'var(--color-sale)';
+      } else {
+        btn.style.backgroundColor = 'var(--color-ink)';
+      }
+      pendingConfirmAction = onConfirm;
+      openModal('modal-confirm');
+    }
+
+    document.getElementById('confirm-modal-btn').addEventListener('click', () => {
+      closeModal('modal-confirm');
+      if (typeof pendingConfirmAction === 'function') {
+        pendingConfirmAction();
+        pendingConfirmAction = null;
+      }
+    });
+
+    // ==================== FETCH BLOGS ====================
+    async function fetchBlogs(page = 0) {
+      currentPage = page;
+      const tbody = document.getElementById('blog-table-body');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="table-loading-overlay">
+            <div style="display:inline-flex; align-items:center; gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+              <span>Đang tải danh sách bài viết...</span>
+            </div>
+          </td>
+        </tr>
+      `;
+
+      try {
+        const params = new URLSearchParams({
+          page: currentPage,
+          size: pageSize
+        });
+        if (currentKeyword && currentKeyword.trim()) {
+          params.append('keyword', currentKeyword.trim());
+        }
+        if (currentCategory && currentCategory.trim()) {
+          params.append('category', currentCategory.trim());
+        }
+        if (currentStatus !== '' && currentStatus !== null) {
+          params.append('status', currentStatus);
+        }
+
+        const res = await fetch(`/api/admin/blogs?${params.toString()}`);
+        if (!res.ok) {
+          throw new Error('Không thể tải dữ liệu bài viết (HTTP ' + res.status + ')');
+        }
+
+        const data = await res.json();
+        const blogs = data.content || [];
+        currentLoadedBlogs = blogs;
+        totalPages = data.totalPages || 0;
+        totalElements = data.totalElements || 0;
+
+        renderBlogTable(blogs);
+        renderPagination(data);
+
+        // Update Total Label
+        const totalLabel = document.getElementById('blog-total-count');
+        if (totalElements === 0) {
+          totalLabel.innerText = '0 bài viết';
+        } else {
+          totalLabel.innerText = `Tổng số ${totalElements.toLocaleString()} bài viết`;
+        }
+      } catch (err) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty-state-row" style="color:var(--color-sale);">
+              <div style="font-weight:600; margin-bottom:6px;">Lỗi khi tải dữ liệu bài viết!</div>
+              <div style="font-size:13px; color:var(--color-mute); margin-bottom:12px;">${escapeHtml(err.message)}</div>
+              <button class="btn-secondary" onclick="fetchBlogs(0)">Thử lại</button>
+            </td>
+          </tr>
+        `;
+        showToast(err.message, 'error');
+      }
+    }
+
+    // Render Table Rows
+    function renderBlogTable(blogs) {
+      const tbody = document.getElementById('blog-table-body');
+      if (!blogs || blogs.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty-state-row">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:8px; opacity:0.6;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <div style="font-weight:600; font-size:15px; margin-bottom:4px;">Không tìm thấy bài viết phù hợp</div>
+              <div style="font-size:13px; color:var(--color-mute);">Hãy thử thay đổi từ khóa tìm kiếm hoặc bỏ chọn các bộ lọc.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      let html = '';
+      blogs.forEach(b => {
+        const idFormatted = `#BLG-${String(b.id).padStart(3, '0')}`;
+        const thumbUrl = b.thumbnail && b.thumbnail.trim() ? b.thumbnail.trim() : DEFAULT_THUMB;
+        const isPublished = (b.status === 1);
+        const categoryTag = b.categoryTag || 'Công Nghệ & Đổi Mới';
+
+        const statusBadgeHtml = isPublished
+          ? `<span class="badge-status active" style="cursor:pointer;" title="Bấm để đổi sang bản nháp" onclick="handleToggleStatus(${b.id}, '${escapeHtml(b.title)}', 1)">● Đã xuất bản</span>`
+          : `<span class="badge-status inactive" style="cursor:pointer;" title="Bấm để xuất bản bài viết" onclick="handleToggleStatus(${b.id}, '${escapeHtml(b.title)}', 0)">○ Bản nháp</span>`;
+
+        // 1-click Toggle Status Button
+        const toggleBtnHtml = isPublished
+          ? `<button class="btn-action-icon" style="color:var(--color-charcoal);" title="Chuyển về bản nháp" onclick="handleToggleStatus(${b.id}, '${escapeHtml(b.title)}', 1)">
+               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+             </button>`
+          : `<button class="btn-action-icon" style="color:var(--color-success);" title="Xuất bản ngay" onclick="handleToggleStatus(${b.id}, '${escapeHtml(b.title)}', 0)">
+               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+             </button>`;
+
+        html += `
+          <tr>
+            <td>
+              <div class="blog-thumb-box">
+                <img src="${escapeHtml(thumbUrl)}" alt="${escapeHtml(b.title)}" onerror="this.onerror=null; this.src='${DEFAULT_THUMB}'">
+              </div>
+            </td>
+            <td>
+              <div class="item-name-cell" style="cursor:pointer;" onclick="handleViewBlog(${b.id})" title="Xem chi tiết: ${escapeHtml(b.title)}">${escapeHtml(b.title)}</div>
+              <span class="caption-sm" style="color:var(--color-mute);">${idFormatted}</span>
+            </td>
+            <td><span class="badge-category">${escapeHtml(categoryTag)}</span></td>
+            <td>${escapeHtml(b.authorName || 'Nike Newsroom')}</td>
+            <td>${formatDate(b.createdAt)}</td>
+            <td>${statusBadgeHtml}</td>
+            <td style="text-align:right;">
+              <div class="table-actions-cell" style="justify-content:flex-end;">
+                <!-- Xem trước -->
+                <button class="btn-action-icon" title="Xem trước bài viết" onclick="handleViewBlog(${b.id})">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+                <!-- Sửa -->
+                <button class="btn-action-icon" title="Sửa bài viết" onclick="handleOpenEditBlog(${b.id})">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <!-- Đổi trạng thái 1-click -->
+                ${toggleBtnHtml}
+                <!-- Xóa -->
+                <button class="btn-action-icon danger" title="Xóa bài viết" onclick="handleDeleteBlog(${b.id}, '${escapeHtml(b.title)}')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    // Render Pagination Controls
+    function renderPagination(data) {
+      const infoSpan = document.getElementById('pagination-info');
+      const controlsDiv = document.getElementById('pagination-buttons');
+
+      const pageNumber = data.number || 0;
+      const pagesCount = data.totalPages || 0;
+      const count = data.totalElements || 0;
+
+      if (pagesCount <= 1) {
+        infoSpan.innerText = count > 0 ? `Hiển thị ${count} / ${count} bài viết • Trang 1 / 1` : 'Trang 0 / 0';
+        controlsDiv.innerHTML = '';
+        return;
+      }
+
+      const start = pageNumber * pageSize + 1;
+      const end = Math.min((pageNumber + 1) * pageSize, count);
+      infoSpan.innerText = `Hiển thị ${start} - ${end} / ${count} bài viết • Trang ${pageNumber + 1} / ${pagesCount}`;
+
+      let buttonsHtml = '';
+
+      // Nút Trước
+      const prevDisabled = pageNumber === 0 ? 'disabled' : '';
+      buttonsHtml += `<button class="page-chip ${prevDisabled}" onclick="fetchBlogs(${pageNumber - 1})" ${prevDisabled ? 'disabled' : ''}>← Trước</button>`;
+
+      // Render Page Numbers
+      for (let i = 0; i < pagesCount; i++) {
+        if (i === 0 || i === pagesCount - 1 || (i >= pageNumber - 1 && i <= pageNumber + 1)) {
+          const activeClass = i === pageNumber ? 'active' : '';
+          buttonsHtml += `<button class="page-chip ${activeClass}" onclick="fetchBlogs(${i})">${i + 1}</button>`;
+        } else if (i === pageNumber - 2 || i === pageNumber + 2) {
+          buttonsHtml += `<span style="padding:0 4px; display:inline-flex; align-items:center; color:var(--color-mute);">...</span>`;
+        }
+      }
+
+      // Nút Sau
+      const nextDisabled = pageNumber >= pagesCount - 1 ? 'disabled' : '';
+      buttonsHtml += `<button class="page-chip ${nextDisabled}" onclick="fetchBlogs(${pageNumber + 1})" ${nextDisabled ? 'disabled' : ''}>Sau →</button>`;
+
+      controlsDiv.innerHTML = buttonsHtml;
+    }
+
+    // ==================== XEM CHI TIẾT BÀI VIẾT (PREVIEW) ====================
+    function handleViewBlog(id) {
+      const b = currentLoadedBlogs.find(item => item.id === id);
+      if (!b) return;
+
+      document.getElementById('view-blog-title').innerText = b.title || '';
+      document.getElementById('view-blog-category').innerText = b.categoryTag || 'Công Nghệ & Đổi Mới';
+      document.getElementById('view-blog-author').innerText = b.authorName || 'Nike Newsroom';
+      document.getElementById('view-blog-created').innerText = formatDate(b.createdAt);
+      document.getElementById('view-blog-thumb').src = b.thumbnail && b.thumbnail.trim() ? b.thumbnail.trim() : DEFAULT_THUMB;
+      document.getElementById('view-blog-content').innerText = b.content || 'Nội dung bài viết chưa được cập nhật.';
+
+      const statusBadge = document.getElementById('view-blog-status');
+      if (b.status === 1) {
+        statusBadge.className = 'badge-status active';
+        statusBadge.innerText = 'Đã xuất bản';
+      } else {
+        statusBadge.className = 'badge-status inactive';
+        statusBadge.innerText = 'Bản nháp';
+      }
+
+      const switchBtn = document.getElementById('btn-switch-to-edit-blog');
+      switchBtn.onclick = () => {
+        closeModal('modal-view-blog');
+        handleOpenEditBlog(b.id);
+      };
+
+      openModal('modal-view-blog');
+    }
+
+    // ==================== THÊM BÀI VIẾT MỚI ====================
     const btnOpenAdd = document.getElementById('btn-open-add');
     if (btnOpenAdd) {
       btnOpenAdd.addEventListener('click', () => {
-        document.getElementById('modal-add-blog').classList.add('active');
+        document.getElementById('form-add-blog').reset();
+        document.getElementById('add-blog-status').value = '1';
+        openModal('modal-add-blog');
       });
     }
 
-    // Mở modal Sửa khi bấm Sửa bài
-    document.querySelectorAll('button[title*="Sửa"]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const row = this.closest('tr');
-        const cells = row.querySelectorAll('td');
-        const thumbSrc = row.querySelector('img')?.getAttribute('src') || '';
-        const title = row.querySelector('.item-name-cell')?.innerText.trim() || '';
-        const cate = cells[3]?.innerText.trim() || '';
-        const author = cells[4]?.innerText.trim() || '';
-        const statusText = cells[7]?.querySelector('.badge-status')?.innerText.trim() || '';
+    document.getElementById('form-add-blog').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('btn-submit-add');
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Đang lưu...';
 
-        document.getElementById('edit-blog-title').value = title;
-        document.getElementById('edit-blog-author').value = author;
-        document.getElementById('edit-blog-thumb').value = thumbSrc;
+      const payload = {
+        title: document.getElementById('add-blog-title').value.trim(),
+        categoryTag: document.getElementById('add-blog-category').value,
+        authorName: document.getElementById('add-blog-author').value.trim(),
+        thumbnail: document.getElementById('add-blog-thumb').value.trim(),
+        status: parseInt(document.getElementById('add-blog-status').value, 10),
+        content: document.getElementById('add-blog-content').value.trim()
+      };
 
-        const cateSelect = document.getElementById('edit-blog-category');
-        for (let i = 0; i < cateSelect.options.length; i++) {
-          if (cate.toLowerCase().includes(cateSelect.options[i].value.toLowerCase()) || cateSelect.options[i].value.toLowerCase().includes(cate.toLowerCase())) {
-            cateSelect.selectedIndex = i;
-            break;
-          }
+      try {
+        const res = await fetch('/api/admin/blogs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || 'Không thể tạo bài viết mới!');
         }
 
-        const statusSelect = document.getElementById('edit-blog-status');
-        for (let i = 0; i < statusSelect.options.length; i++) {
-          if (statusText.includes(statusSelect.options[i].value)) {
-            statusSelect.selectedIndex = i;
-            break;
-          }
-        }
-
-        document.getElementById('modal-edit-blog').classList.add('active');
-      });
+        closeModal('modal-add-blog');
+        document.getElementById('form-add-blog').reset();
+        showToast('Đã thêm bài viết mới thành công!', 'success');
+        fetchBlogs(0);
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Xuất Bản Bài Viết';
+      }
     });
 
-    // Đóng modal
+    // ==================== SỬA BÀI VIẾT ====================
+    function handleOpenEditBlog(id) {
+      const b = currentLoadedBlogs.find(item => item.id === id);
+      if (!b) return;
+
+      document.getElementById('edit-blog-id').value = b.id;
+      document.getElementById('edit-blog-title').value = b.title || '';
+      document.getElementById('edit-blog-author').value = b.authorName || '';
+      document.getElementById('edit-blog-thumb').value = b.thumbnail || '';
+      document.getElementById('edit-blog-content').value = b.content || '';
+
+      const cateSelect = document.getElementById('edit-blog-category');
+      const targetCat = (b.categoryTag || '').toLowerCase();
+      let matched = false;
+      for (let i = 0; i < cateSelect.options.length; i++) {
+        if (targetCat.includes(cateSelect.options[i].value.toLowerCase()) || cateSelect.options[i].value.toLowerCase().includes(targetCat)) {
+          cateSelect.selectedIndex = i;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched && cateSelect.options.length > 0) {
+        cateSelect.selectedIndex = 0;
+      }
+
+      document.getElementById('edit-blog-status').value = (b.status === 0) ? '0' : '1';
+
+      openModal('modal-edit-blog');
+    }
+
+    // Submit Sửa Bài Viết
+    document.getElementById('form-edit-blog').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-blog-id').value;
+      const submitBtn = document.getElementById('btn-submit-edit');
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Đang lưu...';
+
+      const payload = {
+        title: document.getElementById('edit-blog-title').value.trim(),
+        categoryTag: document.getElementById('edit-blog-category').value,
+        authorName: document.getElementById('edit-blog-author').value.trim(),
+        thumbnail: document.getElementById('edit-blog-thumb').value.trim(),
+        status: parseInt(document.getElementById('edit-blog-status').value, 10),
+        content: document.getElementById('edit-blog-content').value.trim()
+      };
+
+      try {
+        const res = await fetch(`/api/admin/blogs/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || 'Không thể cập nhật bài viết!');
+        }
+
+        closeModal('modal-edit-blog');
+        showToast('Cập nhật bài viết thành công!', 'success');
+        fetchBlogs(currentPage);
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Lưu Thay Đổi';
+      }
+    });
+
+    // ==================== ĐỔI TRẠNG THÁI (1-CLICK TOGGLE STATUS) ====================
+    function handleToggleStatus(id, title, currentStatus) {
+      const willDraft = (currentStatus === 1);
+      const actionTitle = willDraft ? 'Chuyển Về Bản Nháp' : 'Xuất Bản Bài Viết';
+      const actionText = willDraft ? 'Chuyển Bản Nháp' : 'Xuất Bản';
+      const message = willDraft
+        ? `Bạn có chắc chắn muốn chuyển bài viết <strong>"${escapeHtml(title)}"</strong> về trạng thái <strong>Bản nháp</strong>?<br><br>Bài viết sẽ tạm thời bị ẩn khỏi trang tin tức Client.`
+        : `Bạn có muốn <strong>Xuất bản</strong> bài viết <strong>"${escapeHtml(title)}"</strong>?<br><br>Bài viết sẽ hiển thị công khai trên trang tin tức Client ngay lập tức.`;
+
+      showConfirmModal(actionTitle, message, actionText, false, async () => {
+        try {
+          const res = await fetch(`/api/admin/blogs/${id}/toggle-status`, {
+            method: 'PUT'
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.message || 'Thao tác đổi trạng thái thất bại!');
+          }
+
+          const data = await res.json();
+          showToast(data.message || 'Cập nhật trạng thái bài viết thành công!', 'success');
+          fetchBlogs(currentPage);
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      });
+    }
+
+    // ==================== XÓA BÀI VIẾT ====================
+    function handleDeleteBlog(id, title) {
+      const idFormatted = `#BLG-${String(id).padStart(3, '0')}`;
+      const titleModal = 'Xóa Vĩnh Viễn Bài Viết';
+      const message = `Bạn có chắc chắn muốn <strong>XÓA VĨNH VIỄN</strong> bài viết <strong>"${escapeHtml(title)}"</strong> (${idFormatted})?<br><br><span style="color:var(--color-sale); font-weight:600;">Cảnh báo: Hành động này không thể hoàn tác!</span>`;
+
+      showConfirmModal(titleModal, message, 'Xóa Bài Viết', true, async () => {
+        try {
+          const res = await fetch(`/api/admin/blogs/${id}`, {
+            method: 'DELETE'
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.message || 'Không thể xóa bài viết này!');
+          }
+
+          const data = await res.json().catch(() => ({ message: 'Đã xóa bài viết thành công!' }));
+          showToast(data.message || 'Đã xóa bài viết thành công!', 'success');
+
+          // Nếu trang hiện tại không còn item nào sau khi xóa thì lùi về trang trước
+          if (currentLoadedBlogs.length === 1 && currentPage > 0) {
+            currentPage--;
+          }
+          fetchBlogs(currentPage);
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      });
+    }
+
+    // ==================== TÌM KIẾM & BỘ LỌC CHUYÊN MỤC / TRẠNG THÁI ====================
+    const searchInput = document.getElementById('blog-search-input');
+    const searchClearBtn = document.getElementById('search-clear-btn');
+    const topbarSearchInput = document.getElementById('topbar-search-input');
+    const categoryFilter = document.getElementById('blog-category-filter');
+    const statusFilter = document.getElementById('blog-status-filter');
+    const resetFilterBtn = document.getElementById('btn-reset-filters');
+
+    let searchDebounceTimer = null;
+    function handleSearchInput(value) {
+      currentKeyword = value;
+      if (searchClearBtn) {
+        searchClearBtn.style.display = currentKeyword ? 'inline' : 'none';
+      }
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        fetchBlogs(0);
+      }, 350);
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        handleSearchInput(e.target.value);
+        if (topbarSearchInput) topbarSearchInput.value = e.target.value;
+      });
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          clearTimeout(searchDebounceTimer);
+          fetchBlogs(0);
+        }
+      });
+    }
+
+    if (searchClearBtn) {
+      searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        if (topbarSearchInput) topbarSearchInput.value = '';
+        handleSearchInput('');
+      });
+    }
+
+    if (topbarSearchInput) {
+      topbarSearchInput.addEventListener('input', (e) => {
+        if (searchInput) searchInput.value = e.target.value;
+        handleSearchInput(e.target.value);
+      });
+    }
+
+    if (categoryFilter) {
+      categoryFilter.addEventListener('change', (e) => {
+        currentCategory = e.target.value;
+        fetchBlogs(0);
+      });
+    }
+
+    if (statusFilter) {
+      statusFilter.addEventListener('change', (e) => {
+        currentStatus = e.target.value;
+        fetchBlogs(0);
+      });
+    }
+
+    if (resetFilterBtn) {
+      resetFilterBtn.addEventListener('click', () => {
+        currentKeyword = '';
+        currentCategory = '';
+        currentStatus = '';
+        if (searchInput) searchInput.value = '';
+        if (searchClearBtn) searchClearBtn.style.display = 'none';
+        if (topbarSearchInput) topbarSearchInput.value = '';
+        if (categoryFilter) categoryFilter.value = '';
+        if (statusFilter) statusFilter.value = '';
+        fetchBlogs(0);
+      });
+    }
+
+    // Modal Close Buttons Event Handlers
     document.querySelectorAll('[data-close]').forEach(btn => {
       btn.addEventListener('click', function() {
         const targetId = this.getAttribute('data-close');
-        const modal = document.getElementById(targetId);
-        if (modal) modal.classList.remove('active');
+        closeModal(targetId);
       });
     });
 
-    // Đóng khi click ngoài backdrop
     document.querySelectorAll('.modal-overlay').forEach(modal => {
       modal.addEventListener('click', function(e) {
         if (e.target === this) {
@@ -450,11 +1042,15 @@
       });
     });
 
-    // Đóng khi nhấn phím Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
       }
+    });
+
+    // ==================== KHỞI CHẠY TẢI DỮ LIỆU BAN ĐẦU ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchBlogs(0);
     });
   </script>
 </body>
