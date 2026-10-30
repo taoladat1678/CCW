@@ -49,4 +49,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+  // Universal header search: press Enter to search products on non-product pages
+  const searchInputs = document.querySelectorAll('.search-pill-box input');
+  searchInputs.forEach(input => {
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        // If on product page, product.html handles its own filtering
+        if (document.getElementById('productGrid')) {
+          return;
+        }
+        e.preventDefault();
+        const val = input.value.trim();
+        window.location.href = '/products' + (val ? ('?keyword=' + encodeURIComponent(val)) : '');
+      }
+    });
+  });
 });

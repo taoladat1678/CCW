@@ -12,6 +12,7 @@
 <body>
 
   <!-- Top Utility Bar -->
+    <!-- Top Utility Bar (Converse, Jordan silhouettes + Store/Help links) -->
   <header class="utility-bar">
     <div class="container utility-content">
       <div class="jordan-swoosh">
@@ -33,6 +34,7 @@
   </header>
 
   <!-- Primary Navigation -->
+    <!-- Primary Navigation -->
   <nav class="primary-nav">
     <div class="container nav-container">
       <div class="nav-logo">
@@ -44,9 +46,9 @@
 
       <div class="nav-menu">
         <a th:href="@{/}" href="/" class="active">Mới & Nổi Bật</a>
-        <a th:href="@{/products}" href="/products">Sản Phẩm</a>
-        <a th:href="@{/brand}" href="/brand">Thương Hiệu</a>
-        <a th:href="@{/blog}" href="/blog">Tin Tức / Blog</a>
+        <a th:href="@{/products}" href="/products" >Sản Phẩm</a>
+        <a th:href="@{/brand}" href="/brand" >Thương Hiệu</a>
+        <a th:href="@{/blog}" href="/blog" >Bài Viết / Blog</a>
       </div>
 
       <div class="nav-actions">
@@ -56,7 +58,7 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" placeholder="Tìm kiếm sản phẩm">
+          <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." th:value="${keyword}">
         </div>
 
         <!-- Cart Bag -->
@@ -66,11 +68,7 @@
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-
-          <span class="cart-count-badge" th:text="${cartCount != null ? cartCount : 0}">0</span>
-
-          <span class="cart-count-badge" th:text="${cart != null ? cart.totalQuantity : 0}">0</span>
-
+          <span class="cart-count-badge" id="cartBadge" th:text="${cart != null ? cart.totalQuantity : (cartCount != null ? cartCount : 0)}">0</span>
         </a>
 
         <!-- User Account Dropdown -->
@@ -84,36 +82,36 @@
           </button>
           <div class="user-dropdown-menu">
             <th:block th:if="${currentUser != null}">
-              <div class="user-dropdown-header" th:text="'Xin chào, ' + ${currentUser.fullName}"></div>
-              <a th:href="@{/user}" class="user-dropdown-item">
+              <div class="user-dropdown-header" th:text="'Xin chào, ' + ${currentUser.fullName}">Xin chào</div>
+              <a th:href="@{/user}" href="/user" class="user-dropdown-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <span>Hồ sơ cá nhân</span>
               </a>
-              <a th:href="@{/cart}" class="user-dropdown-item">
+              <a th:href="@{/cart}" href="/cart" class="user-dropdown-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
                 <span>Giỏ hàng của tôi</span>
               </a>
               <div class="user-dropdown-divider"></div>
-              <a th:href="@{/logout}" class="user-dropdown-item" style="color:#e50914;">
+              <a th:href="@{/logout}" href="/logout" class="user-dropdown-item" style="color:#e50914;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                 <span>Đăng xuất</span>
               </a>
             </th:block>
             <th:block th:unless="${currentUser != null}">
               <div class="user-dropdown-header">Tài Khoản</div>
-              <a th:href="@{/login}" class="user-dropdown-item">
+              <a th:href="@{/login}" href="/login" class="user-dropdown-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
                 <span>Đăng nhập</span>
               </a>
-              <a th:href="@{/register}" class="user-dropdown-item">
+              <a th:href="@{/register}" href="/register" class="user-dropdown-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                 <span>Đăng ký</span>
               </a>
             </th:block>
-            <div class="user-dropdown-divider" th:if="${currentUser != null and currentUser.role == 'ADMIN'}"></div>
-            <a th:if="${currentUser != null and currentUser.role == 'ADMIN'}" th:href="@{/admin/dashboard}" class="user-dropdown-item user-dropdown-admin">
+            <div class="user-dropdown-divider"></div>
+            <a th:href="@{/admin/dashboard}" href="/admin/dashboard" class="user-dropdown-item user-dropdown-admin">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-              <span>Tới trang quản trị</span>
+              <span>Trang quản trị</span>
             </a>
           </div>
         </div>
