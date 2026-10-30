@@ -59,9 +59,16 @@ public class BlogServiceImpl implements BlogService {
         if (category == null || category.trim().isEmpty() || "ALL".equalsIgnoreCase(category)) {
             return blogRepository.findByStatus(1, pageable).map(this::toDTO);
         }
+        String catLower = category.trim().toLowerCase();
         List<BlogDTO> all = blogRepository.findByStatus(1, org.springframework.data.domain.Pageable.unpaged()).getContent().stream()
                 .map(this::toDTO)
-                .filter(b -> b.getCategoryTag() != null && b.getCategoryTag().equalsIgnoreCase(category.trim()))
+                .filter(b -> {
+                    if (b.getCategoryTag() == null) return false;
+                    String tagLower = b.getCategoryTag().toLowerCase();
+                    return tagLower.equalsIgnoreCase(catLower)
+                            || tagLower.contains(catLower)
+                            || catLower.contains(tagLower);
+                })
                 .collect(Collectors.toList());
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), all.size());
@@ -116,35 +123,50 @@ public class BlogServiceImpl implements BlogService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tiêu đề bài viết không được để trống!");
         }
 
+        String inputAuthorName = (request.getAuthorName() != null && !request.getAuthorName().trim().isEmpty())
+                ? request.getAuthorName().trim()
+                : null;
+
         User author = null;
         if (request.getAuthorId() != null) {
             author = userRepository.findById(request.getAuthorId()).orElse(null);
         }
-        if (author == null && request.getAuthorName() != null && !request.getAuthorName().trim().isEmpty()) {
-            String authorName = request.getAuthorName().trim();
+        if (author == null && inputAuthorName != null) {
             author = userRepository.findAll().stream()
-                    .filter(u -> authorName.equalsIgnoreCase(u.getFullName()) || authorName.equalsIgnoreCase(u.getEmail()))
+                    .filter(u -> inputAuthorName.equalsIgnoreCase(u.getFullName()) || inputAuthorName.equalsIgnoreCase(u.getEmail()))
                     .findFirst().orElse(null);
         }
         if (author == null) {
-            author = userRepository.findFirstByOrderByIdAsc().orElse(null);
+            // Find an ADMIN user first, or first user in DB to satisfy foreign key
+            author = userRepository.findAll().stream()
+                    .filter(u -> "ADMIN".equalsIgnoreCase(u.getRole()))
+                    .findFirst()
+                    .orElseGet(() -> userRepository.findFirstByOrderByIdAsc().orElse(null));
         }
 
         Blog blog = new Blog();
         blog.setTitle(request.getTitle().trim());
+        blog.setAuthor(author);
 
-        String rawContent = request.getContent() != null ? request.getContent().trim() : "";
+        String finalAuthorName = (inputAuthorName != null)
+                ? inputAuthorName
+                : ((author != null && author.getFullName() != null) ? author.getFullName() : "Nike Newsroom");
+        blog.setAuthorName(finalAuthorName);
+
+        String rawContent = cleanDisplayContent(request.getContent() != null ? request.getContent().trim() : "");
+        StringBuilder sb = new StringBuilder();
         if (request.getCategoryTag() != null && !request.getCategoryTag().trim().isEmpty()) {
-            if (!rawContent.startsWith("[Chuyên mục: ")) {
-                rawContent = "[Chuyên mục: " + request.getCategoryTag().trim() + "]\n" + rawContent;
-            }
+            sb.append("[Chuyên mục: ").append(request.getCategoryTag().trim()).append("]\n");
         }
-        blog.setContent(rawContent);
+        if (inputAuthorName != null && !inputAuthorName.isEmpty()) {
+            sb.append("[Tác giả: ").append(inputAuthorName).append("]\n");
+        }
+        sb.append(rawContent);
+        blog.setContent(sb.toString());
 
         blog.setThumbnail(request.getThumbnail() != null && !request.getThumbnail().trim().isEmpty()
                 ? request.getThumbnail().trim()
                 : "https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=700&q=80");
-        blog.setAuthor(author);
         blog.setStatus(request.getStatus() != null ? request.getStatus() : 1);
 
         Blog saved = blogRepository.save(blog);
@@ -161,45 +183,51 @@ public class BlogServiceImpl implements BlogService {
             blog.setTitle(request.getTitle().trim());
         }
 
+        String inputAuthorName = (request.getAuthorName() != null && !request.getAuthorName().trim().isEmpty())
+                ? request.getAuthorName().trim()
+                : null;
+
+        if (inputAuthorName != null) {
+            blog.setAuthorName(inputAuthorName);
+            User matchedAuthor = userRepository.findAll().stream()
+                    .filter(u -> inputAuthorName.equalsIgnoreCase(u.getFullName()) || inputAuthorName.equalsIgnoreCase(u.getEmail()))
+                    .findFirst().orElse(null);
+            if (matchedAuthor != null) {
+                blog.setAuthor(matchedAuthor);
+            }
+        } else if (request.getAuthorId() != null) {
+            User author = userRepository.findById(request.getAuthorId()).orElse(null);
+            if (author != null) {
+                blog.setAuthor(author);
+                blog.setAuthorName(author.getFullName());
+            }
+        }
+
         String targetCategory = (request.getCategoryTag() != null && !request.getCategoryTag().trim().isEmpty())
                 ? request.getCategoryTag().trim()
                 : null;
 
-        if (request.getContent() != null) {
-            String content = request.getContent().trim();
-            if (content.startsWith("[Chuyên mục: ")) {
-                int endIdx = content.indexOf("]");
-                if (endIdx > 0) {
-                    content = content.substring(endIdx + 1).trim();
-                }
-            }
-            if (targetCategory != null) {
-                content = "[Chuyên mục: " + targetCategory + "]\n" + content;
-            }
-            blog.setContent(content);
-        } else if (targetCategory != null) {
-            String content = blog.getContent() != null ? blog.getContent() : "";
-            if (content.startsWith("[Chuyên mục: ")) {
-                int endIdx = content.indexOf("]");
-                if (endIdx > 0) {
-                    content = content.substring(endIdx + 1).trim();
-                }
-            }
-            blog.setContent("[Chuyên mục: " + targetCategory + "]\n" + content);
+        String baseContent = cleanDisplayContent(request.getContent() != null ? request.getContent().trim() : blog.getContent());
+        String currentCat = (targetCategory != null) ? targetCategory : extractTag(blog.getTitle(), blog.getContent());
+        String currentAuthor = (blog.getAuthorName() != null && !blog.getAuthorName().trim().isEmpty())
+                ? blog.getAuthorName().trim()
+                : inputAuthorName;
+
+        StringBuilder sb = new StringBuilder();
+        if (currentCat != null && !currentCat.trim().isEmpty()) {
+            sb.append("[Chuyên mục: ").append(currentCat.trim()).append("]\n");
         }
+        if (currentAuthor != null && !currentAuthor.trim().isEmpty()) {
+            sb.append("[Tác giả: ").append(currentAuthor.trim()).append("]\n");
+        }
+        sb.append(baseContent);
+        blog.setContent(sb.toString());
 
         if (request.getThumbnail() != null && !request.getThumbnail().trim().isEmpty()) {
             blog.setThumbnail(request.getThumbnail().trim());
         }
         if (request.getStatus() != null) {
             blog.setStatus(request.getStatus());
-        }
-
-        if (request.getAuthorId() != null) {
-            User author = userRepository.findById(request.getAuthorId()).orElse(null);
-            if (author != null) {
-                blog.setAuthor(author);
-            }
         }
 
         Blog updated = blogRepository.save(blog);
@@ -226,15 +254,22 @@ public class BlogServiceImpl implements BlogService {
     }
 
     private BlogDTO toDTO(Blog b) {
-        String authorName = (b.getAuthor() != null && b.getAuthor().getFullName() != null) ? b.getAuthor().getFullName() : "Nike Newsroom";
-        String tag = extractTag(b.getTitle(), b.getContent());
-        String displayContent = b.getContent();
-        if (displayContent != null && displayContent.startsWith("[Chuyên mục: ")) {
-            int endIdx = displayContent.indexOf("]");
-            if (endIdx > 0) {
-                displayContent = displayContent.substring(endIdx + 1).trim();
-            }
+        String authorName = null;
+        if (b.getAuthorName() != null && !b.getAuthorName().trim().isEmpty()) {
+            authorName = b.getAuthorName().trim();
+        } else if (b.getContent() != null && b.getContent().contains("[Tác giả: ")) {
+            authorName = extractAuthorFromContent(b.getContent());
         }
+
+        if (authorName == null || authorName.trim().isEmpty()) {
+            authorName = (b.getAuthor() != null && b.getAuthor().getFullName() != null)
+                    ? b.getAuthor().getFullName()
+                    : "Nike Newsroom";
+        }
+
+        String tag = extractTag(b.getTitle(), b.getContent());
+        String displayContent = cleanDisplayContent(b.getContent());
+
         return new BlogDTO(
                 b.getId(),
                 b.getTitle(),
@@ -247,11 +282,48 @@ public class BlogServiceImpl implements BlogService {
         );
     }
 
+    private String extractAuthorFromContent(String content) {
+        if (content == null) return null;
+        int start = content.indexOf("[Tác giả: ");
+        if (start >= 0) {
+            int end = content.indexOf("]", start);
+            if (end > start + 10) {
+                return content.substring(start + 10, end).trim();
+            }
+        }
+        return null;
+    }
+
+    private String cleanDisplayContent(String rawContent) {
+        if (rawContent == null) return "";
+        String content = rawContent.trim();
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            if (content.startsWith("[Chuyên mục: ")) {
+                int end = content.indexOf("]");
+                if (end > 0) {
+                    content = content.substring(end + 1).trim();
+                    changed = true;
+                }
+            }
+            if (content.startsWith("[Tác giả: ")) {
+                int end = content.indexOf("]");
+                if (end > 0) {
+                    content = content.substring(end + 1).trim();
+                    changed = true;
+                }
+            }
+        }
+        return content;
+    }
+
     private String extractTag(String title, String content) {
-        if (content != null && content.startsWith("[Chuyên mục: ")) {
-            int end = content.indexOf("]");
-            if (end > 13) {
-                return content.substring(13, end).trim();
+        if (content != null && content.contains("[Chuyên mục: ")) {
+            int start = content.indexOf("[Chuyên mục: ");
+            int end = content.indexOf("]", start);
+            if (end > start + 13) {
+                return content.substring(start + 13, end).trim();
             }
         }
         String combined = ((title != null ? title : "") + " " + (content != null ? content : "")).toLowerCase();

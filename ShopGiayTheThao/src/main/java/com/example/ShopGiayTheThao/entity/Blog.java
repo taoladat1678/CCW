@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "blogs")
@@ -36,6 +37,9 @@ public class Blog {
     @JoinColumn(name = "author_id", nullable = false)
     @JsonBackReference
     private User author;
+
+    @Transient
+    private String authorName;
 
     @Column(nullable = false)
     private Integer status = 1;
@@ -103,6 +107,14 @@ public class Blog {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     public Integer getStatus() {
