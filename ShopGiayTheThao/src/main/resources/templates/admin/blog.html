@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản Lý Bài Viết & Blog | T1SHOESPORT Admin Portal</title>
-  <link rel="icon" type="image/png" href="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/T1_esports_logo.svg/3840px-T1_esports_logo.svg.png">
+  <link rel="icon" type="image/png" th:href="@{/images/logo.png}" href="/images/logo.png">
   <link rel="stylesheet" th:href="@{/admin/css/style.css}" href="/admin/css/style.css">
   <style>
     /* Custom enhancements for Blog management */
@@ -132,7 +132,7 @@
     <div class="sidebar-header">
       <div class="admin-logo">
         <a th:href="@{/admin/dashboard}" href="/admin/dashboard" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
-          <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/T1_esports_logo.svg/3840px-T1_esports_logo.svg.png" alt="T1SHOESPORT Logo">
+          <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="T1SHOESPORT Logo">
           <span>T1SHOESPORT ADMIN</span>
         </a>
       </div>
