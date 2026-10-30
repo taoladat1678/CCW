@@ -113,16 +113,26 @@
   <div class="container" style="margin-bottom:var(--space-xl);" id="articles">
     <div style="display:flex; gap:var(--space-sm); flex-wrap:wrap; align-items:center;">
       <a th:href="@{/blog(page=0, category='ALL')}" class="filter-chip" th:classappend="${selectedCategory == 'ALL' || selectedCategory == null} ? 'active' : ''">Tất Cả Bài Viết</a>
-      <a th:href="@{/blog(page=0, category='Công Nghệ')}" class="filter-chip" th:classappend="${selectedCategory == 'Công Nghệ'} ? 'active' : ''">Công Nghệ & Đổi Mới</a>
+      <a th:href="@{/blog(page=0, category='Công Nghệ & Đổi Mới')}" class="filter-chip" th:classappend="${selectedCategory == 'Công Nghệ & Đổi Mới' || selectedCategory == 'Công Nghệ'} ? 'active' : ''">Công Nghệ & Đổi Mới</a>
       <a th:href="@{/blog(page=0, category='Vận Động Viên')}" class="filter-chip" th:classappend="${selectedCategory == 'Vận Động Viên'} ? 'active' : ''">Vận Động Viên</a>
-      <a th:href="@{/blog(page=0, category='Phong Cách')}" class="filter-chip" th:classappend="${selectedCategory == 'Phong Cách'} ? 'active' : ''">Phong Cách Streetwear</a>
-      <a th:href="@{/blog(page=0, category='Cẩm Nang')}" class="filter-chip" th:classappend="${selectedCategory == 'Cẩm Nang'} ? 'active' : ''">Cẩm Nang Chọn Giày</a>
+      <a th:href="@{/blog(page=0, category='Phong Cách Streetwear')}" class="filter-chip" th:classappend="${selectedCategory == 'Phong Cách Streetwear' || selectedCategory == 'Phong Cách'} ? 'active' : ''">Phong Cách Streetwear</a>
+      <a th:href="@{/blog(page=0, category='Cẩm Nang Chọn Giày')}" class="filter-chip" th:classappend="${selectedCategory == 'Cẩm Nang Chọn Giày' || selectedCategory == 'Cẩm Nang'} ? 'active' : ''">Cẩm Nang Chọn Giày</a>
+      <a th:href="@{/blog(page=0, category='Dã Ngoại & ACG')}" class="filter-chip" th:classappend="${selectedCategory == 'Dã Ngoại & ACG' || selectedCategory == 'Dã Ngoại'} ? 'active' : ''">Dã Ngoại & ACG</a>
+      <a th:href="@{/blog(page=0, category='Di Sản & Retro')}" class="filter-chip" th:classappend="${selectedCategory == 'Di Sản & Retro' || selectedCategory == 'Di Sản'} ? 'active' : ''">Di Sản & Retro</a>
     </div>
   </div>
 
   <!-- Articles 3-Column Grid -->
   <main class="container" style="margin-bottom:var(--space-section);">
     <div class="blog-grid" id="blog-list-grid">
+      <!-- Empty state notice when no articles found -->
+      <div th:if="${blogs == null or blogs.isEmpty()}" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #fafafa; border-radius: 12px; border: 1px dashed var(--color-hairline);">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px; opacity:0.5; color:var(--color-granite);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <h3 style="font-size:18px; font-weight:700; color:var(--color-charcoal); margin-bottom:8px;">Chưa Có Bài Viết</h3>
+        <p style="font-size:14px; color:var(--color-granite); margin-bottom:16px;">Hiện chưa có bài viết nào thuộc chuyên mục này.</p>
+        <a th:href="@{/blog(category='ALL')}" class="btn-primary" style="display:inline-flex; align-items:center; height:38px; padding:0 20px; font-size:13px;">Xem Tất Cả Bài Viết</a>
+      </div>
+
       <article class="blog-card" th:each="b : ${blogs}" th:attr="data-blog-id=${b.id}">
         <div class="blog-card-image">
           <img th:src="${b.thumbnail}" th:alt="${b.title}" loading="lazy"
@@ -132,6 +142,8 @@
           <span class="blog-category-tag" th:text="${b.categoryTag != null ? b.categoryTag : 'Tin Tức'}">Công Nghệ</span>
           <span>•</span>
           <span th:text="${b.createdAt != null ? #temporals.format(b.createdAt, 'dd/MM/yyyy') : 'Mới nhất'}">18 Tháng 10, 2026</span>
+          <span th:if="${b.authorName != null and !b.authorName.isEmpty()}">•</span>
+          <span th:if="${b.authorName != null and !b.authorName.isEmpty()}" th:text="${b.authorName}" style="font-weight:600;">Nike Newsroom</span>
         </div>
         <h2 class="blog-title"><a th:href="@{/blog(id=${b.id})}" th:text="${b.title}">Tiêu đề bài viết</a></h2>
         <p class="blog-summary" th:text="${b.content}">Nội dung bài viết...</p>

@@ -1,6 +1,7 @@
 package com.example.ShopGiayTheThao.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.ShopGiayTheThao.dto.BlogDTO;
+import com.example.ShopGiayTheThao.dto.CartResponseDTO;
 import com.example.ShopGiayTheThao.dto.ProductResponse;
 import com.example.ShopGiayTheThao.dto.UserRequest;
 import com.example.ShopGiayTheThao.entity.User;
@@ -63,10 +65,30 @@ public class ClientController {
     @ModelAttribute("cartCount")
     public long getCartCount(HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser != null) {
-            return cartService.getCartCount(currentUser.getId());
+        if (currentUser != null && currentUser.getId() != null) {
+            try {
+                return cartService.getCartCount(currentUser.getId());
+            } catch (Exception e) {
+                return 0;
+            }
         }
         return 0;
+    }
+
+    /**
+     * Tự động truyền đối tượng giỏ hàng cart vào TẤT CẢ các template Thymeleaf
+     */
+    @ModelAttribute("cart")
+    public CartResponseDTO getCart(HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser != null && currentUser.getId() != null) {
+            try {
+                return cartService.getCart(currentUser.getId());
+            } catch (Exception e) {
+                // fallback on error
+            }
+        }
+        return new CartResponseDTO(new ArrayList<>(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, 0, 0);
     }
 
     @GetMapping({ "/", "/index", "/index.html" })
@@ -142,10 +164,16 @@ public class ClientController {
     }
 
     @GetMapping({ "/cart", "/cart.html" })
-    public String cart(HttpSession session) {
+    public String cart(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
             return "redirect:/login";
+        }
+        try {
+            CartResponseDTO cart = cartService.getCart(currentUser.getId());
+            model.addAttribute("cart", cart);
+        } catch (Exception e) {
+            model.addAttribute("cart", new CartResponseDTO(new ArrayList<>(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, 0, 0));
         }
         return "client/cart";
     }
