@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.ShopGiayTheThao.dto.BlogDTO;
+import com.example.ShopGiayTheThao.dto.BlogRequest;
 import com.example.ShopGiayTheThao.dto.BrandDTO;
 import com.example.ShopGiayTheThao.dto.BrandRequest;
 import com.example.ShopGiayTheThao.dto.CategoryRequest;
@@ -17,9 +19,11 @@ import com.example.ShopGiayTheThao.dto.CustomerStatsResponse;
 import com.example.ShopGiayTheThao.dto.ProductRequest;
 import com.example.ShopGiayTheThao.dto.ProductResponse;
 import com.example.ShopGiayTheThao.dto.SizeRequest;
+import com.example.ShopGiayTheThao.dto.UserRequest;
 import com.example.ShopGiayTheThao.entity.Brand;
 import com.example.ShopGiayTheThao.entity.Category;
 import com.example.ShopGiayTheThao.entity.Size;
+import com.example.ShopGiayTheThao.entity.User;
 import com.example.ShopGiayTheThao.service.BlogService;
 import com.example.ShopGiayTheThao.service.BrandService;
 import com.example.ShopGiayTheThao.service.CategoryService;
@@ -77,7 +81,8 @@ public class AdminController {
             @RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "id", required = false) Long id,
             Model model) {
-        Page<ProductResponse> productPage = productService.getProductsForAdmin(page, size, keyword, categoryId, brandId, status);
+        Page<ProductResponse> productPage = productService.getProductsForAdmin(page, size, keyword, categoryId, brandId,
+                status);
         model.addAttribute("productPage", productPage);
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", productPage.getNumber());
@@ -112,7 +117,8 @@ public class AdminController {
         return "admin/product";
     }
 
-    private String buildRedirectUrl(int page, int size, String success, String keyword, Long categoryId, Long brandId, String status) {
+    private String buildRedirectUrl(int page, int size, String success, String keyword, Long categoryId, Long brandId,
+            String status) {
         StringBuilder sb = new StringBuilder("/admin/products?page=").append(page).append("&size=").append(size);
         if (success != null && !success.isBlank()) {
             sb.append("&success=").append(success);
@@ -157,20 +163,26 @@ public class AdminController {
         String success = null;
         if (request.getId() != null) {
             try {
-                com.example.ShopGiayTheThao.dto.ProductResponse existing = productService.getProductById(request.getId());
+                com.example.ShopGiayTheThao.dto.ProductResponse existing = productService
+                        .getProductById(request.getId());
                 boolean hasChanged = false;
                 if (existing != null) {
                     String newName = request.getName() != null ? request.getName().trim() : "";
                     String oldName = existing.getName() != null ? existing.getName().trim() : "";
-                    if (!newName.equals(oldName)) hasChanged = true;
+                    if (!newName.equals(oldName))
+                        hasChanged = true;
 
                     String newThumb = request.getThumbnail() != null ? request.getThumbnail().trim() : "";
                     String oldThumb = existing.getThumbnail() != null ? existing.getThumbnail().trim() : "";
-                    if (!newThumb.isEmpty() && !newThumb.equals(oldThumb)) hasChanged = true;
+                    if (!newThumb.isEmpty() && !newThumb.equals(oldThumb))
+                        hasChanged = true;
 
-                    if (request.getPrice() != null && !request.getPrice().equals(existing.getPrice())) hasChanged = true;
-                    if (request.getSalePrice() != null && !request.getSalePrice().equals(existing.getSalePrice())) hasChanged = true;
-                    if (request.getStatus() != null && !request.getStatus().equals(existing.getStatus())) hasChanged = true;
+                    if (request.getPrice() != null && !request.getPrice().equals(existing.getPrice()))
+                        hasChanged = true;
+                    if (request.getSalePrice() != null && !request.getSalePrice().equals(existing.getSalePrice()))
+                        hasChanged = true;
+                    if (request.getStatus() != null && !request.getStatus().equals(existing.getStatus()))
+                        hasChanged = true;
                 }
                 productService.updateProduct(request.getId(), request);
                 success = hasChanged ? "edit" : null;
@@ -227,7 +239,8 @@ public class AdminController {
         model.addAttribute("pageSize", size);
 
         model.addAttribute("keyword", (keyword != null && !keyword.isBlank()) ? keyword.trim() : "");
-        model.addAttribute("status", (effectiveStatus != null && !effectiveStatus.isBlank()) ? effectiveStatus.trim() : "");
+        model.addAttribute("status",
+                (effectiveStatus != null && !effectiveStatus.isBlank()) ? effectiveStatus.trim() : "");
         model.addAttribute("action", action);
 
         if (action != null && id != null) {
@@ -289,13 +302,16 @@ public class AdminController {
             if (existing != null) {
                 String newName = request.getName() != null ? request.getName().trim() : "";
                 String oldName = existing.getName() != null ? existing.getName().trim() : "";
-                if (!newName.equals(oldName)) hasChanged = true;
+                if (!newName.equals(oldName))
+                    hasChanged = true;
 
                 String newDesc = request.getDescription() != null ? request.getDescription().trim() : "";
                 String oldDesc = existing.getDescription() != null ? existing.getDescription().trim() : "";
-                if (!newDesc.equals(oldDesc)) hasChanged = true;
+                if (!newDesc.equals(oldDesc))
+                    hasChanged = true;
 
-                if (request.getStatus() != null && !request.getStatus().equals(existing.getStatus())) hasChanged = true;
+                if (request.getStatus() != null && !request.getStatus().equals(existing.getStatus()))
+                    hasChanged = true;
             }
             categoryService.updateCategory(request);
             String success = hasChanged ? "edit" : null;
@@ -425,7 +441,8 @@ public class AdminController {
             if (existing != null) {
                 String newName = request.getName() != null ? request.getName().trim() : "";
                 String oldName = existing.getName() != null ? existing.getName().trim() : "";
-                if (!newName.equals(oldName)) hasChanged = true;
+                if (!newName.equals(oldName))
+                    hasChanged = true;
             }
             sizeService.updateSize(request);
             String success = hasChanged ? "edit" : null;
@@ -478,8 +495,150 @@ public class AdminController {
     }
 
     @GetMapping({ "/users", "/user.html" })
-    public String users() {
+    public String users(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "role", required = false) String role,
+            @RequestParam(name = "status", required = false) Integer status,
+            @RequestParam(name = "action", required = false) String action,
+            @RequestParam(name = "id", required = false) Long id,
+            Model model) {
+        Page<User> userPage = userService.getUsersForAdmin(page, size, keyword, role, status);
+        model.addAttribute("userPage", userPage);
+        model.addAttribute("users", userPage.getContent());
+        model.addAttribute("currentPage", userPage.getNumber());
+        model.addAttribute("totalPages", userPage.getTotalPages());
+        model.addAttribute("totalElements", userPage.getTotalElements());
+        model.addAttribute("pageSize", size);
+
+        model.addAttribute("keyword", (keyword != null && !keyword.isBlank()) ? keyword.trim() : "");
+        model.addAttribute("role", (role != null && !role.isBlank()) ? role.trim() : "");
+        model.addAttribute("status", status);
+        model.addAttribute("action", action);
+
+        if (action != null && id != null) {
+            try {
+                User u = userService.getUserById(id);
+                if ("view".equalsIgnoreCase(action)) {
+                    model.addAttribute("viewUser", u);
+                } else if ("edit".equalsIgnoreCase(action)) {
+                    model.addAttribute("editUser", u);
+                }
+            } catch (Exception ignored) {
+            }
+        }
         return "admin/user";
+    }
+
+    @PostMapping("/users/add")
+    public String addUser(
+            @ModelAttribute UserRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "roleFilter", required = false) String roleFilter,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter) {
+        try {
+            userService.createUser(request);
+            return buildUserRedirectUrl(page, size, "add", null, keyword, roleFilter, statusFilter);
+        } catch (Exception e) {
+            return buildUserRedirectUrl(page, size, null, e.getMessage(), keyword, roleFilter, statusFilter);
+        }
+    }
+
+    @PostMapping("/users/edit-status")
+    public String editUserStatus(
+            @RequestParam(name = "id") Long id,
+            @RequestParam(name = "status") Integer status,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "roleFilter", required = false) String roleFilter,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter) {
+        try {
+            userService.updateUserStatus(id, status);
+            return buildUserRedirectUrl(page, size, "edit", null, keyword, roleFilter, statusFilter);
+        } catch (Exception e) {
+            return buildUserRedirectUrl(page, size, null, e.getMessage(), keyword, roleFilter, statusFilter);
+        }
+    }
+
+    @PostMapping("/users/toggle-lock/{id}")
+    public String toggleLockUser(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "roleFilter", required = false) String roleFilter,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter) {
+        try {
+            userService.toggleLockUser(id);
+            return buildUserRedirectUrl(page, size, "lock", null, keyword, roleFilter, statusFilter);
+        } catch (Exception e) {
+            return buildUserRedirectUrl(page, size, null, e.getMessage(), keyword, roleFilter, statusFilter);
+        }
+    }
+
+    @GetMapping("/users/toggle-lock/{id}")
+    public String toggleLockUserGet(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "roleFilter", required = false) String roleFilter,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter) {
+        return toggleLockUser(id, page, size, keyword, roleFilter, statusFilter);
+    }
+
+    @PostMapping("/users/delete/{id}")
+    public String deleteUser(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "roleFilter", required = false) String roleFilter,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter) {
+        try {
+            userService.deleteUser(id);
+            return buildUserRedirectUrl(page, size, "delete", null, keyword, roleFilter, statusFilter);
+        } catch (Exception e) {
+            return buildUserRedirectUrl(page, size, null,
+                    "Không thể xóa người dùng do có dữ liệu liên kết. Bạn có thể sử dụng tính năng Khóa tài khoản!",
+                    keyword, roleFilter, statusFilter);
+        }
+    }
+
+    @GetMapping("/users/delete/{id}")
+    public String deleteUserGet(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "roleFilter", required = false) String roleFilter,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter) {
+        return deleteUser(id, page, size, keyword, roleFilter, statusFilter);
+    }
+
+    private String buildUserRedirectUrl(int page, int size, String success, String error, String keyword, String role,
+            Integer status) {
+        StringBuilder sb = new StringBuilder("/admin/users?page=").append(page).append("&size=").append(size);
+        if (success != null && !success.isBlank()) {
+            sb.append("&success=").append(success);
+        }
+        if (error != null && !error.isBlank()) {
+            sb.append("&error=").append(java.net.URLEncoder.encode(error, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        if (keyword != null && !keyword.isBlank()) {
+            sb.append("&keyword=").append(java.net.URLEncoder.encode(keyword, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        if (role != null && !role.isBlank()) {
+            sb.append("&role=").append(java.net.URLEncoder.encode(role, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        if (status != null) {
+            sb.append("&status=").append(status);
+        }
+        return "redirect:" + sb.toString();
     }
 
     @GetMapping({ "/brands", "/brand.html" })
@@ -556,15 +715,18 @@ public class AdminController {
             if (existing != null) {
                 String newName = request.getName() != null ? request.getName().trim() : "";
                 String oldName = existing.getName() != null ? existing.getName().trim() : "";
-                if (!newName.equals(oldName)) hasChanged = true;
+                if (!newName.equals(oldName))
+                    hasChanged = true;
 
                 String newLogo = request.getLogo() != null ? request.getLogo().trim() : "";
                 String oldLogo = existing.getLogo() != null ? existing.getLogo().trim() : "";
-                if (!newLogo.isEmpty() && !newLogo.equals(oldLogo)) hasChanged = true;
+                if (!newLogo.isEmpty() && !newLogo.equals(oldLogo))
+                    hasChanged = true;
 
                 String newDesc = request.getDescription() != null ? request.getDescription().trim() : "";
                 String oldDesc = existing.getDescription() != null ? existing.getDescription().trim() : "";
-                if (!newDesc.equals(oldDesc)) hasChanged = true;
+                if (!newDesc.equals(oldDesc))
+                    hasChanged = true;
             }
             brandService.updateBrand(request);
             String success = hasChanged ? "edit" : null;
@@ -617,7 +779,147 @@ public class AdminController {
     }
 
     @GetMapping({ "/blogs", "/blog.html" })
-    public String blogs() {
+    public String blogs(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "status", required = false) Integer status,
+            @RequestParam(name = "category", required = false) String category,
+            @RequestParam(name = "action", required = false) String action,
+            @RequestParam(name = "id", required = false) Long id,
+            Model model) {
+        Page<BlogDTO> blogPage = blogService.getBlogsForAdmin(page, size, keyword, status, category);
+        model.addAttribute("blogPage", blogPage);
+        model.addAttribute("blogs", blogPage.getContent());
+        model.addAttribute("currentPage", blogPage.getNumber());
+        model.addAttribute("totalPages", blogPage.getTotalPages());
+        model.addAttribute("totalElements", blogPage.getTotalElements());
+        model.addAttribute("pageSize", size);
+
+        model.addAttribute("keyword", (keyword != null && !keyword.isBlank()) ? keyword.trim() : "");
+        model.addAttribute("status", status);
+        model.addAttribute("category", (category != null && !category.isBlank()) ? category.trim() : "");
+        model.addAttribute("action", action);
+
+        if (action != null && id != null) {
+            try {
+                BlogDTO b = blogService.getBlogById(id);
+                if ("view".equalsIgnoreCase(action)) {
+                    model.addAttribute("viewBlog", b);
+                } else if ("edit".equalsIgnoreCase(action)) {
+                    model.addAttribute("editBlog", b);
+                }
+            } catch (Exception ignored) {
+            }
+        }
         return "admin/blog";
+    }
+
+    @PostMapping("/blogs/add")
+    public String addBlog(
+            @ModelAttribute BlogRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter,
+            @RequestParam(name = "categoryFilter", required = false) String categoryFilter) {
+        try {
+            blogService.createBlog(request);
+            return buildBlogRedirectUrl(page, size, "add", null, keyword, statusFilter, categoryFilter);
+        } catch (Exception e) {
+            return buildBlogRedirectUrl(page, size, null, e.getMessage(), keyword, statusFilter, categoryFilter);
+        }
+    }
+
+    @PostMapping("/blogs/edit")
+    public String editBlog(
+            @ModelAttribute BlogRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter,
+            @RequestParam(name = "categoryFilter", required = false) String categoryFilter) {
+        try {
+            blogService.updateBlog(request.getId(), request);
+            return buildBlogRedirectUrl(page, size, "edit", null, keyword, statusFilter, categoryFilter);
+        } catch (Exception e) {
+            return buildBlogRedirectUrl(page, size, null, e.getMessage(), keyword, statusFilter, categoryFilter);
+        }
+    }
+
+    @PostMapping("/blogs/toggle-status/{id}")
+    public String toggleBlogStatus(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter,
+            @RequestParam(name = "categoryFilter", required = false) String categoryFilter) {
+        try {
+            blogService.toggleBlogStatus(id);
+            return buildBlogRedirectUrl(page, size, "status", null, keyword, statusFilter, categoryFilter);
+        } catch (Exception e) {
+            return buildBlogRedirectUrl(page, size, null, e.getMessage(), keyword, statusFilter, categoryFilter);
+        }
+    }
+
+    @GetMapping("/blogs/toggle-status/{id}")
+    public String toggleBlogStatusGet(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter,
+            @RequestParam(name = "categoryFilter", required = false) String categoryFilter) {
+        return toggleBlogStatus(id, page, size, keyword, statusFilter, categoryFilter);
+    }
+
+    @PostMapping("/blogs/delete/{id}")
+    public String deleteBlog(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter,
+            @RequestParam(name = "categoryFilter", required = false) String categoryFilter) {
+        try {
+            blogService.deleteBlog(id);
+            return buildBlogRedirectUrl(page, size, "delete", null, keyword, statusFilter, categoryFilter);
+        } catch (Exception e) {
+            return buildBlogRedirectUrl(page, size, null, e.getMessage(), keyword, statusFilter, categoryFilter);
+        }
+    }
+
+    @GetMapping("/blogs/delete/{id}")
+    public String deleteBlogGet(
+            @PathVariable Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "statusFilter", required = false) Integer statusFilter,
+            @RequestParam(name = "categoryFilter", required = false) String categoryFilter) {
+        return deleteBlog(id, page, size, keyword, statusFilter, categoryFilter);
+    }
+
+    private String buildBlogRedirectUrl(int page, int size, String success, String error, String keyword,
+            Integer status, String category) {
+        StringBuilder sb = new StringBuilder("/admin/blogs?page=").append(page).append("&size=").append(size);
+        if (success != null && !success.isBlank()) {
+            sb.append("&success=").append(success);
+        }
+        if (error != null && !error.isBlank()) {
+            sb.append("&error=").append(java.net.URLEncoder.encode(error, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        if (keyword != null && !keyword.isBlank()) {
+            sb.append("&keyword=").append(java.net.URLEncoder.encode(keyword, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        if (status != null) {
+            sb.append("&status=").append(status);
+        }
+        if (category != null && !category.isBlank()) {
+            sb.append("&category=")
+                    .append(java.net.URLEncoder.encode(category, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        return "redirect:" + sb.toString();
     }
 }
